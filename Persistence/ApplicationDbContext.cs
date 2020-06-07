@@ -12,5 +12,8 @@ namespace Persistence
         }
 
         public DbSet<Shift> Shifts { get; set; }
+
+
+
     }
 }

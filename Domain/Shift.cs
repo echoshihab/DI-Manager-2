@@ -11,6 +11,7 @@ namespace Domain
         public string Location { get; set; } //foreign key
         public string Room { get; set; } //foreign key
         public string Technologist { get; set; }  //foreign key
+        public string Modality { get; set; } //foreign key
 
     }
 }
