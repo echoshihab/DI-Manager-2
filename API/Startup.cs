@@ -30,7 +30,7 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            })
+            });
             services.AddControllers();
         }
 
