@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Shifts;
@@ -23,6 +24,14 @@ namespace API.Controllers
         {
             return await _mediator.Send(new List.Query());
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Shift>> Details(Guid id)
+        {
+            return await _mediator.Send(new Details.Query { Id = id });
+        }
+
+
 
 
     }
