@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 
 import "./App.css";
 import agent from "./app/api/agent";
 import { IShift } from "./app/models/shift";
+import ShiftDayList from "./app/fatures/Shift/display/ShiftDayList";
+import ShiftForm from "./app/fatures/Shift/Form/ShiftForm";
 
 const App = () => {
   const [shifts, setShifts] = useState<IShift[]>([]);
+
+  const handleCreateShift = (shift: IShift) => {
+    setShifts([...shifts, shift]);
+    agent.Shifts.create(shift);
+  };
 
   useEffect(() => {
     agent.Shifts.list().then((response) => {
@@ -18,14 +25,10 @@ const App = () => {
   }, []);
 
   return (
-    <ul>
-      {shifts.map((shift) => (
-        <li key={shift.id}>
-          {shift.location}|{shift.room}|{shift.license}|{shift.start}:{" "}
-          {shift.end}|{shift.technologist}
-        </li>
-      ))}
-    </ul>
+    <Fragment>
+      <ShiftDayList shifts={shifts} />
+      <ShiftForm createShift={handleCreateShift} />
+    </Fragment>
   );
 };
 

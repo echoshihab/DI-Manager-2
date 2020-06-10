@@ -13,10 +13,12 @@ const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
+  post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
 };
 
 const Shifts = {
-  list: (): Promise<IShift[]> => axios.get("/shifts").then(responseBody),
+  list: (): Promise<IShift[]> => requests.get("/shifts"),
+  create: (shift: IShift) => requests.post("/shifts", shift),
 };
 
 export default {

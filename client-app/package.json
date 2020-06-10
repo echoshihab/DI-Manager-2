@@ -10,11 +10,14 @@
     "@types/node": "^12.12.45",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
+    "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
-    "typescript": "^3.7.5"
+    "semantic-ui-react": "^0.88.2",
+    "typescript": "^3.7.5",
+    "uuid": "^8.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
