@@ -1,5 +1,4 @@
 import React, { useEffect, useState, Fragment } from "react";
-
 import "./App.css";
 import agent from "./app/api/agent";
 import { IShift } from "./app/models/shift";
@@ -9,9 +8,26 @@ import ShiftForm from "./app/fatures/Shift/Form/ShiftForm";
 const App = () => {
   const [shifts, setShifts] = useState<IShift[]>([]);
 
+  const [editMode, setEditMode] = useState(false);
+
+  const [selectedShift, setSelectedShift] = useState<IShift | null>(null);
+
   const handleCreateShift = (shift: IShift) => {
     setShifts([...shifts, shift]);
     agent.Shifts.create(shift);
+  };
+
+  const handleEditShift = (shift: IShift) => {
+    setShifts([...shifts.filter((s) => s.id !== shift.id), shift]);
+    agent.Shifts.edit(shift);
+  };
+
+  const handleSelectShift = (id: string) => {
+    console.log(id);
+    setEditMode(true);
+    let shiftSelected = shifts.filter((s) => s.id === id)[0];
+    setSelectedShift(shiftSelected);
+    console.log(selectedShift);
   };
 
   useEffect(() => {
@@ -26,8 +42,15 @@ const App = () => {
 
   return (
     <Fragment>
-      <ShiftDayList shifts={shifts} />
-      <ShiftForm createShift={handleCreateShift} />
+      <ShiftDayList shifts={shifts} selectShift={handleSelectShift} />
+      {selectedShift && (
+        <ShiftForm
+          createShift={handleCreateShift}
+          editShift={handleEditShift}
+          editMode={editMode}
+          selectedShift={selectedShift!}
+        />
+      )}
     </Fragment>
   );
 };

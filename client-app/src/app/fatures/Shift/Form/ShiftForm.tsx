@@ -5,18 +5,32 @@ import { v4 as uuid } from "uuid";
 
 interface IProps {
   createShift: (shift: IShift) => void;
+  editShift: (shift: IShift) => void;
+  editMode: Boolean;
+  selectedShift: IShift;
 }
 
-const ShiftForm: React.FC<IProps> = ({ createShift }) => {
-  const initializeForm = {
-    id: "",
-    start: "",
-    end: "",
-    license: "",
-    location: "",
-    room: "",
-    technologist: "",
-    modality: "",
+const ShiftForm: React.FC<IProps> = ({
+  createShift,
+  editMode,
+  editShift,
+  selectedShift,
+}) => {
+  const initializeForm = () => {
+    if (selectedShift) {
+      return selectedShift;
+    } else {
+      return {
+        id: "",
+        start: "",
+        end: "",
+        license: "",
+        location: "",
+        room: "",
+        technologist: "",
+        modality: "",
+      };
+    }
   };
 
   const [shift, setShift] = useState<IShift>(initializeForm);
@@ -28,11 +42,15 @@ const ShiftForm: React.FC<IProps> = ({ createShift }) => {
   };
 
   const handleSubmit = () => {
-    let newShift = {
-      ...shift,
-      id: uuid(),
-    };
-    createShift(newShift);
+    if (shift.id.length === 0) {
+      let newShift = {
+        ...shift,
+        id: uuid(),
+      };
+      createShift(newShift);
+    } else {
+      editShift(shift);
+    }
   };
 
   return (

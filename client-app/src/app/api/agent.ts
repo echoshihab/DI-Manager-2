@@ -14,11 +14,14 @@ const responseBody = (response: AxiosResponse) => response.data;
 const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
 };
 
 const Shifts = {
   list: (): Promise<IShift[]> => requests.get("/shifts"),
   create: (shift: IShift) => requests.post("/shifts", shift),
+  details: (id: string) => requests.get(`/shifts/${id}`),
+  edit: (shift: IShift) => requests.put(`/shifts/${shift.id}`, shift),
 };
 
 export default {
