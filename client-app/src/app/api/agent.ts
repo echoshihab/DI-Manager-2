@@ -15,6 +15,7 @@ const requests = {
   get: (url: string) => axios.get(url).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
+  delete: (url: string) => axios.delete(url).then(responseBody),
 };
 
 const Shifts = {
@@ -22,6 +23,7 @@ const Shifts = {
   create: (shift: IShift) => requests.post("/shifts", shift),
   details: (id: string) => requests.get(`/shifts/${id}`),
   edit: (shift: IShift) => requests.put(`/shifts/${shift.id}`, shift),
+  delete: (id: string) => requests.delete(`/shifts/${id}`),
 };
 
 export default {

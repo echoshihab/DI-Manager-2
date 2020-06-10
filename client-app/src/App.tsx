@@ -22,6 +22,11 @@ const App = () => {
     agent.Shifts.edit(shift);
   };
 
+  const handleDeleteShift = (id: string) => {
+    setShifts([...shifts.filter((s) => s.id !== id)]);
+    agent.Shifts.delete(id);
+  };
+
   const handleSelectShift = (id: string) => {
     console.log(id);
     setEditMode(true);
@@ -42,7 +47,11 @@ const App = () => {
 
   return (
     <Fragment>
-      <ShiftDayList shifts={shifts} selectShift={handleSelectShift} />
+      <ShiftDayList
+        shifts={shifts}
+        selectShift={handleSelectShift}
+        deleteShift={handleDeleteShift}
+      />
       {selectedShift && (
         <ShiftForm
           createShift={handleCreateShift}

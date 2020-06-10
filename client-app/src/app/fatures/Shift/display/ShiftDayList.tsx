@@ -5,9 +5,14 @@ import { Button } from "semantic-ui-react";
 interface IProps {
   shifts: IShift[];
   selectShift: (id: string) => void;
+  deleteShift: (id: string) => void;
 }
 
-const ShiftDayList: React.FC<IProps> = ({ shifts, selectShift }) => {
+const ShiftDayList: React.FC<IProps> = ({
+  shifts,
+  selectShift,
+  deleteShift,
+}) => {
   return (
     <ul>
       {shifts.map((shift) => (
@@ -15,6 +20,7 @@ const ShiftDayList: React.FC<IProps> = ({ shifts, selectShift }) => {
           {shift.location}|{shift.room}|{shift.license}|{shift.start}:{" "}
           {shift.end}|{shift.technologist}
           <Button onClick={() => selectShift(shift.id)} content="Edit" />
+          <Button onClick={() => deleteShift(shift.id)} content="Delete" />
         </li>
       ))}
     </ul>
