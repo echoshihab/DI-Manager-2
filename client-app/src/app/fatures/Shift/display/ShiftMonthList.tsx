@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 
-const ShiftDayList = () => {
+const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shifts } = rootStore.shiftStore;
+  const { shifts, loadShifts } = rootStore.shiftStore;
+
+  useEffect(() => {
+    loadShifts();
+  }, [loadShifts]);
 
   return (
     <ul>
@@ -18,4 +22,4 @@ const ShiftDayList = () => {
   );
 };
 
-export default observer(ShiftDayList);
+export default observer(ShiftMonthList);
