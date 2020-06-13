@@ -5,17 +5,13 @@ import { Menu, Header } from "semantic-ui-react";
 const ShiftFilters = () => {
   return (
     <Fragment>
-      <Menu
-        vertical
-        size={"large"}
-        style={{ width: "60%", marginTop: 50, float: "right" }}
-      >
-        <Header icon={"filter"} attached color={"blue"} content={"Filters"} />
+      <Menu vertical size={"large"} style={{ width: "60%", float: "right" }}>
+        <Header icon={"filter"} attached color={"black"} content={"Filters"} />
 
         <Header
           icon={"calendar"}
           attached
-          color={"blue"}
+          color={"black"}
           content={"Select Date"}
         />
         <Calendar

@@ -5,6 +5,7 @@ import ShiftMonthList from "./app/fatures/Shift/display/ShiftMonthList";
 import HomePage from "./app/fatures/home/HomePage";
 import { Route } from "react-router-dom";
 import ShiftDashboard from "./app/fatures/Shift/dashboard/ShiftDashboard";
+import NavBar from "./app/layout/NavBar";
 
 const App = () => {
   // const [shifts, setShifts] = useState<IShift[]>([]);
@@ -48,6 +49,7 @@ const App = () => {
 
   return (
     <Fragment>
+      <NavBar />
       <Route exact path="/" component={HomePage} />
       <Route path="/monthview" component={ShiftDashboard} />
     </Fragment>
