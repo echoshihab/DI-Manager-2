@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, Fragment, useState } from "react";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
-import { getDaysInMonth } from "../../../helpers/shiftHelper";
-import { Grid, Container } from "semantic-ui-react";
+import { getMonthDates } from "../../../helpers/shiftHelper";
+import { Grid } from "semantic-ui-react";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
   const { shifts, loadShifts } = rootStore.shiftStore;
-  const [daysInMonth, setDaysInMonth] = useState<number>(0);
+  const [daysInMonth, setDaysInMonth] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    let numberOfDays = getDaysInMonth();
-    setDaysInMonth(numberOfDays);
-    console.log(numberOfDays);
-    console.log(numberOfDays);
+    let monthDates = getMonthDates();
+    setDaysInMonth(monthDates);
     loadShifts();
   }, [setDaysInMonth, loadShifts]);
 
@@ -29,9 +27,11 @@ const ShiftMonthList = () => {
       </ul> */}
 
       <Grid columns={7} divided style={{ marginTop: "20px" }}>
-        {Array(daysInMonth).fill(
-          <Grid.Column style={{ border: "1px solid black" }}>test</Grid.Column>
-        )}
+        {Object.keys(daysInMonth).map((d) => (
+          <Grid.Column key={d} style={{ border: "1px solid black" }}>
+            {d}
+          </Grid.Column>
+        ))}
       </Grid>
     </Fragment>
   );

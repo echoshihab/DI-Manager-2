@@ -9,6 +9,7 @@ export default class ShiftStore {
     this.rootStore = rootStore;
   }
 
+  @observable shiftRegistry = new Map();
   @observable shifts: IShift[] = [];
   @observable shift: IShift | null = null;
   @observable loading = false;
