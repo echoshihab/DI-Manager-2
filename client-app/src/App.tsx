@@ -1,11 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import "./App.css";
 
-import ShiftMonthList from "./app/fatures/Shift/display/ShiftMonthList";
+import { RootStoreContext } from "./app/stores/rootStore";
 import HomePage from "./app/fatures/home/HomePage";
 import { Route } from "react-router-dom";
 import ShiftDashboard from "./app/fatures/Shift/dashboard/ShiftDashboard";
 import NavBar from "./app/layout/NavBar";
+import { observer } from "mobx-react-lite";
 
 const App = () => {
   // const [shifts, setShifts] = useState<IShift[]>([]);
@@ -36,16 +37,12 @@ const App = () => {
   //   setSelectedShift(shiftSelected);
   //   console.log(selectedShift);
   // };
+  const rootStore = useContext(RootStoreContext);
+  const { loadShifts } = rootStore.shiftStore;
 
-  // useEffect(() => {
-  //   agent.Shifts.list().then((response) => {
-  //     let shifts: IShift[] = [];
-  //     response.forEach((shift) => {
-  //       shifts.push(shift);
-  //     });
-  //     setShifts(shifts);
-  //   });
-  // }, []);
+  useEffect(() => {
+    loadShifts();
+  }, [loadShifts]);
 
   return (
     <Fragment>
@@ -56,4 +53,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default observer(App);

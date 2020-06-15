@@ -10,6 +10,10 @@ namespace Application.Shifts
 {
     public class List
     {
+        public class ShiftsEnvelope
+        {
+            public List<Shift> Shifts { get; set; }
+        }
         public class Query : IRequest<List<Shift>> { }
 
         public class Handler : IRequestHandler<Query, List<Shift>>

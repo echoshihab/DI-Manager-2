@@ -1,7 +1,7 @@
 export interface IShift {
   id: string;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
   license: string;
   location: string;
   room: string;

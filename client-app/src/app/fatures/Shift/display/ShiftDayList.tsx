@@ -4,16 +4,15 @@ import { observer } from "mobx-react-lite";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shifts } = rootStore.shiftStore;
 
   return (
     <ul>
-      {shifts.map((shift) => (
+      {/* {shifts.map((shift) => (
         <li key={shift.id}>
           {shift.location}|{shift.room}|{shift.license}|{shift.start}:{" "}
           {shift.end}|{shift.technologist}
         </li>
-      ))}
+      ))} */}
     </ul>
   );
 };

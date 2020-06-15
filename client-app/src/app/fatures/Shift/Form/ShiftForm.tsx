@@ -22,8 +22,8 @@ const ShiftForm: React.FC<IProps> = ({
     } else {
       return {
         id: "",
-        start: "",
-        end: "",
+        start: new Date(),
+        end: new Date(),
         license: "",
         location: "",
         room: "",
