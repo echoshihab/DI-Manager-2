@@ -7,6 +7,7 @@ import { Route } from "react-router-dom";
 import ShiftDashboard from "./app/fatures/Shift/dashboard/ShiftDashboard";
 import NavBar from "./app/layout/NavBar";
 import { observer } from "mobx-react-lite";
+import ShiftDayList from "./app/fatures/Shift/display/ShiftDayList";
 
 const App = () => {
   // const [shifts, setShifts] = useState<IShift[]>([]);
@@ -49,6 +50,7 @@ const App = () => {
       <NavBar />
       <Route exact path="/" component={HomePage} />
       <Route path="/monthview" component={ShiftDashboard} />
+      <Route path="/dayview" component={ShiftDayList} />
     </Fragment>
   );
 };

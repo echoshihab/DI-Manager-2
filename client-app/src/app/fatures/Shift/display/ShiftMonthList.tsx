@@ -7,7 +7,7 @@ import { IShift } from "../../../models/shift";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByDate } = rootStore.shiftStore;
+  const { shiftsByMonth } = rootStore.shiftStore;
   const [daysInMonth, setDaysInMonth] = useState<{
     [key: string]: IShift[] | [];
   }>({});
@@ -24,7 +24,7 @@ const ShiftMonthList = () => {
           <Grid.Column key={d} style={{ border: "1px solid black" }}>
             {d}
             <ul>
-              {shiftsByDate[d]?.map((s) => (
+              {shiftsByMonth[d]?.map((s) => (
                 <li key={s.id}>{s.location}</li>
               ))}
             </ul>

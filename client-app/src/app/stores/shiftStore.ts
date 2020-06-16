@@ -14,23 +14,17 @@ export default class ShiftStore {
   @observable shift: IShift | null = null;
   @observable loading = false;
 
-  @computed get shiftsByDate() {
-    console.log(Array.from(this.shiftRegistry.values()));
-    return this.groupShiftsByDate(Array.from(this.shiftRegistry.values()));
+  @computed get shiftsByMonth() {
+    return this.groupShiftsByDateForMonth(
+      Array.from(this.shiftRegistry.values())
+    );
   }
 
-  groupShiftsByDate(shifts: IShift[]) {
-    // const sortedshifts = shifts.sort((a, b) => {
-    //   return a.start.getTime() - b.start.getTime();
-    // });
-    // return Object.entries(
-    //   sortedshifts.reduce((shifts, shift) => {
-    //     const date = format(shift.start, "MM/dd/yyyy");
-    //     shifts[date] = shifts[date] ? [...shifts[date], shift] : [shift];
-    //     return shifts;
-    //   }, {} as { [key: string]: IShift[] })
-    // );
+  @computed get shiftsByDay() {
+    return this.sortShiftsForDay(Array.from(this.shiftRegistry.values()));
+  }
 
+  groupShiftsByDateForMonth(shifts: IShift[]) {
     const monthObj = {} as { [key: string]: IShift[] };
     shifts.forEach((s) => {
       let date = format(s.start, "MM/dd/yyyy");
@@ -39,6 +33,14 @@ export default class ShiftStore {
         : (monthObj[date] = [s]);
     });
     return monthObj;
+  }
+
+  sortShiftsForDay(shifts: IShift[]) {
+    const sortedShifts = shifts.sort(
+      (a, b) => a.start.getTime() - b.start.getTime()
+    );
+    console.log(sortedShifts);
+    return sortedShifts;
   }
 
   @action loadShifts = async () => {
