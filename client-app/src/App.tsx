@@ -3,11 +3,13 @@ import "./App.css";
 
 import { RootStoreContext } from "./app/stores/rootStore";
 import HomePage from "./app/fatures/home/HomePage";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import ShiftDashboard from "./app/fatures/Shift/dashboard/ShiftDashboard";
 import NavBar from "./app/layout/NavBar";
 import { observer } from "mobx-react-lite";
 import ShiftDayList from "./app/fatures/Shift/display/ShiftDayList";
+import NotFound from "./app/layout/NotFound";
+import { Container } from "semantic-ui-react";
 
 const App = () => {
   // const [shifts, setShifts] = useState<IShift[]>([]);
@@ -48,9 +50,14 @@ const App = () => {
   return (
     <Fragment>
       <NavBar />
-      <Route exact path="/" component={HomePage} />
-      <Route path="/monthview" component={ShiftDashboard} />
-      <Route path="/dayview" component={ShiftDayList} />
+      <Container fluid>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/monthview" component={ShiftDashboard} />
+          <Route path="/dayview" component={ShiftDayList} />
+          <Route component={NotFound} />
+        </Switch>
+      </Container>
     </Fragment>
   );
 };
