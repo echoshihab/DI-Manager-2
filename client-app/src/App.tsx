@@ -3,11 +3,10 @@ import "./App.css";
 
 import { RootStoreContext } from "./app/stores/rootStore";
 import HomePage from "./app/fatures/home/HomePage";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, RouteComponentProps } from "react-router-dom";
 import ShiftDashboard from "./app/fatures/Shift/dashboard/ShiftDashboard";
 import NavBar from "./app/layout/NavBar";
 import { observer } from "mobx-react-lite";
-import ShiftDayList from "./app/fatures/Shift/display/ShiftDayList";
 import NotFound from "./app/layout/NotFound";
 import { Container } from "semantic-ui-react";
 
@@ -53,8 +52,18 @@ const App = () => {
       <Container fluid>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/monthview" component={ShiftDashboard} />
-          <Route path="/dayview" component={ShiftDayList} />
+          <Route
+            path="/monthview"
+            component={(props: RouteComponentProps<any>) => (
+              <ShiftDashboard {...props} view={"Month"} />
+            )}
+          />
+          <Route
+            path="/dayview"
+            component={(props: RouteComponentProps<any>) => (
+              <ShiftDashboard {...props} view={"Date"} />
+            )}
+          />
           <Route component={NotFound} />
         </Switch>
       </Container>

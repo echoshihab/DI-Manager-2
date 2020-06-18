@@ -1,8 +1,14 @@
 import React, { Fragment } from "react";
 import { Calendar } from "react-widgets";
 import { Menu, Header } from "semantic-ui-react";
+import { CalendarView } from "react-widgets/lib/Calendar";
 
-const ShiftFilters = () => {
+interface IProps {
+  view: string;
+}
+const ShiftFilters: React.FC<IProps> = ({ view }) => {
+  const params: CalendarView[] =
+    view === "Month" ? ["year", "decade"] : ["month", "decade", "year"];
   return (
     <Fragment>
       <Menu vertical size={"large"}>
@@ -12,10 +18,10 @@ const ShiftFilters = () => {
           icon={"calendar"}
           attached
           color={"black"}
-          content={"Select Month"}
+          content={`Select ${view}`}
         />
         <Calendar
-          views={["year", "decade"]}
+          views={params}
           onChange={(date: any) => console.log(date)}
           footer={false}
         />
