@@ -12,7 +12,10 @@ export default class ShiftStore {
 
   @observable shiftRegistry = new Map();
   @observable shift: IShift | null = null;
+
   @observable loading = false;
+
+  @observable predicate = new Map();
 
   @computed get shiftsByMonth() {
     return this.groupShiftsByDateForMonth(
@@ -59,5 +62,12 @@ export default class ShiftStore {
     runInAction("toggle loading indicator", () => {
       this.loading = false;
     });
+  };
+
+  @action setPredicate = (predicate: string, value: string | Date) => {
+    this.predicate.clear();
+    if (predicate !== "all") {
+      this.predicate.set(predicate, value);
+    }
   };
 }
