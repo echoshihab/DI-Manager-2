@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
@@ -14,7 +16,20 @@ namespace Application.Shifts
         {
             public List<Shift> Shifts { get; set; }
         }
-        public class Query : IRequest<List<Shift>> { }
+        public class Query : IRequest<List<Shift>>
+        {
+            //add additional filters here
+            public Query(DateTime? filterDate)
+            {
+                //for paging
+
+                //for filtering
+                FilterDate = filterDate;
+            }
+
+            public DateTime? FilterDate { get; set; }
+
+        }
 
         public class Handler : IRequestHandler<Query, List<Shift>>
         {
@@ -27,8 +42,22 @@ namespace Application.Shifts
 
             public async Task<List<Shift>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var shifts = await _context.Shifts.ToListAsync();
-                return shifts;
+                if (request.FilterDate != null)
+                {
+                    var queryable = _context.Shifts.Where(x => x.Start == request.FilterDate);
+                    var shifts = await queryable.ToListAsync();
+                    return shifts;
+
+                }
+                else
+                {
+                    var shifts = await _context.Shifts.ToListAsync();
+                    return shifts;
+                }
+
+
+
+
             }
         }
     }

@@ -13,9 +13,9 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult<List<Shift>>> List()
+        public async Task<ActionResult<List<Shift>>> List(DateTime? filterDate)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query(filterDate));
         }
 
         [HttpGet("{id}")]
