@@ -13,6 +13,8 @@ namespace Persistence
         }
 
         public DbSet<Shift> Shifts { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Room> Rooms { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
