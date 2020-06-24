@@ -7,6 +7,7 @@ namespace Domain
     {
         public string DisplayName { get; set; }
 
+
         //add modality as collection here
         //give this a role of coordinator
     }
