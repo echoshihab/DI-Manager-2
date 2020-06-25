@@ -33,14 +33,14 @@ namespace Application.Shifts
             {
                 var shift = new Shift
                 {
-                    Id = request.Id,
-                    Start = request.Start,
-                    End = request.End,
-                    License = request.License,
-                    Location = request.Location,
-                    Room = request.Room,
-                    Technologist = request.Technologist,
-                    Modality = request.Modality
+                    // Id = request.Id,
+                    // Start = request.Start,
+                    // End = request.End,
+                    // License = request.License,
+                    // Location = request.Location,
+                    // Room = request.Room,
+                    // Technologist = request.Technologist,
+                    // Modality = request.Modality
 
                 };
                 _context.Shifts.Add(shift);

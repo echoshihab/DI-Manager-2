@@ -35,12 +35,12 @@ namespace Application.Shifts
                 if (shift == null)
                     throw new Exception("Could not find shift");
 
-                shift.Start = request.Start ?? shift.Start;
-                shift.End = request.End ?? shift.End;
-                shift.License = request.License ?? shift.License;
-                shift.Location = request.Location ?? shift.Location;
-                shift.Room = request.Room ?? shift.Room;
-                shift.Technologist = request.Technologist ?? shift.Technologist;
+                // shift.Start = request.Start ?? shift.Start;
+                // shift.End = request.End ?? shift.End;
+                // shift.License = request.License ?? shift.License;
+                // shift.Location = request.Location ?? shift.Location;
+                // shift.Room = request.Room ?? shift.Room;
+                // shift.Technologist = request.Technologist ?? shift.Technologist;
 
                 //handler logic
                 var success = await _context.SaveChangesAsync() > 0;
