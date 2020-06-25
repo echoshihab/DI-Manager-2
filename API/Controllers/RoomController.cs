@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Application.Locations;
+using Application.Rooms;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class LocationController : BaseController
+    public class RoomController : BaseController
     {
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> Details(Guid id)
+        public async Task<ActionResult<Room>> Details(Guid id)
         {
             return await Mediator.Send(new Details.Query { Id = id });
         }
@@ -23,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<LocationDto>>> List()
+        public async Task<ActionResult<List<Room>>> List()
         {
             return await Mediator.Send(new List.Query());
         }

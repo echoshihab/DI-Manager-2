@@ -1,5 +1,6 @@
 
 using Application.Shifts;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace API
             });
             services.AddControllers();
             services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddAutoMapper(typeof(List.Handler));
 
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);

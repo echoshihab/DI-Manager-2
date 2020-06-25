@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Persistence;
 
-namespace Application.Locations
+namespace Application.Rooms
 {
     public class Delete
     {
@@ -23,12 +23,12 @@ namespace Application.Locations
             }
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var location = await _context.Locations.FindAsync(request.Id);
+                var room = await _context.Rooms.FindAsync(request.Id);
 
-                if (location == null)
-                    throw new Exception("Couldn't find location");
+                if (room == null)
+                    throw new Exception("Couldn't find room");
 
-                _context.Remove(location);
+                _context.Remove(room);
                 //handler logic
                 var success = await _context.SaveChangesAsync() > 0;
 
