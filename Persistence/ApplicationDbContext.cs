@@ -25,6 +25,10 @@ namespace Persistence
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Technologist>()
+                .HasIndex(t => t.Initial)
+                .IsUnique();
+
             builder.Entity<TechnologistLicense>(x => x.HasKey(ta => new { ta.TechnologistId, ta.LicenseId }));
 
             builder.Entity<TechnologistLicense>()

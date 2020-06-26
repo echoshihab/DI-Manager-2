@@ -7,7 +7,7 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
+        public string DisplayName { get; set; }
         public ICollection<License> Licenses { get; set; }
         public ICollection<Technologist> Technologists { get; set; }
 

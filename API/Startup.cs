@@ -29,7 +29,7 @@ namespace API
         {
             services.AddDbContext<ApplicationDbContext>(opt =>
             {
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddCors(opt =>
             {
