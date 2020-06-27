@@ -9,6 +9,7 @@ import NavBar from "./app/layout/NavBar";
 import { observer } from "mobx-react-lite";
 import NotFound from "./app/layout/NotFound";
 import { Container } from "semantic-ui-react";
+import AdminDashboard from "./app/fatures/admin/dashboard/AdminDashboard";
 
 const App = () => {
   // const [shifts, setShifts] = useState<IShift[]>([]);
@@ -64,6 +65,7 @@ const App = () => {
               <ShiftDashboard {...props} view={"Date"} />
             )}
           />
+          <Route path="/admin" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>
       </Container>
