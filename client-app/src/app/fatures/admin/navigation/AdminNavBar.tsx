@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Grid, Header } from "semantic-ui-react";
+import { Menu, Header } from "semantic-ui-react";
 
 interface IProps {
   setComponent: (target: string) => void;

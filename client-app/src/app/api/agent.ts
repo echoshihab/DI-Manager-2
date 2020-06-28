@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { IShift } from "../models/shift";
+import { IModality } from "../models/modality";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -26,6 +27,16 @@ const Shifts = {
   delete: (id: string) => requests.delete(`/shifts/${id}`),
 };
 
+const Modalities = {
+  list: (): Promise<IModality[]> => requests.get("/modality"),
+  create: (modality: IModality) => requests.post("/modality", modality),
+  details: (id: string) => requests.get(`/modality/${id}`),
+  edit: (modality: IModality) =>
+    requests.put(`/modality/${modality.id}`, modality),
+  delete: (id: string) => requests.delete(`/modality/${id}`),
+};
+
 export default {
   Shifts,
+  Modalities,
 };

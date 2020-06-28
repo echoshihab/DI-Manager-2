@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from "react";
-import TechnologistManager from "../components/TechnologistManager";
-import LocationManager from "../components/LocationManager";
-import RoomManager from "../components/RoomManager";
-import ModalityManager from "../components/ModalityManager";
-import RoleManager from "../components/RoleManager";
+import TechnologistManager from "../components/technologist/TechnologistManager";
+import LocationManager from "../components/location/LocationManager";
+import RoomManager from "../components/room/RoomManager";
+import ModalityManager from "../components/modality/ModalityManager";
+import RoleManager from "../components/role/RoleManager";
 import { Grid, Segment } from "semantic-ui-react";
 import AdminNavBar from "../navigation/AdminNavBar";
 
