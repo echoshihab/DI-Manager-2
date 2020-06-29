@@ -1,10 +1,11 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment, useEffect } from "react";
 import { IModality } from "../../../../models/modality";
 import { List, Button, Icon, Form, Label } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../api/common/form/TextInput";
 import { listenerCount } from "process";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   modality: IModality;
@@ -21,7 +22,9 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
   };
 
   const handleFinalFormSubmit = (modality: IModality) => {
+    console.log(modality);
     editModality(modality);
+    setEditMode(false);
   };
 
   return editMode ? (
@@ -29,7 +32,7 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
       initialValues={modality}
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
-        <Form onSubmit={handleSubmit} loading={loading}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group widths="equal">
             <Field
               name="name"
@@ -73,4 +76,4 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
   );
 };
 
-export default ModalityListItem;
+export default observer(ModalityListItem);

@@ -63,6 +63,9 @@ export default class ModalityStore {
     } catch (error) {
       console.log(error);
     }
+    runInAction("toggle button loading indiciator", () => {
+      this.submitting = false;
+    });
   };
 
   @action deleteModality = async (id: string) => {
