@@ -30,9 +30,8 @@ const AdminDashboard = () => {
   return (
     <Grid>
       <Grid.Column width={12} floated="right">
-        {components.hasOwnProperty(visibleComponent) && (
-          <Segment>{components[visibleComponent]}</Segment>
-        )}
+        {components.hasOwnProperty(visibleComponent) &&
+          components[visibleComponent]}
       </Grid.Column>
       <Grid.Column floated="left">
         <AdminNavBar

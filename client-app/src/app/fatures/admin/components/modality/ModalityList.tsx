@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { List } from "semantic-ui-react";
+import { List, Header } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 import ModalityListItem from "./ModalityListItem";
@@ -10,10 +10,11 @@ const ModalityList = () => {
 
   return (
     <List divided relaxed>
+      <Header content="List of Modalities" />
+
       {sortedModalitiesByDisplayName.map((modality) => (
-        <List.Item>
+        <List.Item key={modality.id}>
           <List.Content>
-            <List.Header>List of Modalities</List.Header>
             <ModalityListItem modality={modality} />
           </List.Content>
         </List.Item>

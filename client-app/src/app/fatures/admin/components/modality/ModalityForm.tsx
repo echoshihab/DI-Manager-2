@@ -25,7 +25,7 @@ const ModalityForm = () => {
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit}>
-          <Header content="Manage Modalities" />
+          <Header content="Add New Modality" />
           <Field
             placeholder="Modality Name"
             name="modalityName"
