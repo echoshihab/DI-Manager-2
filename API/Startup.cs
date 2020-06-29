@@ -2,6 +2,7 @@
 using Application.Shifts;
 using AutoMapper;
 using Domain;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,8 +41,13 @@ namespace API
                     .WithOrigins("http://localhost:3000");
                 });
             });
-            services.AddControllers();
+            services.AddControllers()
+                .AddFluentValidation(cfg =>
+                {
+                    cfg.RegisterValidatorsFromAssemblyContaining<Create>();
+                });
             services.AddMediatR(typeof(List.Handler).Assembly);
+
             services.AddAutoMapper(typeof(List.Handler));
 
             var builder = services.AddIdentityCore<AppUser>();
