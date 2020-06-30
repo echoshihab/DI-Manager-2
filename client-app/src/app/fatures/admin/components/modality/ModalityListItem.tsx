@@ -63,12 +63,16 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
         {modality.name} {"(" + modality.displayName + ")"}
       </List.Item>
       <List.Item>
-        <Button circular compact onClick={toggleEditMode}>
+        <Button circular size="small" onClick={toggleEditMode}>
           <Icon name="edit" color="blue" />
         </Button>
       </List.Item>
       <List.Item>
-        <Button circular compact onClick={() => deleteModality(modality.id)}>
+        <Button
+          circular
+          size="small"
+          onClick={() => deleteModality(modality.id)}
+        >
           <Icon name="trash alternate outline" color="red" />
         </Button>
       </List.Item>

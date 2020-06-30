@@ -4,6 +4,7 @@ import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import "./index.css";
 import "react-widgets/dist/css/react-widgets.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import dateFnsLocalizer from "react-widgets-date-fns";

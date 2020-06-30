@@ -10,36 +10,9 @@ import { observer } from "mobx-react-lite";
 import NotFound from "./app/layout/NotFound";
 import { Container } from "semantic-ui-react";
 import AdminDashboard from "./app/fatures/admin/dashboard/AdminDashboard";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
-  // const [shifts, setShifts] = useState<IShift[]>([]);
-
-  // const [editMode, setEditMode] = useState(false);
-
-  // const [selectedShift, setSelectedShift] = useState<IShift | null>(null);
-
-  // const handleCreateShift = (shift: IShift) => {
-  //   setShifts([...shifts, shift]);
-  //   agent.Shifts.create(shift);
-  // };
-
-  // const handleEditShift = (shift: IShift) => {
-  //   setShifts([...shifts.filter((s) => s.id !== shift.id), shift]);
-  //   agent.Shifts.edit(shift);
-  // };
-
-  // const handleDeleteShift = (id: string) => {
-  //   setShifts([...shifts.filter((s) => s.id !== id)]);
-  //   agent.Shifts.delete(id);
-  // };
-
-  // const handleSelectShift = (id: string) => {
-  //   console.log(id);
-  //   setEditMode(true);
-  //   let shiftSelected = shifts.filter((s) => s.id === id)[0];
-  //   setSelectedShift(shiftSelected);
-  //   console.log(selectedShift);
-  // };
   const rootStore = useContext(RootStoreContext);
   const { loadShifts } = rootStore.shiftStore;
 
@@ -49,6 +22,7 @@ const App = () => {
 
   return (
     <Fragment>
+      <ToastContainer position="bottom-right" />
       <NavBar />
       <Container fluid>
         <Switch>

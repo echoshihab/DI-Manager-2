@@ -2,13 +2,17 @@ import axios, { AxiosResponse } from "axios";
 import { IShift } from "../models/shift";
 import { IModality } from "../models/modality";
 import { history } from "../..";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(undefined, (error) => {
   const originalRequest = error.config;
+  if (error.message === "Network Error" && !error.response) {
+    toast.error("Network error!");
+  }
+  const { status, data, config } = error.response;
 
-  const { status, data, config } = error.resposne;
   if (status === 404) {
     history.push("/notfound");
   }
@@ -18,6 +22,9 @@ axios.interceptors.response.use(undefined, (error) => {
     data.errors.hasOwnProperty("id")
   ) {
     history.push("/notfound");
+  }
+  if (status === 500) {
+    toast.error("Server Error - unable to process request");
   }
 });
 

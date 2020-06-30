@@ -23,6 +23,7 @@
     "react-final-form": "^6.5.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-toastify": "^6.0.6",
     "react-widgets": "^4.4.11",
     "react-widgets-date-fns": "^4.0.26",
     "semantic-ui-react": "^0.88.2",
