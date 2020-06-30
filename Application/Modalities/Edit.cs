@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -40,7 +42,7 @@ namespace Application.Modalities
                 var modality = await _context.Modalities.FindAsync(request.Id);
 
                 if (modality == null)
-                    throw new Exception("Could not find Modality");
+                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Not Found" });
 
                 modality.Name = request.Name ?? modality.Name;
                 modality.DisplayName = request.DisplayName ?? modality.DisplayName;

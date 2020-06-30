@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,7 +28,7 @@ namespace Application.Modalities
                 var modality = await _context.Modalities.FindAsync(request.Id);
 
                 if (modality == null)
-                    throw new Exception("Couldn't find modality");
+                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Not Found" });
 
                 _context.Remove(modality);
                 //handler logic
