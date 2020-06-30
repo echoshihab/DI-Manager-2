@@ -1,13 +1,24 @@
 import axios, { AxiosResponse } from "axios";
 import { IShift } from "../models/shift";
 import { IModality } from "../models/modality";
+import { history } from "../..";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(undefined, (error) => {
   const originalRequest = error.config;
-  const status = error.status;
-  console.log(originalRequest, status); //log to remove
+
+  const { status, data, config } = error.resposne;
+  if (status === 404) {
+    history.push("/notfound");
+  }
+  if (
+    status === 400 &&
+    config.method === "get" &&
+    data.errors.hasOwnProperty("id")
+  ) {
+    history.push("/notfound");
+  }
 });
 
 const responseBody = (response: AxiosResponse) => response.data;
@@ -30,7 +41,6 @@ const Shifts = {
 const Modalities = {
   list: (): Promise<IModality[]> => requests.get("/modality"),
   create: (modality: IModality) => requests.post("/modality", modality),
-  details: (id: string) => requests.get(`/modality/${id}`),
   edit: (modality: IModality) =>
     requests.put(`/modality/${modality.id}`, modality),
   delete: (id: string) => requests.delete(`/modality/${id}`),
