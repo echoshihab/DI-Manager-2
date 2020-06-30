@@ -1,4 +1,5 @@
 
+using API.Middleware;
 using Application.Shifts;
 using AutoMapper;
 using Domain;
@@ -63,9 +64,11 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ErrorHandlingMiddleWare>();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
+
             }
 
             // app.UseHttpsRedirection();
