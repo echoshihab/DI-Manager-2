@@ -6,12 +6,18 @@ import { v4 as uuid } from "uuid";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { ModalityFormValues } from "../../../../models/modality";
 import { observer } from "mobx-react-lite";
+import { combineValidators, isRequired } from "revalidate";
 
 const ModalityForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { createModality } = rootStore.modalityStore;
   const [modality, setModality] = useState(new ModalityFormValues());
   const [loading, setLoading] = useState(false);
+
+  const validate = combineValidators({
+    name: isRequired({ message: "Modality name is required" }),
+    displayName: isRequired({ message: "Display name is required" }),
+  });
 
   const handleFinalFormSubmit = (values: any, form: any) => {
     console.log(values);
@@ -31,6 +37,7 @@ const ModalityForm = () => {
   return (
     <FinalForm
       onSubmit={handleFinalFormSubmit}
+      validate={validate}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
           <Header content="Add New Modality" />

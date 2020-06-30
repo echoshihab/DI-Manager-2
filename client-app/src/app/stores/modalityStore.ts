@@ -2,6 +2,7 @@ import { RootStore } from "./rootStore";
 import { observable, runInAction, action, computed } from "mobx";
 import { IModality } from "../models/modality";
 import agent from "../api/agent";
+import { toast } from "react-toastify";
 
 export default class ModalityStore {
   rootStore: RootStore;
@@ -45,8 +46,8 @@ export default class ModalityStore {
         this.modalityRegistry.set(modality.id, modality);
       });
     } catch (error) {
-      console.log("problem submitting data");
-      console.log(error);
+      toast.error("Problem submitting data");
+      console.log(error.response);
     }
     runInAction("toggle button loading indiciator", () => {
       this.submitting = false;
@@ -61,6 +62,7 @@ export default class ModalityStore {
         this.modalityRegistry.set(modality.id, modality);
       });
     } catch (error) {
+      toast.error("Problem submitting data");
       console.log(error);
     }
     runInAction("toggle button loading indiciator", () => {

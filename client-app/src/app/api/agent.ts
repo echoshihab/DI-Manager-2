@@ -9,7 +9,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.interceptors.response.use(undefined, (error) => {
   const originalRequest = error.config;
   if (error.message === "Network Error" && !error.response) {
-    toast.error("Network error!");
+    toast.error("Network error- Problem communicating with server!");
   }
   const { status, data, config } = error.response;
 
@@ -26,6 +26,7 @@ axios.interceptors.response.use(undefined, (error) => {
   if (status === 500) {
     toast.error("Server Error - unable to process request");
   }
+  throw error;
 });
 
 const responseBody = (response: AxiosResponse) => response.data;

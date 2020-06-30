@@ -12,6 +12,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-widgets": "^4.4.2",
+    "@types/revalidate": "^1.1.2",
     "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
     "date-fns": "^2.0.0-alpha.13",
@@ -26,6 +27,7 @@
     "react-toastify": "^6.0.6",
     "react-widgets": "^4.4.11",
     "react-widgets-date-fns": "^4.0.26",
+    "revalidate": "^1.2.0",
     "semantic-ui-react": "^0.88.2",
     "typescript": "^3.7.5",
     "uuid": "^8.2.0"
