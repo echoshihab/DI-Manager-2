@@ -30,7 +30,7 @@ const ModalityForm = () => {
     };
     setLoading(true);
     createModality(newModality)
-      .then(() => form.reset())
+      .then(() => form.restart())
       .finally(() => setLoading(false));
   };
 
@@ -38,7 +38,8 @@ const ModalityForm = () => {
     <FinalForm
       onSubmit={handleFinalFormSubmit}
       validate={validate}
-      render={({ handleSubmit, invalid, pristine }) => (
+      initialValues={modality}
+      render={({ handleSubmit, form, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
           <Header content="Add New Modality" />
           <Field
