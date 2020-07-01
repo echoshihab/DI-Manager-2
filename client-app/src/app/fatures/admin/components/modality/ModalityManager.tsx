@@ -4,15 +4,18 @@ import ModalityList from "./ModalityList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Segment, Grid, Container, Header } from "semantic-ui-react";
+import LoadingComponent from "../../../../layout/LoadingComponent";
 
 const ModalityManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
+  const { setAppLoaded, appLoaded } = rootStore.commonStore;
 
   useEffect(() => {
-    loadModalities();
-  }, [loadModalities]);
+    loadModalities().finally(() => setAppLoaded());
+  }, [loadModalities, setAppLoaded]);
 
+  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header

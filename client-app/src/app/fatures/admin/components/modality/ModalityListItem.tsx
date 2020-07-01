@@ -6,6 +6,7 @@ import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../api/common/form/TextInput";
 import { observer } from "mobx-react-lite";
 import { combineValidators, isRequired } from "revalidate";
+import LoadingComponent from "../../../../layout/LoadingComponent";
 
 interface IProps {
   modality: IModality;
@@ -26,9 +27,15 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
   };
 
   const handleFinalFormSubmit = (modality: IModality) => {
-    console.log(modality);
-    editModality(modality);
-    setEditMode(false);
+    setLoading(true);
+    editModality(modality)
+      .then(() => setLoading(false))
+      .finally(() => setEditMode(false));
+  };
+
+  const handleDeleteModality = (id: string) => {
+    setLoading(true);
+    deleteModality(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -37,7 +44,7 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
       initialValues={modality}
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} loading={loading}>
           <Form.Group widths="equal">
             <Field
               name="name"
@@ -53,15 +60,17 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
               label="Display Name"
             />
             <Button loading={submitting} type="submit">
-              <Icon name="check" />
+              <Icon name="check" color="green" />
             </Button>
             <Button onClick={toggleEditMode}>
-              <Icon name="cancel" />
+              <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>
         </Form>
       )}
     />
+  ) : loading ? (
+    <LoadingComponent content="Loading Modality List" />
   ) : (
     <List horizontal>
       <List.Item>
@@ -76,7 +85,7 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
         <Button
           circular
           size="small"
-          onClick={() => deleteModality(modality.id)}
+          onClick={() => handleDeleteModality(modality.id)}
         >
           <Icon name="trash alternate outline" color="red" />
         </Button>
