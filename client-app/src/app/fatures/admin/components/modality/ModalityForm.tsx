@@ -8,16 +8,16 @@ import { ModalityFormValues } from "../../../../models/modality";
 import { observer } from "mobx-react-lite";
 import { combineValidators, isRequired } from "revalidate";
 
+const validate = combineValidators({
+  name: isRequired({ message: "Modality name is required" }),
+  displayName: isRequired({ message: "Display name is required" }),
+});
+
 const ModalityForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { createModality } = rootStore.modalityStore;
-  const [modality, setModality] = useState(new ModalityFormValues());
+  const modality = new ModalityFormValues();
   const [loading, setLoading] = useState(false);
-
-  const validate = combineValidators({
-    name: isRequired({ message: "Modality name is required" }),
-    displayName: isRequired({ message: "Display name is required" }),
-  });
 
   const handleFinalFormSubmit = (values: any, form: any) => {
     console.log(values);

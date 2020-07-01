@@ -1,15 +1,19 @@
 import React, { useState, useContext, Fragment, useEffect } from "react";
-import { IModality } from "../../../../models/modality";
+import { IModality, ModalityFormValues } from "../../../../models/modality";
 import { List, Button, Icon, Form, Label } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../api/common/form/TextInput";
-import { listenerCount } from "process";
 import { observer } from "mobx-react-lite";
+import { combineValidators, isRequired } from "revalidate";
 
 interface IProps {
   modality: IModality;
 }
+const validate = combineValidators({
+  name: isRequired({ message: "Modality name is required" }),
+  displayName: isRequired({ message: "Display name is required" }),
+});
 
 const ModalityListItem: React.FC<IProps> = ({ modality }) => {
   const rootStore = useContext(RootStoreContext);
@@ -29,6 +33,7 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
 
   return editMode ? (
     <FinalForm
+      validate={validate}
       initialValues={modality}
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
