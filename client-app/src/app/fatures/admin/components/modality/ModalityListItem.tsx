@@ -1,6 +1,6 @@
-import React, { useState, useContext, Fragment, useEffect } from "react";
-import { IModality, ModalityFormValues } from "../../../../models/modality";
-import { List, Button, Icon, Form, Label } from "semantic-ui-react";
+import React, { useState, useContext } from "react";
+import { IModality } from "../../../../models/modality";
+import { List, Button, Icon, Form } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../api/common/form/TextInput";
