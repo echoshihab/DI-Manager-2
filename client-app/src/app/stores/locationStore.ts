@@ -74,7 +74,7 @@ export default class LocationStore {
     this.submitting = true;
     try {
       await agent.Locations.delete(id);
-      runInAction("delete Modality", () => {
+      runInAction("delete location", () => {
         this.locationRegistry.delete(id);
       });
     } catch (error) {

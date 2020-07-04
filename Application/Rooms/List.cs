@@ -16,7 +16,7 @@ namespace Application.Rooms
     {
         public class roomEnvelope
         {
-            public List<LocationDto> LocationWithRooms { get; set; }
+            public List<RoomDto> RoomsWithLocation { get; set; }
         }
         public class Query : IRequest<roomEnvelope>
         {
@@ -38,11 +38,11 @@ namespace Application.Rooms
             public async Task<roomEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                var locationWithRooms = await _context.Locations.Include(l => l.Rooms).ToListAsync();
+                var roomsWithLocation = await _context.Rooms.Include(r => r.Location).ToListAsync();
 
                 return new roomEnvelope
                 {
-                    LocationWithRooms = _mapper.Map<List<Location>, List<LocationDto>>(locationWithRooms)
+                    RoomsWithLocation = _mapper.Map<List<Room>, List<RoomDto>>(roomsWithLocation)
                 };
 
             }
