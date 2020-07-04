@@ -3,6 +3,7 @@ import { IShift } from "../models/shift";
 import { IModality } from "../models/modality";
 import { history } from "../..";
 import { toast } from "react-toastify";
+import { ILocation } from "../models/location";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -62,7 +63,16 @@ const Modalities = {
   delete: (id: string) => requests.delete(`/modality/${id}`),
 };
 
+const Locations = {
+  list: (): Promise<ILocation[]> => requests.get("/location"),
+  create: (location: ILocation) => requests.post("/location", location),
+  edit: (location: ILocation) =>
+    requests.put(`/location/${location.id}`, location),
+  delete: (id: string) => requests.delete(`/location/${id}`),
+};
+
 export default {
   Shifts,
   Modalities,
+  Locations,
 };
