@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -23,12 +26,21 @@ namespace Application.Locations
                 _context = context;
             }
 
+            public class CommandValidator : AbstractValidator<Command>
+            {
+                public CommandValidator()
+                {
+                    RuleFor(x => x.Name).NotEmpty();
+                }
+            }
+
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 var location = await _context.Locations.FindAsync(request.Id);
 
                 if (location == null)
-                    throw new Exception("Could not find location");
+                    throw new RestException(HttpStatusCode.NotFound, new { location = "Not Found" });
+
 
                 location.Name = request.Name ?? location.Name;
 

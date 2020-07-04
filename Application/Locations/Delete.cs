@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,7 +28,7 @@ namespace Application.Locations
                 var location = await _context.Locations.FindAsync(request.Id);
 
                 if (location == null)
-                    throw new Exception("Couldn't find location");
+                    throw new RestException(HttpStatusCode.NotFound, new { location = "Not Found" });
 
                 _context.Remove(location);
                 //handler logic

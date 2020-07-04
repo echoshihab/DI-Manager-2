@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -14,6 +15,15 @@ namespace Application.Locations
             public Guid Id { get; set; }
             public string Name { get; set; }
         }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+            }
+        }
+
 
         public class Handler : IRequestHandler<Command>
         {
