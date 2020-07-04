@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,7 +28,7 @@ namespace Application.Rooms
                 var room = await _context.Rooms.FindAsync(request.Id);
 
                 if (room == null)
-                    throw new Exception("Couldn't find room");
+                    throw new RestException(HttpStatusCode.NotFound, new { room = "Room not found" });
 
                 _context.Remove(room);
                 //handler logic

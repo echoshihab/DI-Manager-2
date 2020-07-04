@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Persistence;
@@ -25,6 +27,9 @@ namespace Application.Rooms
             public async Task<Room> Handle(Query request, CancellationToken cancellationToken)
             {
                 var room = await _context.Rooms.FindAsync(request.Id);
+
+                if (room == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { room = "Could not find room" });
 
                 return room;
 

@@ -1,7 +1,10 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -14,6 +17,15 @@ namespace Application.Rooms
             public Guid Id { get; set; }
             public string Name { get; set; }
             public Guid LocationId { get; set; }
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.LocationId).NotEmpty().WithMessage("Location must be selected");
+            }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -29,7 +41,7 @@ namespace Application.Rooms
                 var location = await _context.Locations.FindAsync(request.LocationId);
 
                 if (location == null)
-                    throw new Exception("Could not find location");
+                    throw new RestException(HttpStatusCode.NotFound, new { location = "Could not find location" });
 
                 var room = new Room
                 {

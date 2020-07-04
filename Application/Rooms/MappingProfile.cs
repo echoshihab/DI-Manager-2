@@ -1,8 +1,8 @@
-using Application.Rooms;
+using Application.Locations;
 using AutoMapper;
 using Domain;
 
-namespace Application.Locations
+namespace Application.Rooms
 {
     public class MappingProfile : Profile
     {

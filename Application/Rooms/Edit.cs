@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -13,6 +16,14 @@ namespace Application.Rooms
             public Guid Id { get; set; }
             public string Name { get; set; }
 
+        }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -28,7 +39,7 @@ namespace Application.Rooms
                 var room = await _context.Rooms.FindAsync(request.Id);
 
                 if (room == null)
-                    throw new Exception("Could not find room");
+                    throw new RestException(HttpStatusCode.NotFound, new { room = "Could not find room" });
 
                 room.Name = request.Name ?? room.Name;
 

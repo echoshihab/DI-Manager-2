@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Room>>> List()
+        public async Task<ActionResult<List.roomEnvelope>> List()
         {
             return await Mediator.Send(new List.Query());
         }

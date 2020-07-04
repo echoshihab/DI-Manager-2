@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Locations;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,30 +14,37 @@ namespace Application.Rooms
 {
     public class List
     {
-        public class ListEnvelope
+        public class roomEnvelope
         {
-            public List<Room> Rooms { get; set; }
+            public List<LocationDto> LocationWithRooms { get; set; }
         }
-        public class Query : IRequest<List<Room>>
+        public class Query : IRequest<roomEnvelope>
         {
 
 
         }
 
-        public class Handler : IRequestHandler<Query, List<Room>>
+        public class Handler : IRequestHandler<Query, roomEnvelope>
         {
             private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context)
+            private readonly IMapper _mapper;
+            public Handler(ApplicationDbContext context, IMapper mapper)
             {
+                _mapper = mapper;
                 _context = context;
 
             }
 
-            public async Task<List<Room>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<roomEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                var rooms = await _context.Rooms.ToListAsync();
-                return rooms;
+                var locationWithRooms = await _context.Locations.Include(l => l.Rooms).ToListAsync();
+
+                return new roomEnvelope
+                {
+                    LocationWithRooms = _mapper.Map<List<Location>, List<LocationDto>>(locationWithRooms)
+                };
+
             }
 
 
