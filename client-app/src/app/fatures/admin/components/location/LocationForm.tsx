@@ -9,27 +9,25 @@ import { observer } from "mobx-react-lite";
 import { combineValidators, isRequired } from "revalidate";
 
 const validate = combineValidators({
-  name: isRequired({ message: "Modality name is required" }),
-  displayName: isRequired({ message: "Display name is required" }),
+  name: isRequired({ message: "Location name is required" }),
 });
 
-const ModalityForm = () => {
+const LocationForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { createModality } = rootStore.modalityStore;
-  const modality = new ModalityFormValues();
+  const { createLocation } = rootStore.locationStore;
+  const location = new ModalityFormValues();
   const [loading, setLoading] = useState(false);
 
   const handleFinalFormSubmit = (values: any, form: any) => {
     console.log(values);
-    const { name, displayName } = values;
+    const { name } = values;
 
-    let newModality = {
+    let newLocation = {
       id: uuid(),
       name: name,
-      displayName: displayName,
     };
     setLoading(true);
-    createModality(newModality)
+    createLocation(newLocation)
       .then(() => form.restart())
       .finally(() => setLoading(false));
   };
@@ -38,20 +36,14 @@ const ModalityForm = () => {
     <FinalForm
       onSubmit={handleFinalFormSubmit}
       validate={validate}
-      initialValues={modality}
+      initialValues={location}
       render={({ handleSubmit, form, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
-          <Header content="Add New Modality" />
+          <Header content="Add New Location" />
           <Field
-            placeholder="Modality Name"
+            placeholder="Location Name"
             name="name"
-            value={modality.name}
-            component={TextInput}
-          />
-          <Field
-            placeholder="Modality Display Name"
-            name="displayName"
-            value={modality.displayName}
+            value={location.name}
             component={TextInput}
           />
 
@@ -59,7 +51,7 @@ const ModalityForm = () => {
             floated="right"
             positive
             type="submit"
-            content="Add Modality"
+            content="Add Location"
             disabled={loading || invalid || pristine}
           />
         </Form>
@@ -68,4 +60,4 @@ const ModalityForm = () => {
   );
 };
 
-export default observer(ModalityForm);
+export default observer(LocationForm);
