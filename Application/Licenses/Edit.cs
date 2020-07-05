@@ -1,6 +1,9 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -16,6 +19,17 @@ namespace Application.Licenses
 
         }
 
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.DisplayName).NotEmpty();
+            }
+        }
+
+
         public class Handler : IRequestHandler<Command>
         {
             private readonly ApplicationDbContext _context;
@@ -29,7 +43,7 @@ namespace Application.Licenses
                 var license = await _context.Licenses.FindAsync(request.Id);
 
                 if (license == null)
-                    throw new Exception("Could not find License");
+                    throw new RestException(HttpStatusCode.NotFound, new { license = "License not found" });
 
                 license.Name = request.Name ?? license.Name;
                 license.DisplayName = request.DisplayName ?? license.DisplayName;
