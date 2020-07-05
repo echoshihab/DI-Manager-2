@@ -19,6 +19,9 @@ export default class LicenseStore {
   }
 
   sortLicenseByName(license: ILicense[]) {
+    if (license && license.length) {
+      return license;
+    }
     const sortedLicenses = license.sort((a, b) =>
       a.displayName.localeCompare(b.displayName)
     );

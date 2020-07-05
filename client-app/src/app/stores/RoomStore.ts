@@ -19,6 +19,9 @@ export default class RoomStore {
   }
 
   sortRoomsByName(rooms: IRoom[]) {
+    if (rooms && rooms.length) {
+      return rooms;
+    }
     const sortedRooms = rooms.sort((a, b) => a.name.localeCompare(b.name));
     return sortedRooms;
   }
