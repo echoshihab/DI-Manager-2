@@ -4,9 +4,9 @@ import TextInput from "../../../../api/common/form/TextInput";
 import { Form as FinalForm, Field } from "react-final-form";
 import { v4 as uuid } from "uuid";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { ModalityFormValues } from "../../../../models/modality";
 import { observer } from "mobx-react-lite";
 import { combineValidators, isRequired } from "revalidate";
+import { LocationFormValues } from "../../../../models/location";
 
 const validate = combineValidators({
   name: isRequired({ message: "Location name is required" }),
@@ -15,11 +15,10 @@ const validate = combineValidators({
 const LocationForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { createLocation } = rootStore.locationStore;
-  const location = new ModalityFormValues();
+  const location = new LocationFormValues();
   const [loading, setLoading] = useState(false);
 
   const handleFinalFormSubmit = (values: any, form: any) => {
-    console.log(values);
     const { name } = values;
 
     let newLocation = {

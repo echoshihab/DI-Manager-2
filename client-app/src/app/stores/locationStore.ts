@@ -15,9 +15,14 @@ export default class LocationStore {
   @observable submitting = false;
 
   @computed get sortedLocationByName() {
-    return Array.from(this.locationRegistry.values()).sort((a, b) =>
-      a.name.localeCompare(b.displayName)
+    return this.sortLocationsByName(Array.from(this.locationRegistry.values()));
+  }
+
+  sortLocationsByName(locations: ILocation[]) {
+    const sortedLocations = locations.sort((a, b) =>
+      a.name.localeCompare(b.name)
     );
+    return sortedLocations;
   }
 
   @action loadLocations = async () => {
@@ -31,7 +36,7 @@ export default class LocationStore {
         });
       });
     } catch (error) {
-      console.log(error);
+      toast.error("Problem loading locations");
     }
     runInAction("toggle loading indicator", () => {
       this.loadingInitial = false;
@@ -47,7 +52,6 @@ export default class LocationStore {
       });
     } catch (error) {
       toast.error("Problem submitting data");
-      console.log(error.response);
     }
     runInAction("toggle button loading indiciator", () => {
       this.submitting = false;
@@ -63,7 +67,6 @@ export default class LocationStore {
       });
     } catch (error) {
       toast.error("Problem submitting data");
-      console.log(error);
     }
     runInAction("toggle button loading indiciator", () => {
       this.submitting = false;
@@ -78,7 +81,7 @@ export default class LocationStore {
         this.locationRegistry.delete(id);
       });
     } catch (error) {
-      console.log(error);
+      toast.error("Problem deleting");
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;

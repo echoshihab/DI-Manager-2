@@ -15,24 +15,19 @@ export default class RoomStore {
   @observable submitting = false;
 
   @computed get sortedRoomsByName() {
-    return this.groupRoomsByLocation(Array.from(this.roomRegistry.values()));
+    return this.sortRoomsByName(Array.from(this.roomRegistry.values()));
   }
 
-  groupRoomsByLocation(rooms: IRoomWithLocation[]) {
+  sortRoomsByName(rooms: IRoom[]) {
     const sortedRooms = rooms.sort((a, b) => a.name.localeCompare(b.name));
-    return Object.entries(
-      sortedRooms.reduce((rooms, room) => {
-        const location = room.Location.name;
-        rooms[location] = rooms[location] ? [...rooms[location], room] : [room];
-        return rooms;
-      }, {} as { [key: string]: IRoomWithLocation[] })
-    );
+    return sortedRooms;
   }
 
-  @action loadRooms = async () => {
+  @action loadRooms = async (locationId: string) => {
     this.loadingInitial = true;
     try {
-      const rooms = await agent.Rooms.list();
+      const rooms = await agent.Rooms.list(locationId);
+      console.log(rooms);
       runInAction("loading Rooms", () => {
         rooms.forEach((room) => {
           this.roomRegistry.set(room.id, room);
@@ -48,15 +43,11 @@ export default class RoomStore {
 
   @action createRoom = async (room: IRoomWithLocation) => {
     this.submitting = true;
-    let roomToCreate: IRoom = {
-      id: room.id,
-      name: room.name,
-      locationId: room.Location.id,
-    };
+
     try {
-      await agent.Rooms.create(roomToCreate);
+      await agent.Rooms.create(room);
       runInAction("create room", () => {
-        this.roomRegistry.set(room.id, room);
+        this.roomRegistry.set(room.id, { id: room.name, name: room.name });
       });
     } catch (error) {
       toast.error("Problem submitting data");
@@ -67,19 +58,18 @@ export default class RoomStore {
     });
   };
 
-  @action editRoom = async (room: IRoomWithLocation) => {
+  @action editRoom = async (room: IRoom) => {
     this.submitting = true;
-    let roomToEdit = { id: room.id, name: room.name };
+    console.log(room);
     try {
-      await agent.Rooms.edit(roomToEdit);
+      await agent.Rooms.edit(room);
       runInAction(() => {
         this.roomRegistry.set(room.id, room);
       });
     } catch (error) {
       toast.error("Problem submitting data");
-      console.log(error);
     }
-    runInAction("toggle button loading indiciator", () => {
+    runInAction("toggle button loading indicator", () => {
       this.submitting = false;
     });
   };

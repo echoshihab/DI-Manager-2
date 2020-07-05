@@ -24,9 +24,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List.roomEnvelope>> List()
+        public async Task<ActionResult<List<RoomDto>>> List(Guid? locationId)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query(locationId));
         }
 
         [HttpPut("{id}")]

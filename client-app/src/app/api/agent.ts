@@ -4,7 +4,7 @@ import { IModality } from "../models/modality";
 import { history } from "../..";
 import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
-import { IRoom, IRoomWithLocation } from "../models/room";
+import { IRoom } from "../models/room";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -73,7 +73,8 @@ const Locations = {
 };
 
 const Rooms = {
-  list: (): Promise<IRoomWithLocation[]> => requests.get("/room"),
+  list: (locationId: string): Promise<IRoom[]> =>
+    requests.get(`/room?locationId=${locationId}`),
   create: (room: IRoom) => requests.post("/room", room),
   edit: (room: IRoom) => requests.put(`/room/${room.id}`, room),
   delete: (id: string) => requests.delete(`/room/${id}`),

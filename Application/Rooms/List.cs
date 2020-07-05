@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Application.Locations;
 using AutoMapper;
 using Domain;
@@ -14,17 +16,20 @@ namespace Application.Rooms
 {
     public class List
     {
-        public class roomEnvelope
+
+        public class Query : IRequest<List<RoomDto>>
         {
-            public List<RoomDto> RoomsWithLocation { get; set; }
-        }
-        public class Query : IRequest<roomEnvelope>
-        {
+            public Guid? LocationId { get; set; }
+            public Query(Guid? locationId)
+            {
+                LocationId = locationId;
+
+            }
 
 
         }
 
-        public class Handler : IRequestHandler<Query, roomEnvelope>
+        public class Handler : IRequestHandler<Query, List<RoomDto>>
         {
             private readonly ApplicationDbContext _context;
             private readonly IMapper _mapper;
@@ -35,16 +40,28 @@ namespace Application.Rooms
 
             }
 
-            public async Task<roomEnvelope> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<RoomDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                var roomsWithLocation = await _context.Rooms.Include(r => r.Location).ToListAsync();
+                var queryable = _context.Rooms.AsQueryable();
 
-                return new roomEnvelope
+                if (request.LocationId.HasValue)
                 {
-                    RoomsWithLocation = _mapper.Map<List<Room>, List<RoomDto>>(roomsWithLocation)
-                };
+                    var location = await _context.Locations.FindAsync(request.LocationId);
 
+                    if (location == null)
+                        throw new RestException(HttpStatusCode.NotFound, new { location = "location not found" });
+
+                    queryable = queryable.Where(x => x.LocationId == request.LocationId);
+                }
+
+
+                var rooms = await queryable.ToListAsync();
+
+
+                var roomsToReturn = _mapper.Map<List<Room>, List<RoomDto>>(rooms);
+
+                return roomsToReturn;
             }
 
 

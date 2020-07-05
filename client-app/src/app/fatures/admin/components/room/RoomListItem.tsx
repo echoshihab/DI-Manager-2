@@ -1,24 +1,23 @@
-import React, { useContext, useState } from "react";
-import { ILocation } from "../../../../models/location";
-import { combineValidators, isRequired } from "revalidate";
+import React, { useState, useContext } from "react";
+import { IRoomWithLocation, IRoom } from "../../../../models/room";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { Form, Button, Icon, List } from "semantic-ui-react";
-import { Form as FinalForm } from "react-final-form";
-import { Field } from "react-final-form";
+import { combineValidators, isRequired } from "revalidate";
+import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../api/common/form/TextInput";
+import { Form, Button, Icon, List } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
 
 interface IProps {
-  location: ILocation;
+  room: IRoom;
 }
 const validate = combineValidators({
-  name: isRequired({ message: "Location name is required" }),
+  name: isRequired({ message: "room name is required" }),
 });
 
-const LocationListItem: React.FC<IProps> = ({ location }) => {
+const RoomListItem: React.FC<IProps> = ({ room }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteLocation, editLocation } = rootStore.locationStore;
+  const { submitting, deleteRoom, editRoom } = rootStore.roomStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,22 +25,22 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
     setEditMode(!editMode);
   };
 
-  const handleFinalFormSubmit = (location: ILocation) => {
+  const handleFinalFormSubmit = (room: IRoom) => {
     setLoading(true);
-    editLocation(location)
+    editRoom(room)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
   };
 
-  const handleDeleteLocation = (id: string) => {
+  const handleDeleteRoom = (id: string) => {
     setLoading(true);
-    deleteLocation(id).finally(() => setLoading(false));
+    deleteRoom(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
     <FinalForm
       validate={validate}
-      initialValues={location}
+      initialValues={room}
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
@@ -49,7 +48,7 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
             <Field
               name="name"
               component={TextInput}
-              value={location.name}
+              value={room.name}
               label="Name"
             />
 
@@ -68,26 +67,21 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
       )}
     />
   ) : loading ? (
-    <LoadingComponent content="Loading Locations..." />
+    <LoadingComponent content="Loading Rooms..." />
   ) : (
     <List horizontal>
-      <List.Item>{location.name}</List.Item>
+      <List.Item>{room.name}</List.Item>
       <List.Item>
         <Button circular size="small" onClick={toggleEditMode}>
           <Icon name="edit" color="blue" />
         </Button>
       </List.Item>
       <List.Item>
-        <Button
-          circular
-          size="small"
-          onClick={() => handleDeleteLocation(location.id)}
-        >
+        <Button circular size="small" onClick={() => handleDeleteRoom(room.id)}>
           <Icon name="trash alternate outline" color="red" />
         </Button>
       </List.Item>
     </List>
   );
 };
-
-export default observer(LocationListItem);
+export default observer(RoomListItem);

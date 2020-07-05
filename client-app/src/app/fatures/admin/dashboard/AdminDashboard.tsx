@@ -1,10 +1,10 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import TechnologistManager from "../components/technologist/TechnologistManager";
 import LocationManager from "../components/location/LocationManager";
 import RoomManager from "../components/room/RoomManager";
 import ModalityManager from "../components/modality/ModalityManager";
 import RoleManager from "../components/role/RoleManager";
-import { Grid, Segment } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import AdminNavBar from "../navigation/AdminNavBar";
 
 const AdminDashboard = () => {
@@ -12,7 +12,6 @@ const AdminDashboard = () => {
   const [activeNavItem, setActiveNavItem] = useState<string>("");
 
   const handleComponentChange = (component: string) => {
-    console.log(component);
     setActiveNavItem(component);
     setVisibleComponent(component);
   };
