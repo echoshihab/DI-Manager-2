@@ -78,7 +78,7 @@ export default class LicenseStore {
     });
   };
 
-  @action deleteRoom = async (id: string) => {
+  @action deleteLicense = async (id: string) => {
     this.submitting = true;
     try {
       await agent.Licenses.delete(id);

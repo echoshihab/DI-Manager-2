@@ -19,6 +19,15 @@ const AdminNavBar: React.FC<IProps> = ({ setComponent, activeItem }) => {
       </Menu.Item>
 
       <Menu.Item
+        name="license"
+        active={activeItem === "license"}
+        onClick={(e, { name }) => setComponent(name!)}
+      >
+        <Header as="h4">License </Header>
+        <p>Manage Licenses</p>
+      </Menu.Item>
+
+      <Menu.Item
         name="location"
         active={activeItem === "location"}
         onClick={(e, { name }) => setComponent(name!)}

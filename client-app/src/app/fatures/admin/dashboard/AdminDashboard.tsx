@@ -6,6 +6,7 @@ import ModalityManager from "../components/modality/ModalityManager";
 import RoleManager from "../components/role/RoleManager";
 import { Grid } from "semantic-ui-react";
 import AdminNavBar from "../navigation/AdminNavBar";
+import LicenseManager from "../components/license/LicenseManager";
 
 const AdminDashboard = () => {
   const [visibleComponent, setVisibleComponent] = useState("");
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
   const components = {
     technologist: <TechnologistManager />,
     location: <LocationManager />,
+    license: <LicenseManager />,
     room: <RoomManager />,
     modality: <ModalityManager />,
     role: <RoleManager />,
