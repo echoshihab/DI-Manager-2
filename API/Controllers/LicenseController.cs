@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Licenses;
-using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +17,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<License>>> List()
+        public async Task<ActionResult<List<LicenseDto>>> List(Guid? modalityId)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query(modalityId));
         }
 
         [HttpPut("{id}")]

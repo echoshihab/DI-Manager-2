@@ -5,6 +5,7 @@ import { history } from "../..";
 import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
 import { IRoom } from "../models/room";
+import { ILicense } from "../models/license";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -80,9 +81,18 @@ const Rooms = {
   delete: (id: string) => requests.delete(`/room/${id}`),
 };
 
+const Licenses = {
+  list: (modalityId: string): Promise<ILicense[]> =>
+    requests.get(`/room?modalityId=${modalityId}`),
+  create: (license: ILicense) => requests.post("/license", license),
+  edit: (license: ILicense) => requests.put(`/license/${license.id}`, license),
+  delete: (id: string) => requests.delete(`/license/${id}`),
+};
+
 export default {
   Shifts,
   Modalities,
   Locations,
   Rooms,
+  Licenses,
 };

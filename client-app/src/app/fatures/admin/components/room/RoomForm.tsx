@@ -5,8 +5,8 @@ import { RoomFormValues } from "../../../../models/room";
 import { Form, Header, Button } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { v4 as uuid } from "uuid";
-import TextInput from "../../../../api/common/form/TextInput";
-import SelectInput from "../../../../api/common/SelectInput";
+import TextInput from "../../../../common/form/TextInput";
+import SelectInput from "../../../../common/form/SelectInput";
 import { ILocation } from "../../../../models/location";
 
 interface IProps {

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Form, Button, Header } from "semantic-ui-react";
-import TextInput from "../../../../api/common/form/TextInput";
+import TextInput from "../../../../common/form/TextInput";
 import { Form as FinalForm, Field } from "react-final-form";
 import { v4 as uuid } from "uuid";
 import { RootStoreContext } from "../../../../stores/rootStore";

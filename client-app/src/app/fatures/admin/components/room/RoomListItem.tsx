@@ -3,7 +3,7 @@ import { IRoomWithLocation, IRoom } from "../../../../models/room";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { combineValidators, isRequired } from "revalidate";
 import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from "../../../../api/common/form/TextInput";
+import TextInput from "../../../../common/form/TextInput";
 import { Form, Button, Icon, List } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { observer } from "mobx-react-lite";

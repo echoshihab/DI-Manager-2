@@ -5,7 +5,7 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form, Button, Icon, List } from "semantic-ui-react";
 import { Form as FinalForm } from "react-final-form";
 import { Field } from "react-final-form";
-import TextInput from "../../../../api/common/form/TextInput";
+import TextInput from "../../../../common/form/TextInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
 

@@ -3,7 +3,7 @@ import { IModality } from "../../../../models/modality";
 import { List, Button, Icon, Form } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from "../../../../api/common/form/TextInput";
+import TextInput from "../../../../common/form/TextInput";
 import { observer } from "mobx-react-lite";
 import { combineValidators, isRequired } from "revalidate";
 import LoadingComponent from "../../../../layout/LoadingComponent";
