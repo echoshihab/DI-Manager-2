@@ -13,6 +13,7 @@ interface IProps {
 }
 const validate = combineValidators({
   name: isRequired({ message: "license name is required" }),
+  displayName: isRequired({ message: "display name is required" }),
 });
 
 const LicenseListItem: React.FC<IProps> = ({ license }) => {
@@ -22,7 +23,9 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
   const [loading, setLoading] = useState(false);
 
   const toggleEditMode = () => {
+    setLoading(true);
     setEditMode(!editMode);
+    setLoading(false);
   };
 
   const handleFinalFormSubmit = (license: ILicense) => {

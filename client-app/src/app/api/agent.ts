@@ -83,7 +83,7 @@ const Rooms = {
 
 const Licenses = {
   list: (modalityId: string): Promise<ILicense[]> =>
-    requests.get(`/room?modalityId=${modalityId}`),
+    requests.get(`/license?modalityId=${modalityId}`),
   create: (license: ILicense) => requests.post("/license", license),
   edit: (license: ILicense) => requests.put(`/license/${license.id}`, license),
   delete: (id: string) => requests.delete(`/license/${id}`),
