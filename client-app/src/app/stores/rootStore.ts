@@ -5,6 +5,7 @@ import ModalityStore from "./modalityStore";
 import CommonStore from "./commonStore";
 import LocationStore from "./locationStore";
 import RoomStore from "./RoomStore";
+import LicenseStore from "./LicenseStore";
 
 configure({ enforceActions: "always" });
 
@@ -14,6 +15,7 @@ export class RootStore {
   locationStore: LocationStore;
   commonStore: CommonStore;
   roomStore: RoomStore;
+  licenseStore: LicenseStore;
 
   constructor() {
     this.shiftStore = new ShiftStore(this);
@@ -21,6 +23,7 @@ export class RootStore {
     this.commonStore = new CommonStore(this);
     this.locationStore = new LocationStore(this);
     this.roomStore = new RoomStore(this);
+    this.licenseStore = new LicenseStore(this);
   }
 }
 export const RootStoreContext = createContext(new RootStore());

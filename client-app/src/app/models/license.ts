@@ -2,6 +2,9 @@ export interface ILicense {
   id: string;
   name: string;
   displayName: string;
+}
+
+export interface ILicenseWithModality extends ILicense {
   modalityId: string;
 }
 
