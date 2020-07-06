@@ -54,8 +54,9 @@ namespace Application.Technologists
                 foreach (var id in request.LicenseIdList)
                 {
                     var license = await _context.Licenses.FindAsync(id);
-                    if (license == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { license = "Unable to save: Invalid License Added" });
+
+                    if (license == null || license.ModalityId != technologist.ModalityId)
+                        throw new RestException(HttpStatusCode.BadRequest, new { license = "Unable to save: Invalid License Added" });
 
                     var technologistLicenses = new TechnologistLicense
                     {
