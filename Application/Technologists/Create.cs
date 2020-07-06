@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Technologists
@@ -33,11 +34,10 @@ namespace Application.Technologists
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                var modality = _context.Modalities.FindAsync(request.ModalityId);
+                var modality = await _context.Modalities.FindAsync(request.ModalityId);
 
                 if (modality == null)
                     throw new RestException(HttpStatusCode.NotFound, new { modality = "modality not found" });
-
 
 
                 var technologist = new Technologist
