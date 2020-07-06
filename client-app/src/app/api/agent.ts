@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
 import { IRoom } from "../models/room";
 import { ILicense } from "../models/license";
+import { ITechnologist } from "../models/technologist";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -87,6 +88,16 @@ const Licenses = {
   create: (license: ILicense) => requests.post("/license", license),
   edit: (license: ILicense) => requests.put(`/license/${license.id}`, license),
   delete: (id: string) => requests.delete(`/license/${id}`),
+};
+
+const Technologists = {
+  list: (modalityId: string): Promise<ITechnologist[]> =>
+    requests.get(`/technologist?modalityId=${modalityId}`),
+  create: (technologist: ITechnologist) =>
+    requests.post("/technologist", technologist),
+  edit: (technologist: ITechnologist) =>
+    requests.put(`/technologist/${technologist.id}`, technologist),
+  delete: (id: string) => requests.delete(`/technologist/${id}`),
 };
 
 export default {

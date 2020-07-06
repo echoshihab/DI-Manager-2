@@ -1,5 +1,3 @@
-import { ILocation } from "./location";
-
 export interface IRoom {
   id: string;
   name: string;
