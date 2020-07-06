@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Persistence;
@@ -15,6 +18,7 @@ namespace Application.Technologists
             public string Name { get; set; }
             public string Initial { get; set; }
             public Guid ModalityId { get; set; }
+            public ICollection<Guid> LicenseIdList { get; set; }
 
         }
 
@@ -31,7 +35,10 @@ namespace Application.Technologists
 
                 var modality = _context.Modalities.FindAsync(request.ModalityId);
 
-                if (modality == null) throw new Exception("Modality doesn't exist");
+                if (modality == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { modality = "modality not found" });
+
+
 
                 var technologist = new Technologist
                 {
@@ -42,6 +49,22 @@ namespace Application.Technologists
                 };
 
                 _context.Technologists.Add(technologist);
+
+                //foreach will not be exceuted if LicenseIdList is empty
+                foreach (var id in request.LicenseIdList)
+                {
+                    var license = await _context.Licenses.FindAsync(id);
+                    if (license == null)
+                        throw new RestException(HttpStatusCode.NotFound, new { license = "Unable to save: Invalid License Added" });
+
+                    var technologistLicenses = new TechnologistLicense
+                    {
+                        License = license,
+                        Technologist = technologist
+                    };
+
+                    _context.TechnologistLicenses.Add(technologistLicenses);
+                }
 
                 var success = await _context.SaveChangesAsync() > 0;
 

@@ -13,10 +13,6 @@ namespace Application.Locations
 {
     public class List
     {
-        public class ListEnvelope
-        {
-            public List<Location> Locations { get; set; }
-        }
         public class Query : IRequest<List<LocationDto>>
         {
 
@@ -37,7 +33,7 @@ namespace Application.Locations
             public async Task<List<LocationDto>> Handle(Query request, CancellationToken cancellationToken)
             {
 
-                var locationsFromDb = await _context.Locations.Include(l => l.Rooms).ToListAsync();
+                var locationsFromDb = await _context.Locations.ToListAsync();
 
                 var locationsToReturn = _mapper.Map<List<Location>, List<LocationDto>>(locationsFromDb);
 

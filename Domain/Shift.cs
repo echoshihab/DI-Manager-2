@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Shift
     {
-        public Guid Id { get; set; } //generate client side
+        public Guid Id { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public Guid LicenseId { get; set; }

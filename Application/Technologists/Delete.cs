@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,7 +28,7 @@ namespace Application.Technologists
                 var technologist = await _context.Technologists.FindAsync(request.Id);
 
                 if (technologist == null)
-                    throw new Exception("Couldn't find location");
+                    throw new RestException(HttpStatusCode.NotFound, new { technologist = "Couldn't find technologist" });
 
                 _context.Remove(technologist);
                 //handler logic

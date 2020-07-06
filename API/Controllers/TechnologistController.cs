@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Technologist>>> List()
+        public async Task<ActionResult<List<TechnologistDto>>> List()
         {
             return await Mediator.Send(new List.Query());
         }

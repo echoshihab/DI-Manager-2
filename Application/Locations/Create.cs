@@ -35,6 +35,7 @@ namespace Application.Locations
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
+
                 var location = new Location
                 {
                     Id = request.Id,

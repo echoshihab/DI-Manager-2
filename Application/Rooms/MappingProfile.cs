@@ -10,6 +10,7 @@ namespace Application.Rooms
         {
             CreateMap<Location, LocationDto>();
             CreateMap<Room, RoomDto>();
+
         }
     }
 }
