@@ -106,4 +106,5 @@ export default {
   Locations,
   Rooms,
   Licenses,
+  Technologists,
 };

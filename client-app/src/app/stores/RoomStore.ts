@@ -56,7 +56,7 @@ export default class RoomStore {
       toast.error("Problem submitting data");
       console.log(error.response);
     }
-    runInAction("toggle button loading indiciator", () => {
+    runInAction("toggle button loading indicator", () => {
       this.submitting = false;
     });
   };
