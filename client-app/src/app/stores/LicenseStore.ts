@@ -19,9 +19,6 @@ export default class LicenseStore {
   }
 
   sortLicenseByName(license: ILicense[]) {
-    if (license && license.length) {
-      return license;
-    }
     const sortedLicenses = license.sort((a, b) =>
       a.displayName.localeCompare(b.displayName)
     );
@@ -29,6 +26,7 @@ export default class LicenseStore {
   }
 
   @action loadLicenses = async (modalityId: string) => {
+    this.licenseRegistry.clear();
     this.loadingInitial = true;
     try {
       const licenses = await agent.Licenses.list(modalityId);

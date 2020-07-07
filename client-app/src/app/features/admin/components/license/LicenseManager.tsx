@@ -19,6 +19,7 @@ const LicenseManager = () => {
   }, [loadModalities, setAppLoaded]);
 
   const handleModalityChange = (modalityId: string) => {
+    setLicenses(false);
     loadLicenses(modalityId).then(() => setLicenses(true));
   };
 

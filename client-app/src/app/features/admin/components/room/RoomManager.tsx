@@ -11,15 +11,15 @@ const RoomManager = () => {
   const { loadLocations } = rootStore.locationStore;
   const { loadRooms } = rootStore.roomStore;
   const { setAppLoaded, appLoaded } = rootStore.commonStore;
-
-  const [rooms, setRooms] = useState(false);
+  const [roomsLoader, setRoomsLoader] = useState(false);
 
   useEffect(() => {
     loadLocations().finally(() => setAppLoaded());
   }, [loadLocations, setAppLoaded]);
 
   const handleLocationChange = (locationId: string) => {
-    loadRooms(locationId).then(() => setRooms(true));
+    setRoomsLoader(true);
+    loadRooms(locationId).then(() => setRoomsLoader(false));
   };
 
   if (!appLoaded) return <LoadingComponent content="Loading app..." />;
@@ -38,7 +38,9 @@ const RoomManager = () => {
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">{rooms && <RoomList />}</Segment>
+          <Segment color="blue">
+            <RoomList roomsLoader={roomsLoader} />
+          </Segment>
         </Grid.Column>
       </Grid>
     </Container>

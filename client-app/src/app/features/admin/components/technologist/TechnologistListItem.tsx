@@ -1,23 +1,28 @@
-import React, { useState, useContext } from "react";
-import { IRoom } from "../../../../models/room";
-import { RootStoreContext } from "../../../../stores/rootStore";
+import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
-import { Form as FinalForm, Field } from "react-final-form";
-import TextInput from "../../../../common/form/TextInput";
+import { ITechnologist } from "../../../../models/technologist";
+import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form, Button, Icon, List } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
+import { Form as FinalForm, Field } from "react-final-form";
+import TextInput from "../../../../common/form/TextInput";
 import { observer } from "mobx-react-lite";
 
 interface IProps {
-  room: IRoom;
+  technologist: ITechnologist;
 }
 const validate = combineValidators({
-  name: isRequired({ message: "room name is required" }),
+  name: isRequired({ message: "technologist name is required" }),
+  initial: isRequired({ message: "technologist initial is required" }),
 });
 
-const RoomListItem: React.FC<IProps> = ({ room }) => {
+const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteRoom, editRoom } = rootStore.roomStore;
+  const {
+    submitting,
+    deleteTechnologist,
+    editTechnologist,
+  } = rootStore.technologistStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -25,22 +30,22 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
     setEditMode(!editMode);
   };
 
-  const handleFinalFormSubmit = (room: IRoom) => {
+  const handleFinalFormSubmit = (technologist: ITechnologist) => {
     setLoading(true);
-    editRoom(room)
+    editTechnologist(technologist)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
   };
 
-  const handleDeleteRoom = (id: string) => {
+  const handleDeleteTechnologist = (id: string) => {
     setLoading(true);
-    deleteRoom(id).finally(() => setLoading(false));
+    deleteTechnologist(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
     <FinalForm
       validate={validate}
-      initialValues={room}
+      initialValues={technologist}
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
@@ -48,7 +53,13 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
             <Field
               name="name"
               component={TextInput}
-              value={room.name}
+              value={technologist.name}
+              label="Name"
+            />
+            <Field
+              name="name"
+              component={TextInput}
+              value={technologist.initial}
               label="Name"
             />
 
@@ -67,21 +78,28 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
       )}
     />
   ) : loading ? (
-    <LoadingComponent content="Loading Rooms..." />
+    <LoadingComponent content="Loading technologists..." />
   ) : (
     <List horizontal>
-      <List.Item>{room.name}</List.Item>
+      <List.Item>
+        {technologist.name} {"(" + technologist.initial + ")"}
+      </List.Item>
       <List.Item>
         <Button circular size="small" onClick={toggleEditMode}>
           <Icon name="edit" color="blue" />
         </Button>
       </List.Item>
       <List.Item>
-        <Button circular size="small" onClick={() => handleDeleteRoom(room.id)}>
+        <Button
+          circular
+          size="small"
+          onClick={() => handleDeleteTechnologist(technologist.id)}
+        >
           <Icon name="trash alternate outline" color="red" />
         </Button>
       </List.Item>
     </List>
   );
 };
-export default observer(RoomListItem);
+
+export default observer(TechnologistListItem);

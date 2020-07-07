@@ -19,18 +19,15 @@ export default class RoomStore {
   }
 
   sortRoomsByName(rooms: IRoom[]) {
-    if (rooms && rooms.length) {
-      return rooms;
-    }
     const sortedRooms = rooms.sort((a, b) => a.name.localeCompare(b.name));
     return sortedRooms;
   }
 
   @action loadRooms = async (locationId: string) => {
+    this.roomRegistry.clear();
     this.loadingInitial = true;
     try {
       const rooms = await agent.Rooms.list(locationId);
-      console.log(rooms);
       runInAction("loading Rooms", () => {
         rooms.forEach((room) => {
           this.roomRegistry.set(room.id, room);
