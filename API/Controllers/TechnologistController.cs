@@ -23,9 +23,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<TechnologistDto>>> List()
+        public async Task<ActionResult<List<TechnologistDto>>> List(Guid? modalityId)
         {
-            return await Mediator.Send(new List.Query());
+            return await Mediator.Send(new List.Query(modalityId));
         }
 
         [HttpPut("{id}")]

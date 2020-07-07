@@ -10,6 +10,7 @@ import TextInput from "../../../../common/form/TextInput";
 import { IModality } from "../../../../models/modality";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
 import { ILicense } from "../../../../models/license";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -59,7 +60,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
               (modality: IModality) => {
                 return {
                   key: modality.id,
-                  text: modality.name,
+                  text: modality.displayName,
                   value: modality.id,
                 };
               }
@@ -79,10 +80,10 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
             value={technologist.initial}
             component={TextInput}
           />
-          <Field
+          {/* <Field
             placeholder="Technologist Licenses"
             name="licenses"
-            value={technologist.initial}
+            value={technologist.licenseIdList}
             component={MultiSelectInput}
             options={sortedLicenseByName.map((license: ILicense) => {
               return {
@@ -91,7 +92,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
                 value: license.id,
               };
             })}
-          />
+          /> */}
 
           <Button
             floated="right"
@@ -106,4 +107,4 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   );
 };
 
-export default TechnologistForm;
+export default observer(TechnologistForm);

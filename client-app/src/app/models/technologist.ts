@@ -15,5 +15,5 @@ export class TechnologistFormValues {
   name: string = "";
   initial: string = "";
   modalityId: string = "";
-  licenseIdList: string[] = [];
+  licenseIdList: string[] = [""];
 }

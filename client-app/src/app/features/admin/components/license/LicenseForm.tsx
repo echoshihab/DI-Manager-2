@@ -1,13 +1,11 @@
 import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { RoomFormValues } from "../../../../models/room";
 import { Form, Header, Button } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { v4 as uuid } from "uuid";
 import TextInput from "../../../../common/form/TextInput";
 import SelectInput from "../../../../common/form/SelectInput";
-import { ILocation } from "../../../../models/location";
 import { LicenseFormValues } from "../../../../models/license";
 import { IModality } from "../../../../models/modality";
 
