@@ -45,7 +45,6 @@ const RoomForm: React.FC<IProps> = ({ changeLocation }) => {
       initialValues={room}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
-          <Header content="Add New Room" />
           <Field
             placeholder="Select a Location"
             name="location"

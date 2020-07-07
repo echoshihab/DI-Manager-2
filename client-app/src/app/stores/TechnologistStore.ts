@@ -31,6 +31,7 @@ export default class TechnologistStore {
   }
 
   @action loadTechnologists = async (modalityId: string) => {
+    this.technologistRegistry.clear();
     this.loadingInitial = true;
     try {
       const technologists = await agent.Technologists.list(modalityId);

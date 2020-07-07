@@ -50,7 +50,6 @@ const LicenseForm: React.FC<IProps> = ({ changeModality }) => {
       initialValues={license}
       render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
-          <Header content="Add New License" />
           <Field
             placeholder="Select a Modality"
             name="modality"

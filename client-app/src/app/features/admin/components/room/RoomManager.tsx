@@ -38,9 +38,15 @@ const RoomManager = () => {
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">
-            <RoomList roomsLoader={roomsLoader} />
-          </Segment>
+          {roomsLoader ? (
+            <Grid.Column style={{ marginTop: "20px" }}>
+              <LoadingComponent content="loading rooms.." />
+            </Grid.Column>
+          ) : (
+            <Segment color="blue">
+              <RoomList />
+            </Segment>
+          )}
         </Grid.Column>
       </Grid>
     </Container>

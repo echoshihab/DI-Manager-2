@@ -11,16 +11,19 @@ const TechnologistManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
   const { loadTechnologists } = rootStore.technologistStore;
+  const { loadLicenses } = rootStore.licenseStore;
   const { setAppLoaded, appLoaded } = rootStore.commonStore;
-
-  const [technologists, setTechnologists] = useState(false);
+  const [techLoader, setTechLoader] = useState(false);
 
   useEffect(() => {
     loadModalities().finally(() => setAppLoaded());
   }, [loadModalities, setAppLoaded]);
 
   const handleModalityChange = (modalityId: string) => {
-    loadTechnologists(modalityId).then(() => setTechnologists(true));
+    setTechLoader(true);
+    loadTechnologists(modalityId)
+      .then(() => loadLicenses(modalityId))
+      .finally(() => setTechLoader(false));
   };
 
   if (!appLoaded) return <LoadingComponent content="Loading app..." />;
@@ -28,20 +31,26 @@ const TechnologistManager = () => {
     <Container style={{ width: "800px" }}>
       <Header
         as="h3"
-        content="Manage Rooms"
+        content="Manage Technologists"
         style={{ marginTop: ".5em" }}
         textAlign="center"
       />
       <Grid centered columns={1}>
         <Grid.Column>
           <Segment color="green" clearing>
-            <TechnologistForm />
+            <TechnologistForm changeModality={handleModalityChange} />
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">
-            {technologists && <TechnologistList />}
-          </Segment>
+          {techLoader ? (
+            <Grid.Column style={{ marginTop: "20px" }}>
+              <LoadingComponent content="loading technologists.." />
+            </Grid.Column>
+          ) : (
+            <Segment color="blue">
+              <TechnologistList />
+            </Segment>
+          )}
         </Grid.Column>
       </Grid>
     </Container>
