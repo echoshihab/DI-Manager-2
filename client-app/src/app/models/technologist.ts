@@ -2,7 +2,7 @@ export interface ITechnologist {
   id: string;
   name: string;
   initial: string;
-  licenses: ITechnologistLicenses[] | string[];
+  licenseIdList: ITechnologistLicenses[] | string[]; //possibly need to change the name to licenses.
 }
 
 export interface ITechnologistLicenses {
@@ -15,5 +15,4 @@ export class TechnologistFormValues {
   name: string = "";
   initial: string = "";
   modalityId: string = "";
-  licenseIdList: string[] = [""];
 }

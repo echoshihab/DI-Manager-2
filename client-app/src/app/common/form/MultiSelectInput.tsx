@@ -2,7 +2,7 @@ import React from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormFieldProps, Form, Label, Dropdown } from "semantic-ui-react";
 
-interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {
+interface IProps extends FieldRenderProps<[], HTMLElement>, FormFieldProps {
   inputOnChange: (
     value: string | number | boolean | (string | number | boolean)[] | undefined
   ) => void;
@@ -22,7 +22,7 @@ const MultiSelectInput: React.FC<IProps> = ({
         fluid
         multiple
         selection
-        value={input.value}
+        value={input.value || []}
         onChange={(e, data) => {
           input.onChange(data.value);
           inputOnChange && inputOnChange(data.value);

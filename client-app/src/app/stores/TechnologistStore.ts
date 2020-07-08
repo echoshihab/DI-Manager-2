@@ -2,7 +2,7 @@ import { RootStore } from "./rootStore";
 import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
-import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
+import { ITechnologist } from "../models/technologist";
 
 export default class TechnologistStore {
   rootStore: RootStore;
@@ -51,21 +51,27 @@ export default class TechnologistStore {
 
   @action createTechnologist = async (technologist: ITechnologist) => {
     this.submitting = true;
-    try {
-      await agent.Technologists.create(technologist);
-      runInAction("create technologist", () => {
-        this.technologistRegistry.set(technologist.id, {
-          id: technologist.id,
-          name: technologist.name,
-        });
-      });
-    } catch (error) {
-      toast.error("Problem submitting data");
-      console.log(error.response);
-    }
-    runInAction("toggle button loading indicator", () => {
-      this.submitting = false;
-    });
+    var technologistToSubmit = {
+      id: technologist.id,
+      initial: technologist.initial,
+      LicenseIdList: technologist.licenseIdList.values(),
+    };
+    console.log(technologistToSubmit);
+    // try {
+    //   await agent.Technologists.create(technologist);
+    //   runInAction("create technologist", () => {
+    //     this.technologistRegistry.set(technologist.id, {
+    //       id: technologist.id,
+    //       name: technologist.name,
+    //     });
+    //   });
+    // } catch (error) {
+    //   toast.error("Problem submitting data");
+    //   console.log(error.response);
+    // }
+    // runInAction("toggle button loading indicator", () => {
+    //   this.submitting = false;
+    // });
   };
 
   @action editTechnologist = async (technologist: ITechnologist) => {

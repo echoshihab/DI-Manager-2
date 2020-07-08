@@ -9,8 +9,10 @@ import SelectInput from "../../../../common/form/SelectInput";
 import TextInput from "../../../../common/form/TextInput";
 import { IModality } from "../../../../models/modality";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
-import { ILicense } from "../../../../models/license";
+import { ILicense, LicenseFormValues } from "../../../../models/license";
 import { observer } from "mobx-react-lite";
+import { zhCN } from "date-fns/esm/locale";
+import TechnologistStore from "../../../../stores/TechnologistStore";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -32,12 +34,15 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { name, initial, modality, licenses } = values;
 
+    //access sortedlicensendbyname here and map to an object
+    //
+
     let newTechnologist = {
       id: uuid(),
       name: name,
       modalityId: modality,
       initial: initial,
-      licenses: licenses,
+      licenseIdList: licenses,
     };
     setLoading(true);
     createTechnologist(newTechnologist)
@@ -80,10 +85,11 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
             value={technologist.initial}
             component={TextInput}
           />
-          {/* <Field
+          <Field
             placeholder="Technologist Licenses"
             name="licenses"
-            value={technologist.licenseIdList}
+            value={[""]}
+            multiple
             component={MultiSelectInput}
             options={sortedLicenseByName.map((license: ILicense) => {
               return {
@@ -92,7 +98,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
                 value: license.id,
               };
             })}
-          /> */}
+          />
 
           <Button
             floated="right"

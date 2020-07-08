@@ -20,10 +20,9 @@ const TechnologistManager = () => {
   }, [loadModalities, setAppLoaded]);
 
   const handleModalityChange = (modalityId: string) => {
-    console.log(modalityId);
     setTechLoader(true);
     loadTechnologists(modalityId)
-      // .then(() => loadLicenses(modalityId))
+      .then(() => loadLicenses(modalityId))
       .then(() => setTechLoader(false));
   };
 
