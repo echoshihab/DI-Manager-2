@@ -27,27 +27,20 @@ const validate = combineValidators({
 const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const rootStore = useContext(RootStoreContext);
   const { sortedModalitiesByDisplayName } = rootStore.modalityStore;
-  const {
-    sortedLicenseByName,
-    selectLicense,
-    license: selectedLicense,
-  } = rootStore.licenseStore;
+  const { sortedLicenseByName } = rootStore.licenseStore;
   const { createTechnologist } = rootStore.technologistStore;
   const technologist = new TechnologistFormValues();
   const [loading, setLoading] = useState(false);
 
   const handleFinalFormSubmit = (values: any, form: any) => {
-    const { name, initial, modality, licenses } = values;
+    const { name, initial, modality, licenses: licenseIdList } = values;
 
     let licenseArray: ITechnologistLicenses[] = [];
-    licenses.forEach((license: string) => {
-      selectLicense(license);
-      console.log(selectedLicense);
-      selectedLicense &&
-        licenseArray.push({
-          licenseId: selectedLicense.id,
-          licenseDisplayName: selectedLicense.displayName,
-        });
+    licenseIdList.forEach((licenseId: string) => {
+      licenseArray.push({
+        licenseId: licenseId,
+        licenseDisplayName: "",
+      });
     });
 
     console.log(licenseArray);
@@ -57,7 +50,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
       name: name,
       modalityId: modality,
       initial: initial,
-      licenses: licenses,
+      licenses: licenseArray,
     };
 
     setLoading(true);

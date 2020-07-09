@@ -1,5 +1,5 @@
 import { RootStore } from "./rootStore";
-import { observable, runInAction, action, computed } from "mobx";
+import { observable, runInAction, action, computed, toJS } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
@@ -53,13 +53,13 @@ export default class TechnologistStore {
   @action createTechnologist = async (technologist: ITechnologist) => {
     this.submitting = true;
     let licenses: ITechnologistLicenses[] = [];
-    technologist.licenses.forEach((id: string | ITechnologistLicenses) => {
-      let license: ILicense = this.rootStore.licenseStore.licenseRegistry.get(
-        id
+    technologist.licenses.forEach((license: ITechnologistLicenses) => {
+      let storedlicense: ILicense = this.rootStore.licenseStore.licenseRegistry.get(
+        license.licenseId
       ); //accessing license store to retrieve license display name
       licenses.push({
-        licenseId: license.id,
-        licenseDisplayName: license.displayName,
+        licenseId: storedlicense.id,
+        licenseDisplayName: storedlicense.displayName,
       });
     });
     console.log(licenses);

@@ -1,12 +1,17 @@
 import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
-import { ITechnologist } from "../../../../models/technologist";
+import {
+  ITechnologist,
+  ITechnologistLicenses,
+} from "../../../../models/technologist";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { Form, Button, Icon, List } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
 import { observer } from "mobx-react-lite";
+import { toJS } from "mobx";
+import { ILicense } from "../../../../models/license";
 
 interface IProps {
   technologist: ITechnologist;
@@ -41,7 +46,6 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
     setLoading(true);
     deleteTechnologist(id).finally(() => setLoading(false));
   };
-
   return editMode ? (
     <FinalForm
       validate={validate}
@@ -57,10 +61,10 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
               label="Name"
             />
             <Field
-              name="name"
+              name="initial"
               component={TextInput}
               value={technologist.initial}
-              label="Name"
+              label="Initial"
             />
 
             <Button
@@ -82,13 +86,26 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
   ) : (
     <List horizontal>
       <List.Item>
-        {technologist.name} {"(" + technologist.initial + ")"}
+        <Label basic>
+          {technologist.name} {"(" + technologist.initial + ") "}
+        </Label>
+
+        <Label basic color="red">
+          Licenses:
+          {technologist.licenses.map((t) => (
+            <Label.Detail key={t.licenseId}>
+              {t.licenseDisplayName}
+            </Label.Detail>
+          ))}
+        </Label>
       </List.Item>
+      <List.Item></List.Item>
       <List.Item>
         <Button circular size="small" onClick={toggleEditMode}>
           <Icon name="edit" color="blue" />
         </Button>
       </List.Item>
+
       <List.Item>
         <Button
           circular

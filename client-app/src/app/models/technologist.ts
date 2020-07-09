@@ -2,7 +2,7 @@ export interface ITechnologist {
   id: string;
   name: string;
   initial: string;
-  licenses: ITechnologistLicenses[] | string[];
+  licenses: ITechnologistLicenses[];
 }
 
 export interface ITechnologistLicenses {
