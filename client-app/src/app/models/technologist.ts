@@ -2,7 +2,7 @@ export interface ITechnologist {
   id: string;
   name: string;
   initial: string;
-  licenseIdList: ITechnologistLicenses[] | string[]; //possibly need to change the name to licenses.
+  licenses: ITechnologistLicenses[] | string[];
 }
 
 export interface ITechnologistLicenses {

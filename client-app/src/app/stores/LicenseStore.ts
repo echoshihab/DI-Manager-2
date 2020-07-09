@@ -10,12 +10,19 @@ export default class LicenseStore {
     this.rootStore = rootStore;
   }
   @observable licenseRegistry = new Map();
-  @observable room: ILicense | null = null;
+  @observable license: ILicense | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
 
   @computed get sortedLicenseByName() {
     return this.sortLicenseByName(Array.from(this.licenseRegistry.values()));
+  }
+  @computed get selectedLicense() {
+    return this.license;
+  }
+
+  @action.bound selectLicense(id: string) {
+    this.license = this.licenseRegistry.get(id);
   }
 
   sortLicenseByName(license: ILicense[]) {

@@ -1,7 +1,10 @@
 import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { TechnologistFormValues } from "../../../../models/technologist";
+import {
+  TechnologistFormValues,
+  ITechnologistLicenses,
+} from "../../../../models/technologist";
 import { v4 as uuid } from "uuid";
 import { Form, Button } from "semantic-ui-react";
 import { Form as FinalForm, Field } from "react-final-form";
@@ -9,10 +12,8 @@ import SelectInput from "../../../../common/form/SelectInput";
 import TextInput from "../../../../common/form/TextInput";
 import { IModality } from "../../../../models/modality";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
-import { ILicense, LicenseFormValues } from "../../../../models/license";
+import { ILicense } from "../../../../models/license";
 import { observer } from "mobx-react-lite";
-import { zhCN } from "date-fns/esm/locale";
-import TechnologistStore from "../../../../stores/TechnologistStore";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -26,7 +27,11 @@ const validate = combineValidators({
 const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const rootStore = useContext(RootStoreContext);
   const { sortedModalitiesByDisplayName } = rootStore.modalityStore;
-  const { sortedLicenseByName } = rootStore.licenseStore;
+  const {
+    sortedLicenseByName,
+    selectLicense,
+    license: selectedLicense,
+  } = rootStore.licenseStore;
   const { createTechnologist } = rootStore.technologistStore;
   const technologist = new TechnologistFormValues();
   const [loading, setLoading] = useState(false);
@@ -34,16 +39,27 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { name, initial, modality, licenses } = values;
 
-    //access sortedlicensendbyname here and map to an object
-    //
+    let licenseArray: ITechnologistLicenses[] = [];
+    licenses.forEach((license: string) => {
+      selectLicense(license);
+      console.log(selectedLicense);
+      selectedLicense &&
+        licenseArray.push({
+          licenseId: selectedLicense.id,
+          licenseDisplayName: selectedLicense.displayName,
+        });
+    });
+
+    console.log(licenseArray);
 
     let newTechnologist = {
       id: uuid(),
       name: name,
       modalityId: modality,
       initial: initial,
-      licenseIdList: licenses,
+      licenses: licenses,
     };
+
     setLoading(true);
     createTechnologist(newTechnologist)
       .then(() => form.restart())

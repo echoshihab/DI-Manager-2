@@ -2,7 +2,8 @@ import { RootStore } from "./rootStore";
 import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
-import { ITechnologist } from "../models/technologist";
+import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
+import { ILicense } from "../models/license";
 
 export default class TechnologistStore {
   rootStore: RootStore;
@@ -51,27 +52,34 @@ export default class TechnologistStore {
 
   @action createTechnologist = async (technologist: ITechnologist) => {
     this.submitting = true;
-    var technologistToSubmit = {
-      id: technologist.id,
-      initial: technologist.initial,
-      LicenseIdList: technologist.licenseIdList.values(),
-    };
-    console.log(technologistToSubmit);
-    // try {
-    //   await agent.Technologists.create(technologist);
-    //   runInAction("create technologist", () => {
-    //     this.technologistRegistry.set(technologist.id, {
-    //       id: technologist.id,
-    //       name: technologist.name,
-    //     });
-    //   });
-    // } catch (error) {
-    //   toast.error("Problem submitting data");
-    //   console.log(error.response);
-    // }
-    // runInAction("toggle button loading indicator", () => {
-    //   this.submitting = false;
-    // });
+    let licenses: ITechnologistLicenses[] = [];
+    technologist.licenses.forEach((id: string | ITechnologistLicenses) => {
+      let license: ILicense = this.rootStore.licenseStore.licenseRegistry.get(
+        id
+      ); //accessing license store to retrieve license display name
+      licenses.push({
+        licenseId: license.id,
+        licenseDisplayName: license.displayName,
+      });
+    });
+    console.log(licenses);
+    try {
+      await agent.Technologists.create(technologist);
+      runInAction("create technologist", () => {
+        this.technologistRegistry.set(technologist.id, {
+          id: technologist.id,
+          name: technologist.name,
+          initial: technologist.initial,
+          licenseIdList: licenses,
+        });
+      });
+    } catch (error) {
+      toast.error("Problem submitting data");
+      console.log(error.response);
+    }
+    runInAction("toggle button loading indicator", () => {
+      this.submitting = false;
+    });
   };
 
   @action editTechnologist = async (technologist: ITechnologist) => {
