@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
 import { IRoom } from "../models/room";
 import { ILicense } from "../models/license";
-import { ITechnologist } from "../models/technologist";
+import { ITechnologist, ITechnologistForm } from "../models/technologist";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -93,7 +93,7 @@ const Licenses = {
 const Technologists = {
   list: (modalityId: string): Promise<ITechnologist[]> =>
     requests.get(`/technologist?modalityId=${modalityId}`),
-  create: (technologist: ITechnologist) =>
+  create: (technologist: ITechnologistForm) =>
     requests.post("/technologist", technologist),
   edit: (technologist: ITechnologist) =>
     requests.put(`/technologist/${technologist.id}`, technologist),

@@ -2,7 +2,11 @@ import { RootStore } from "./rootStore";
 import { observable, runInAction, action, computed, toJS } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
-import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
+import {
+  ITechnologist,
+  ITechnologistLicenses,
+  ITechnologistForm,
+} from "../models/technologist";
 import { ILicense } from "../models/license";
 
 export default class TechnologistStore {
@@ -36,7 +40,7 @@ export default class TechnologistStore {
     this.loadingInitial = true;
     try {
       const technologists = await agent.Technologists.list(modalityId);
-      console.log(technologists);
+
       runInAction("loading technologists", () => {
         technologists.forEach((technologist) => {
           this.technologistRegistry.set(technologist.id, technologist);
@@ -50,28 +54,34 @@ export default class TechnologistStore {
     });
   };
 
-  @action createTechnologist = async (technologist: ITechnologist) => {
+  @action createTechnologist = async (technologist: ITechnologistForm) => {
     this.submitting = true;
-    let licenses: ITechnologistLicenses[] = [];
-    technologist.licenses.forEach((license: ITechnologistLicenses) => {
+    if (typeof technologist.licenseIdList === "undefined") {
+      technologist.licenseIdList = [];
+    }
+    let licenses: ITechnologistLicenses[] = technologist.licenseIdList.map(
+      (id) => this.rootStore.licenseStore.licenseRegistry.get(id)
+    );
+
+    technologist.licenseIdList.forEach((id: string) => {
       let storedlicense: ILicense = this.rootStore.licenseStore.licenseRegistry.get(
-        license.licenseId
+        id
       ); //accessing license store to retrieve license display name
       licenses.push({
         licenseId: storedlicense.id,
         licenseDisplayName: storedlicense.displayName,
       });
     });
-    console.log(licenses);
     try {
+      console.log(technologist);
       await agent.Technologists.create(technologist);
       runInAction("create technologist", () => {
         this.technologistRegistry.set(technologist.id, {
           id: technologist.id,
           name: technologist.name,
           initial: technologist.initial,
-          licenseIdList: licenses,
-        });
+          licenses: licenses,
+        } as ITechnologist);
       });
     } catch (error) {
       toast.error("Problem submitting data");

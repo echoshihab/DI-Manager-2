@@ -92,11 +92,12 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
 
         <Label basic color="red">
           Licenses:
-          {technologist.licenses.map((t) => (
-            <Label.Detail key={t.licenseId}>
-              {t.licenseDisplayName}
-            </Label.Detail>
-          ))}
+          {technologist.licenses &&
+            technologist.licenses.map((t) => (
+              <Label.Detail key={t.licenseId}>
+                {t.licenseDisplayName}
+              </Label.Detail>
+            ))}
         </Label>
       </List.Item>
       <List.Item></List.Item>

@@ -4,6 +4,7 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import {
   TechnologistFormValues,
   ITechnologistLicenses,
+  ITechnologistForm,
 } from "../../../../models/technologist";
 import { v4 as uuid } from "uuid";
 import { Form, Button } from "semantic-ui-react";
@@ -35,22 +36,12 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { name, initial, modality, licenses: licenseIdList } = values;
 
-    let licenseArray: ITechnologistLicenses[] = [];
-    licenseIdList.forEach((licenseId: string) => {
-      licenseArray.push({
-        licenseId: licenseId,
-        licenseDisplayName: "",
-      });
-    });
-
-    console.log(licenseArray);
-
-    let newTechnologist = {
+    let newTechnologist: ITechnologistForm = {
       id: uuid(),
       name: name,
       modalityId: modality,
       initial: initial,
-      licenses: licenseArray,
+      licenseIdList: licenseIdList,
     };
 
     setLoading(true);
