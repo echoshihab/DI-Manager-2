@@ -10,12 +10,15 @@ export interface ITechnologistLicenses {
   licenseDisplayName: string;
 }
 
-export interface ITechnologistForm {
+export interface ITechnologistEdit {
   id: string;
   name: string;
   initial: string;
-  modalityId: string;
   licenseIdList: string[];
+}
+
+export interface ITechnologistForm extends ITechnologistEdit {
+  modalityId: string;
 }
 
 export class TechnologistFormValues {

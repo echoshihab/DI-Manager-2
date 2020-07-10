@@ -1,6 +1,9 @@
 import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
-import { ITechnologist } from "../../../../models/technologist";
+import {
+  ITechnologist,
+  ITechnologistEdit,
+} from "../../../../models/technologist";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form, Button, Icon, List, Label, Header } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
@@ -34,9 +37,18 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
     setEditMode(!editMode);
   };
 
-  const handleFinalFormSubmit = (technologist: ITechnologist) => {
+  const handleFinalFormSubmit = (values: any, form: any) => {
+    const { name, initial, licenses_mod: licenseIdList } = values;
+
+    let updatedTechnologist: ITechnologistEdit = {
+      id: technologist.id,
+      name: name,
+      initial: initial,
+      licenseIdList: licenseIdList,
+    };
+
     setLoading(true);
-    editTechnologist(technologist)
+    editTechnologist(updatedTechnologist)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
   };
@@ -75,7 +87,7 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
               Licenses:{" "}
             </Label>
             <Field
-              name="currentLicenses"
+              name="licenses_mod"
               multiple
               defaultValue={currentLicenses}
               component={MultiSelectInput}
@@ -110,34 +122,34 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
   ) : (
     <List horizontal>
       <List.Item>
-        <Label>
+        <Label ribbon basic>
+          <Button circular size="mini" onClick={toggleEditMode} outline="black">
+            <Icon name="edit" color="blue" />
+          </Button>
+          <Button
+            circular
+            size="mini"
+            onClick={() => handleDeleteTechnologist(technologist.id)}
+          >
+            <Icon name="trash alternate outline" color="red" />
+          </Button>
+        </Label>
+      </List.Item>
+      <List.Item>
+        <Label size="large" basic color="black">
           <Icon name="user circle outline" />
           {technologist.name} {"(" + technologist.initial + ") "}
           {technologist.licenses &&
             technologist.licenses.map((t) => (
-              <Label key={t.licenseId} basic circular>
+              <Label key={t.licenseId} basic circular color="black">
                 <Icon name="drivers license" />
                 {t.licenseDisplayName}
               </Label>
             ))}
         </Label>
       </List.Item>
-      <List.Item></List.Item>
-      <List.Item>
-        <Button circular size="mini" onClick={toggleEditMode}>
-          <Icon name="edit" color="blue" />
-        </Button>
-      </List.Item>
 
-      <List.Item>
-        <Button
-          circular
-          size="mini"
-          onClick={() => handleDeleteTechnologist(technologist.id)}
-        >
-          <Icon name="trash alternate outline" color="red" />
-        </Button>
-      </List.Item>
+      <List.Item></List.Item>
     </List>
   );
 };

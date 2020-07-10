@@ -6,6 +6,7 @@ import {
   ITechnologist,
   ITechnologistLicenses,
   ITechnologistForm,
+  ITechnologistEdit,
 } from "../models/technologist";
 import { ILicense } from "../models/license";
 
@@ -54,24 +55,27 @@ export default class TechnologistStore {
     });
   };
 
+  getLicenseIdAndNameForTechnologist = (licenseIdList: string[]) => {
+    let licenseArray: ILicense[] = licenseIdList.map((id) =>
+      this.rootStore.licenseStore.licenseRegistry.get(id)
+    );
+    let licenseNameAndId = licenseArray.map((license) => ({
+      licenseId: license.id,
+      licenseDisplayName: license.displayName,
+    }));
+    return licenseNameAndId;
+  };
+
   @action createTechnologist = async (technologist: ITechnologistForm) => {
     this.submitting = true;
+
     if (typeof technologist.licenseIdList === "undefined") {
       technologist.licenseIdList = [];
     }
-    let licenses: ITechnologistLicenses[] = technologist.licenseIdList.map(
-      (id) => this.rootStore.licenseStore.licenseRegistry.get(id)
+    let licenses: ITechnologistLicenses[] = this.getLicenseIdAndNameForTechnologist(
+      technologist.licenseIdList
     );
 
-    technologist.licenseIdList.forEach((id: string) => {
-      let storedlicense: ILicense = this.rootStore.licenseStore.licenseRegistry.get(
-        id
-      ); //accessing license store to retrieve license display name
-      licenses.push({
-        licenseId: storedlicense.id,
-        licenseDisplayName: storedlicense.displayName,
-      });
-    });
     try {
       await agent.Technologists.create(technologist);
       runInAction("create technologist", () => {
@@ -91,12 +95,23 @@ export default class TechnologistStore {
     });
   };
 
-  @action editTechnologist = async (technologist: ITechnologist) => {
+  @action editTechnologist = async (technologist: ITechnologistEdit) => {
     this.submitting = true;
+    if (typeof technologist.licenseIdList === "undefined") {
+      technologist.licenseIdList = [];
+    }
+    let licenses: ITechnologistLicenses[] = this.getLicenseIdAndNameForTechnologist(
+      technologist.licenseIdList
+    );
     try {
       await agent.Technologists.edit(technologist);
       runInAction(() => {
-        this.technologistRegistry.set(technologist.id, technologist);
+        this.technologistRegistry.set(technologist.id, {
+          id: technologist.id,
+          name: technologist.name,
+          initial: technologist.initial,
+          licenses: licenses,
+        } as ITechnologist);
       });
     } catch (error) {
       toast.error("Problem submitting data");

@@ -6,7 +6,11 @@ import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
 import { IRoom } from "../models/room";
 import { ILicense } from "../models/license";
-import { ITechnologist, ITechnologistForm } from "../models/technologist";
+import {
+  ITechnologist,
+  ITechnologistForm,
+  ITechnologistEdit,
+} from "../models/technologist";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -94,7 +98,7 @@ const Technologists = {
     requests.get(`/technologist?modalityId=${modalityId}`),
   create: (technologist: ITechnologistForm) =>
     requests.post("/technologist", technologist),
-  edit: (technologist: ITechnologist) =>
+  edit: (technologist: ITechnologistEdit) =>
     requests.put(`/technologist/${technologist.id}`, technologist),
   delete: (id: string) => requests.delete(`/technologist/${id}`),
 };
