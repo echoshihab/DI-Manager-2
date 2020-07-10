@@ -3,7 +3,6 @@ import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import {
   TechnologistFormValues,
-  ITechnologistLicenses,
   ITechnologistForm,
 } from "../../../../models/technologist";
 import { v4 as uuid } from "uuid";

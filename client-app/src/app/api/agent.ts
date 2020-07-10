@@ -11,7 +11,6 @@ import { ITechnologist, ITechnologistForm } from "../models/technologist";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(undefined, (error) => {
-  const originalRequest = error.config;
   if (error.message === "Network Error" && !error.response) {
     toast.error("Network error- Problem communicating with server!");
   }

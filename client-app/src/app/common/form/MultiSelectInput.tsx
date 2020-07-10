@@ -6,6 +6,7 @@ interface IProps extends FieldRenderProps<[], HTMLElement>, FormFieldProps {
   inputOnChange: (
     value: string | number | boolean | (string | number | boolean)[] | undefined
   ) => void;
+  defaultValue?: string[];
 }
 
 const MultiSelectInput: React.FC<IProps> = ({
@@ -15,6 +16,7 @@ const MultiSelectInput: React.FC<IProps> = ({
   placeholder,
   inputOnChange,
   meta: { touched, error },
+  defaultValue,
 }) => {
   return (
     <Form.Field error={touched && !!error} width={width}>
@@ -22,6 +24,7 @@ const MultiSelectInput: React.FC<IProps> = ({
         fluid
         multiple
         selection
+        defaultValue={defaultValue}
         value={input.value || []}
         onChange={(e, data) => {
           input.onChange(data.value);

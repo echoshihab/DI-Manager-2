@@ -1,5 +1,5 @@
 import { RootStore } from "./rootStore";
-import { observable, runInAction, action, computed, toJS } from "mobx";
+import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import {
@@ -73,7 +73,6 @@ export default class TechnologistStore {
       });
     });
     try {
-      console.log(technologist);
       await agent.Technologists.create(technologist);
       runInAction("create technologist", () => {
         this.technologistRegistry.set(technologist.id, {

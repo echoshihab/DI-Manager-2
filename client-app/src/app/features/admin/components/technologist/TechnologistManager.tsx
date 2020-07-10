@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Container, Header, Grid, Segment } from "semantic-ui-react";
-import RoomForm from "../room/RoomForm";
 import TechnologistList from "./TechnologistList";
 import { observer } from "mobx-react-lite";
 import TechnologistForm from "./TechnologistForm";

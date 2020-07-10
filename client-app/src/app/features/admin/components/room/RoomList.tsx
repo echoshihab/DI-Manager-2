@@ -3,7 +3,6 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import RoomListItem from "./RoomListItem";
 import { List, Header } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
-import LoadingComponent from "../../../../layout/LoadingComponent";
 
 const RoomList = () => {
   const rootStore = useContext(RootStoreContext);

@@ -1,17 +1,15 @@
 import React, { useContext, useState } from "react";
 import { combineValidators, isRequired } from "revalidate";
-import {
-  ITechnologist,
-  ITechnologistLicenses,
-} from "../../../../models/technologist";
+import { ITechnologist } from "../../../../models/technologist";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { Form, Button, Icon, List, Label } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label, Header } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
 import { observer } from "mobx-react-lite";
-import { toJS } from "mobx";
 import { ILicense } from "../../../../models/license";
+import MultiSelectInput from "../../../../common/form/MultiSelectInput";
+import { equal } from "assert";
 
 interface IProps {
   technologist: ITechnologist;
@@ -28,6 +26,7 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
     deleteTechnologist,
     editTechnologist,
   } = rootStore.technologistStore;
+  const { sortedLicenseByName } = rootStore.licenseStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +45,9 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
     setLoading(true);
     deleteTechnologist(id).finally(() => setLoading(false));
   };
+
+  const currentLicenses = technologist.licenses.map((l) => l.licenseId);
+
   return editMode ? (
     <FinalForm
       validate={validate}
@@ -66,15 +68,37 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
               value={technologist.initial}
               label="Initial"
             />
+          </Form.Group>
 
+          <Form.Group widths="equal" inline>
+            <Label size="large" ribbon>
+              Licenses:{" "}
+            </Label>
+            <Field
+              name="currentLicenses"
+              multiple
+              defaultValue={currentLicenses}
+              component={MultiSelectInput}
+              options={sortedLicenseByName.map((license: ILicense) => {
+                return {
+                  key: license.id,
+                  text: license.displayName,
+                  value: license.id,
+                };
+              })}
+            />
+          </Form.Group>
+          <Form.Group inline>
             <Button
+              fluid
               loading={submitting}
               type="submit"
               disabled={loading || invalid || pristine}
             >
               <Icon name="check" color="green" />
             </Button>
-            <Button onClick={toggleEditMode}>
+
+            <Button fluid onClick={toggleEditMode}>
               <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>
@@ -86,23 +110,21 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
   ) : (
     <List horizontal>
       <List.Item>
-        <Label basic>
+        <Label>
+          <Icon name="user circle outline" />
           {technologist.name} {"(" + technologist.initial + ") "}
-        </Label>
-
-        <Label basic color="red">
-          Licenses:
           {technologist.licenses &&
             technologist.licenses.map((t) => (
-              <Label.Detail key={t.licenseId}>
+              <Label key={t.licenseId} basic circular>
+                <Icon name="drivers license" />
                 {t.licenseDisplayName}
-              </Label.Detail>
+              </Label>
             ))}
         </Label>
       </List.Item>
       <List.Item></List.Item>
       <List.Item>
-        <Button circular size="small" onClick={toggleEditMode}>
+        <Button circular size="mini" onClick={toggleEditMode}>
           <Icon name="edit" color="blue" />
         </Button>
       </List.Item>
@@ -110,7 +132,7 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
       <List.Item>
         <Button
           circular
-          size="small"
+          size="mini"
           onClick={() => handleDeleteTechnologist(technologist.id)}
         >
           <Icon name="trash alternate outline" color="red" />
