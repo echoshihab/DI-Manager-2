@@ -3,18 +3,34 @@ import { Segment, Form, Button } from "semantic-ui-react";
 import { IShift } from "../../../models/shift";
 import { v4 as uuid } from "uuid";
 
-const ShiftForm = () => {
+interface IProps {
+  createShift: (shift: IShift) => void;
+  editShift: (shift: IShift) => void;
+  editMode: Boolean;
+  selectedShift: IShift;
+}
+
+const ShiftForm_old: React.FC<IProps> = ({
+  createShift,
+  editMode,
+  editShift,
+  selectedShift,
+}) => {
   const initializeForm = () => {
-    return {
-      id: "",
-      start: new Date(),
-      end: new Date(),
-      license: "",
-      location: "",
-      room: "",
-      technologist: "",
-      modality: "",
-    };
+    if (selectedShift) {
+      return selectedShift;
+    } else {
+      return {
+        id: "",
+        start: new Date(),
+        end: new Date(),
+        license: "",
+        location: "",
+        room: "",
+        technologist: "",
+        modality: "",
+      };
+    }
   };
 
   const [shift, setShift] = useState<IShift>(initializeForm);
@@ -31,13 +47,15 @@ const ShiftForm = () => {
         ...shift,
         id: uuid(),
       };
-      console.log(newShift);
+      createShift(newShift);
+    } else {
+      editShift(shift);
     }
   };
 
   return (
-    <Segment>
-      <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
+      <Form.Group>
         <Form.Input
           type="datetime-local"
           placeholder="Start Time"
@@ -83,9 +101,9 @@ const ShiftForm = () => {
           onChange={handleInputChange}
         />
         <Button type="submit" content="Submit" />
-      </Form>
-    </Segment>
+      </Form.Group>
+    </Form>
   );
 };
 
-export default ShiftForm;
+export default ShiftForm_old;
