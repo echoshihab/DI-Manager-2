@@ -17,10 +17,7 @@ const ShiftDayList = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const handleClick = (
-    event: SyntheticEvent,
-    titleProps: AccordionTitleProps
-  ) => {
+  const handleClick = (titleProps: AccordionTitleProps) => {
     const { index } = titleProps;
     const newIndex = activeIndex === index ? 1 : 0;
     setActiveIndex(newIndex);
@@ -32,7 +29,7 @@ const ShiftDayList = () => {
         <Accordion.Title
           active={activeIndex === 1}
           index={0}
-          onClick={(e, titleProps) => handleClick(e, titleProps)}
+          onClick={(e, titleProps) => handleClick(titleProps)}
         >
           <Icon name="dropdown" />
           <Label color="blue">Add New Shift</Label>
