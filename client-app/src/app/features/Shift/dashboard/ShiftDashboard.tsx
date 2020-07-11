@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import ShiftMonthList from "../display/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
 import ShiftDayList from "../display/ShiftDayList";
+import { RootStore, RootStoreContext } from "../../../stores/rootStore";
 
 interface IProps {
   view: string;

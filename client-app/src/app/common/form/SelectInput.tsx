@@ -14,11 +14,13 @@ const SelectInput: React.FC<IProps> = ({
   options,
   placeholder,
   inputOnChange,
+  disabled,
   meta: { touched, error },
 }) => {
   return (
     <Form.Field error={touched && !!error} width={width}>
       <Select
+        disabled={disabled}
         value={input.value}
         onChange={(e, data) => {
           input.onChange(data.value);

@@ -47,7 +47,7 @@ export default class RoomStore {
     try {
       await agent.Rooms.create(room);
       runInAction("create room", () => {
-        this.roomRegistry.set(room.id, { id: room.name, name: room.name });
+        this.roomRegistry.set(room.id, { id: room.id, name: room.name });
       });
     } catch (error) {
       toast.error("Problem submitting data");

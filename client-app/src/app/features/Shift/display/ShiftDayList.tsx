@@ -1,4 +1,4 @@
-import React, { useContext, Fragment, useState, SyntheticEvent } from "react";
+import React, { useContext, Fragment, useState, useEffect } from "react";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 import {
@@ -14,6 +14,17 @@ import ShiftForm from "../Form/ShiftForm";
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
   const { shiftsByDay } = rootStore.shiftStore;
+  const { loadLocations } = rootStore.locationStore;
+  const { loadRooms } = rootStore.roomStore;
+  const { loadTechnologists } = rootStore.technologistStore;
+  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+
+  useEffect(() => {
+    Promise.all([
+      loadLocations(),
+      loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
+    ]).finally(() => setAppLoaded());
+  }, [loadLocations, loadTechnologists, setAppLoaded]);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
