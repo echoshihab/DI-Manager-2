@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,9 @@ namespace Application.Shifts
     {
         public class ShiftsEnvelope
         {
-            public List<Shift> Shifts { get; set; }
+            public List<ShiftDto> Shifts { get; set; }
         }
-        public class Query : IRequest<List<Shift>>
+        public class Query : IRequest<List<ShiftDto>>
         {
             //add additional filters here
             public Query(DateTime? filterDate)
@@ -31,32 +32,37 @@ namespace Application.Shifts
 
         }
 
-        public class Handler : IRequestHandler<Query, List<Shift>>
+        public class Handler : IRequestHandler<Query, List<ShiftDto>>
         {
             private readonly ApplicationDbContext _context;
-            public Handler(ApplicationDbContext context)
+            private readonly IMapper _mapper;
+            public Handler(ApplicationDbContext context, IMapper mapper)
             {
+                _mapper = mapper;
                 _context = context;
 
             }
 
-            public async Task<List<Shift>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<ShiftDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (request.FilterDate != null)
-                {
-                    var queryable = _context.Shifts.Where(x => x.Start == request.FilterDate);
-                    var shifts = await queryable.ToListAsync();
-                    return shifts;
+                var shifts = await _context.Shifts
+                                .Include(s => s.License)
+                                .Include(s => s.Modality)
+                                .Include(s => s.Location)
+                                .Include(s => s.Room)
+                                .Include(s => s.Technologist)
+                                .ToListAsync();
 
-                }
-                else
-                {
-                    var shifts = await _context.Shifts.ToListAsync();
-                    return shifts;
-                }
+                // if (request.FilterDate != null)
+                // {
+                //     queryable = queryable.Where(x => x.Start == request.FilterDate);
+                //     var shifts = await queryable.ToListAsync();
+                //     return shifts;
 
+                // }
 
-
+                var shiftsToReturn = _mapper.Map<List<Shift>, List<ShiftDto>>(shifts);
+                return shiftsToReturn;
 
             }
         }
