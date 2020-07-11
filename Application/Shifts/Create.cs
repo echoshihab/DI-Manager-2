@@ -65,16 +65,17 @@ namespace Application.Shifts
                     errors.license = "Invalid License";
 
                 var room = await _context.Rooms.FindAsync(request.RoomId);
-                if (room == null)
+                if (room == null || room.LocationId != location.Id)
                     errors.room = "Invalid Room";
 
-                var technologist = await _context.Technologists.FindAsync(request.TechnologistId);
-                if (technologist == null)
-                    errors.technologist = "Invalid Technologist";
 
                 var modality = await _context.Modalities.FindAsync(request.ModalityId);
                 if (modality == null)
                     errors.modality = "Invalid Modality";
+
+                var technologist = await _context.Technologists.FindAsync(request.TechnologistId);
+                if (technologist == null || technologist.ModalityId != modality.Id)
+                    errors.technologist = "Invalid Technologist";
 
 
                 int errorCount = ((ICollection<KeyValuePair<string, Object>>)errors).Count;
@@ -86,14 +87,14 @@ namespace Application.Shifts
 
                 var shift = new Shift
                 {
-                    // Id = request.Id,
-                    // Start = request.Start,
-                    // End = request.End,
-                    // License = request.License,
-                    // Location = request.Location,
-                    // Room = request.Room,
-                    // Technologist = request.Technologist,
-                    // Modality = request.Modality
+                    Id = request.Id,
+                    Start = request.Start,
+                    End = request.End,
+                    License = license,
+                    Location = location,
+                    Room = room,
+                    Technologist = technologist,
+                    Modality = modality
 
                 };
                 _context.Shifts.Add(shift);
