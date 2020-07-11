@@ -32,7 +32,9 @@ const ShiftDayList = () => {
           onClick={(e, titleProps) => handleClick(titleProps)}
         >
           <Icon name="dropdown" />
-          <Label color="blue">Add New Shift</Label>
+          <Label color="blue">
+            {activeIndex === 0 ? "Add New Shift" : "Close Form"}
+          </Label>
         </Accordion.Title>
         <Accordion.Content active={activeIndex === 1}>
           <ShiftForm />
@@ -54,12 +56,12 @@ const ShiftDayList = () => {
         <Table.Body>
           {shiftsByDay.map((shift) => (
             <Table.Row>
-              <Table.Cell>{shift.location}</Table.Cell>
-              <Table.Cell>{shift.room}</Table.Cell>
-              <Table.Cell>{shift.license}</Table.Cell>
+              <Table.Cell>{shift.locationName}</Table.Cell>
+              <Table.Cell>{shift.roomName}</Table.Cell>
+              <Table.Cell>{shift.licenseDisplayName}</Table.Cell>
               <Table.Cell>{format(shift.start, "HH:mm")}</Table.Cell>
               <Table.Cell>{format(shift.end, "HH:mm")}</Table.Cell>
-              <Table.Cell>{shift.technologist}</Table.Cell>
+              <Table.Cell>{shift.technologistInitial}</Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>

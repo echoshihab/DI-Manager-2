@@ -1,23 +1,21 @@
-import React, { useState, ChangeEvent } from "react";
-import { Segment, Form, Button } from "semantic-ui-react";
-import { IShift } from "../../../models/shift";
+import React, { useState, ChangeEvent, SyntheticEvent } from "react";
+import { Segment, Form, Button, ButtonProps } from "semantic-ui-react";
+import { IShift, ShiftFormValues } from "../../../models/shift";
 import { v4 as uuid } from "uuid";
+import { Form as FinalForm, Field } from "react-final-form";
+import { combineValidators, isRequired } from "revalidate";
+import DateInput from "../../../common/form/DateInput";
+import SelectInput from "../../../common/form/SelectInput";
+import { FormApi } from "final-form";
+
+const validate = combineValidators({
+  date: isRequired("Date"),
+  start: isRequired("start"),
+  end: isRequired("end"),
+});
 
 const ShiftForm = () => {
-  const initializeForm = () => {
-    return {
-      id: "",
-      start: new Date(),
-      end: new Date(),
-      license: "",
-      location: "",
-      room: "",
-      technologist: "",
-      modality: "",
-    };
-  };
-
-  const [shift, setShift] = useState<IShift>(initializeForm);
+  const [shift, setShift] = useState(new ShiftFormValues());
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -25,8 +23,17 @@ const ShiftForm = () => {
     setShift({ ...shift, [name]: value });
   };
 
-  const handleSubmit = () => {
-    if (shift.id.length === 0) {
+  const handleClearForm = (
+    e: SyntheticEvent,
+    form: FormApi<any, Partial<any>>
+  ) => {
+    e.preventDefault();
+    form.reset();
+    form.getRegisteredFields().forEach((field) => form.resetFieldState(field));
+  };
+
+  const handleFinalFormSubmit = () => {
+    if (shift.id?.length === 0) {
       let newShift = {
         ...shift,
         id: uuid(),
@@ -36,54 +43,68 @@ const ShiftForm = () => {
   };
 
   return (
-    <Segment>
-      <Form onSubmit={handleSubmit}>
-        <Form.Input
-          type="datetime-local"
-          placeholder="Start Time"
-          value={shift.start}
-          name="start"
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          type="datetime-local"
-          name="end"
-          placeholder="End Time"
-          value={shift.end}
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          name="license"
-          placeholder="License"
-          value={shift.license}
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          name="location"
-          placeholder="Location"
-          value={shift.location}
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          name="room"
-          placeholder="Room"
-          value={shift.room}
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          name="technologist"
-          placeholder="Technologist"
-          value={shift.technologist}
-          onChange={handleInputChange}
-        />
-        <Form.Input
-          name="modality"
-          placeholder="Modality"
-          value={shift.modality}
-          onChange={handleInputChange}
-        />
-        <Button type="submit" content="Submit" />
-      </Form>
+    <Segment compact>
+      <FinalForm
+        validate={validate}
+        initialValues={shift}
+        onSubmit={handleFinalFormSubmit}
+        render={({ form, handleSubmit, invalid, pristine, validating }) => (
+          <Form onSubmit={handleSubmit} id={"shiftForm"}>
+            <Field
+              component={DateInput}
+              placeholder="Date"
+              date={true}
+              name="date"
+              value={shift.date}
+            />
+            <Field
+              component={DateInput}
+              placeholder="Start Time"
+              time={true}
+              name="start"
+              value={shift.start}
+            />
+            <Field
+              component={DateInput}
+              placeholder="End Time"
+              time={true}
+              name="end"
+              value={shift.end}
+            />
+            <Field
+              placeholder="Exam Type"
+              name="license"
+              value={shift.licenseId}
+              component={SelectInput}
+            />
+            <Field
+              name="location"
+              placeholder="location"
+              value={shift.locationId}
+              component={SelectInput}
+            />
+            <Field
+              name="room"
+              placeholder="Room"
+              value={shift.roomId}
+              component={SelectInput}
+            />
+            <Field
+              name="technologist"
+              placeholder="Technologist"
+              value={shift.technologistId}
+              component={SelectInput}
+            />
+
+            <Button type="submit" content="Add Shift" color="green" />
+            <Button
+              onClick={(e) => handleClearForm(e, form)}
+              content="Clear"
+              color="blue"
+            />
+          </Form>
+        )}
+      />
     </Segment>
   );
 };

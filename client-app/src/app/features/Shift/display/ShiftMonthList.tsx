@@ -24,8 +24,8 @@ const ShiftMonthList = () => {
           <Grid.Column key={d} style={{ border: "1px solid black" }}>
             {d}
             <ul>
-              {shiftsByMonth[d]?.map((s) => (
-                <li key={s.id}>{s.location}</li>
+              {shiftsByMonth[d]?.map((shift) => (
+                <li key={shift.id}>{shift.locationName}</li>
               ))}
             </ul>
           </Grid.Column>
