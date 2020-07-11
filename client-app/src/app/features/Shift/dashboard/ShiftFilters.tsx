@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { Calendar } from "react-widgets";
-import { Menu, Header } from "semantic-ui-react";
+import { Menu, Header, Button } from "semantic-ui-react";
 import { CalendarView } from "react-widgets/lib/Calendar";
 import { RootStoreContext } from "../../../stores/rootStore";
 
@@ -18,12 +18,7 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
   return (
     <Fragment>
       <Menu vertical size={"large"}>
-        <Header
-          icon={"filter"}
-          attached
-          color={"black"}
-          content={"Apply Filters"}
-        />
+        <Header icon={"filter"} attached color={"black"} content={"Filters"} />
 
         <Header
           icon={"calendar"}
@@ -37,9 +32,12 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
           value={predicate.get("selectedDate") || new Date()}
           footer={false}
         />
-        <Menu.Item content={"All"} />
         <Menu.Item content={"Select Technologist"} />
         <Menu.Item content={"Select Exam Type"} />
+        <Menu.Item content={"Select Location"} />
+        <Menu.Item>
+          <Button>Apply Filters</Button>
+        </Menu.Item>
       </Menu>
     </Fragment>
   );
