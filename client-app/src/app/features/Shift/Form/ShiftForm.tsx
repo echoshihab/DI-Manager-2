@@ -9,8 +9,6 @@ import SelectInput from "../../../common/form/SelectInput";
 import { FormApi } from "final-form";
 import { combineDateAndTime } from "../../../helpers/util";
 import { RootStoreContext } from "../../../stores/rootStore";
-import TechnologistStore from "../../../stores/TechnologistStore";
-import { isEqual } from "date-fns";
 import { observer } from "mobx-react-lite";
 
 const validate = combineValidators({
@@ -21,25 +19,36 @@ const validate = combineValidators({
 
 const ShiftForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { sortedTechnologistByInitial } = rootStore.technologistStore;
+  const {
+    sortedTechnologistByInitial,
+    selectTechnologist,
+    technologist,
+  } = rootStore.technologistStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const [shift, setShift] = useState(new ShiftFormValues());
-  const [disabled, setDisabled] = useState(true);
+  const [rooms, setRooms] = useState(false);
+  const [licenses, setLicenses] = useState(false);
 
   const handleClearForm = (
     e: SyntheticEvent,
     form: FormApi<any, Partial<any>>
   ) => {
     e.preventDefault();
-    setDisabled(true);
+    setRooms(false);
+    setLicenses(false);
     form.reset();
     form.getRegisteredFields().forEach((field) => form.resetFieldState(field));
   };
 
   const handleLocationChange = (id: string) => {
-    setDisabled(false);
     loadRooms(id);
+    setRooms(true);
+  };
+
+  const handleTechnologistChange = (id: string) => {
+    selectTechnologist(id);
+    setLicenses(true);
   };
 
   const handleFinalFormSubmit = (values: any) => {
@@ -103,7 +112,7 @@ const ShiftForm = () => {
             <Field
               name="room"
               placeholder="Room"
-              disabled={disabled}
+              disabled={!rooms}
               value={shift.roomId}
               component={SelectInput}
               options={sortedRoomsByName.map((room) => {
@@ -120,6 +129,7 @@ const ShiftForm = () => {
               placeholder="Technologist"
               value={shift.technologistId}
               component={SelectInput}
+              inputOnChange={handleTechnologistChange}
               options={sortedTechnologistByInitial.map((technologist) => {
                 return {
                   key: technologist.id,
@@ -130,11 +140,22 @@ const ShiftForm = () => {
             />
 
             <Field
-              placeholder="Exam Type"
+              placeholder="License"
               name="license"
               value={shift.licenseId}
               component={SelectInput}
-              DIS
+              disabled={!licenses}
+              options={
+                technologist
+                  ? technologist.licenses.map((license) => {
+                      return {
+                        key: license.licenseId,
+                        value: license.licenseId,
+                        text: license.licenseDisplayName,
+                      };
+                    })
+                  : undefined
+              }
             />
 
             <Button type="submit" content="Add Shift" color="green" />

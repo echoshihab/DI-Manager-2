@@ -35,6 +35,9 @@ export default class TechnologistStore {
     );
     return sortedTechnologists;
   }
+  @action selectTechnologist = (id: string) => {
+    this.technologist = this.technologistRegistry.get(id);
+  };
 
   @action loadTechnologists = async (modalityId: string) => {
     this.technologistRegistry.clear();
