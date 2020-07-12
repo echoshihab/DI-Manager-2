@@ -2,7 +2,6 @@ import React from "react";
 import { FieldRenderProps } from "react-final-form";
 import { FormFieldProps, Form, Label } from "semantic-ui-react";
 import { DateTimePicker } from "react-widgets";
-import { format } from "date-fns";
 
 interface IProps extends FieldRenderProps<Date, HTMLElement>, FormFieldProps {}
 
@@ -14,10 +13,11 @@ const DateInput: React.FC<IProps> = ({
   time = false,
   placeholder,
   id,
-  format,
+  timeFormat,
   meta: { touched, error },
   ...rest
 }) => {
+  time ? (timeFormat = "hh:mm a") : (timeFormat = undefined);
   return (
     <Form.Field error={touched && !!error} type={type} width={width}>
       <DateTimePicker
@@ -28,7 +28,7 @@ const DateInput: React.FC<IProps> = ({
         onKeyDown={(e) => e.preventDefault()}
         date={date}
         time={time}
-        format={format}
+        timeFormat={timeFormat}
         {...rest}
       />
       {touched && error && (
