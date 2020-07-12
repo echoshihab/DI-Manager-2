@@ -7,17 +7,23 @@ import {
   Label,
   Icon,
   AccordionTitleProps,
+  Button,
 } from "semantic-ui-react";
 import { format } from "date-fns";
 import ShiftForm from "../Form/ShiftForm";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByDay } = rootStore.shiftStore;
+  const { shiftsByDay, deleteShift } = rootStore.shiftStore;
   const { loadLocations } = rootStore.locationStore;
   const { loadRooms } = rootStore.roomStore;
   const { loadTechnologists } = rootStore.technologistStore;
   const { setAppLoaded, appLoaded } = rootStore.commonStore;
+  const [editMode, setEditMode] = useState(false);
+
+  const toggleEditMode = () => {
+    setEditMode(!editMode);
+  };
 
   useEffect(() => {
     Promise.all([
@@ -55,6 +61,7 @@ const ShiftDayList = () => {
       <Table celled>
         <Table.Header>
           <Table.Row>
+            <Table.HeaderCell collapsing></Table.HeaderCell>
             <Table.HeaderCell>Location</Table.HeaderCell>
             <Table.HeaderCell>Room</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
@@ -67,11 +74,30 @@ const ShiftDayList = () => {
         <Table.Body>
           {shiftsByDay.map((shift) => (
             <Table.Row key={shift.id}>
+              <Table.Cell>
+                <Label ribbon basic>
+                  <Button
+                    circular
+                    size="mini"
+                    onClick={toggleEditMode}
+                    outline="black"
+                  >
+                    <Icon name="edit" color="blue" />
+                  </Button>
+                  <Button
+                    circular
+                    size="mini"
+                    onClick={() => deleteShift(shift.id)}
+                  >
+                    <Icon name="trash alternate outline" color="red" />
+                  </Button>
+                </Label>
+              </Table.Cell>
               <Table.Cell>{shift.locationName}</Table.Cell>
               <Table.Cell>{shift.roomName}</Table.Cell>
               <Table.Cell>{shift.licenseDisplayName}</Table.Cell>
-              <Table.Cell>{format(shift.start, "HH:mm")}</Table.Cell>
-              <Table.Cell>{format(shift.end, "HH:mm")}</Table.Cell>
+              <Table.Cell>{format(shift.start, "hh:mm a")}</Table.Cell>
+              <Table.Cell>{format(shift.end, "hh:mm a")}</Table.Cell>
               <Table.Cell>{shift.technologistInitial}</Table.Cell>
             </Table.Row>
           ))}

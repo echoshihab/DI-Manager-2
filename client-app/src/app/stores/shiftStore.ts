@@ -122,4 +122,19 @@ export default class ShiftStore {
       this.predicate.set(predicate, value);
     }
   };
+
+  @action deleteShift = async (id: string) => {
+    this.submitting = true;
+    try {
+      await agent.Shifts.delete(id);
+      runInAction("delete location", () => {
+        this.shiftRegistry.delete(id);
+      });
+    } catch (error) {
+      toast.error("Problem deleting");
+    }
+    runInAction("toggle submitting", () => {
+      this.submitting = false;
+    });
+  };
 }

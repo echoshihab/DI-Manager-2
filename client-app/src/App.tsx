@@ -12,13 +12,6 @@ import AdminDashboard from "./app/features/admin/dashboard/AdminDashboard";
 import { ToastContainer } from "react-toastify";
 
 const App = () => {
-  // const rootStore = useContext(RootStoreContext);
-  // const { loadShifts } = rootStore.shiftStore;
-
-  // useEffect(() => {
-  //   loadShifts();
-  // }, [loadShifts]);
-
   return (
     <Fragment>
       <ToastContainer position="bottom-right" />
