@@ -1,8 +1,13 @@
 import { observable, runInAction, action, computed } from "mobx";
-import { IShift } from "../models/shift";
+import { IShift, ShiftFormValues, IShiftFormValues } from "../models/shift";
 import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
+import { ILicense } from "../models/license";
+import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
+import { IRoom } from "../models/room";
+import { ILocation } from "../models/location";
 
 export default class ShiftStore {
   rootStore: RootStore;
@@ -16,6 +21,8 @@ export default class ShiftStore {
   @observable loading = false;
 
   @observable predicate = new Map();
+  @observable loadingInitial = false;
+  @observable submitting = false;
 
   @computed get shiftsByMonth() {
     return this.groupShiftsByDateForMonth(
@@ -61,6 +68,51 @@ export default class ShiftStore {
     }
     runInAction("toggle loading indicator", () => {
       this.loading = false;
+    });
+  };
+
+  @action createShift = async (shift: ShiftFormValues) => {
+    this.submitting = true;
+
+    let technologist: ITechnologist = this.rootStore.technologistStore.technologistRegistry.get(
+      shift.technologistId
+    );
+    let license = technologist.licenses.filter(
+      (license) => license.licenseId === shift.licenseId
+    );
+
+    let room: IRoom = this.rootStore.roomStore.roomRegistry.get(shift.roomId);
+
+    let location: ILocation = this.rootStore.locationStore.locationRegistry.get(
+      shift.locationId
+    );
+
+    let newShift: IShiftFormValues = {
+      id: shift.id,
+      start: shift.start,
+      end: shift.end,
+      licenseId: shift.licenseId,
+      licenseDisplayName: license[0].licenseDisplayName,
+      locationId: shift.locationId,
+      locationName: location.name,
+      roomId: shift.roomId,
+      roomName: room.name,
+      technologistId: shift.technologistId,
+      technologistInitial: technologist.initial,
+      modalityId: shift.modalityId,
+    };
+
+    try {
+      await agent.Shifts.create(shift);
+      runInAction("create shift", () => {
+        this.shiftRegistry.set(shift.id, newShift);
+      });
+    } catch (error) {
+      toast.error("Problem submitting data");
+      console.log(error.response);
+    }
+    runInAction("toggle button loading indicator", () => {
+      this.submitting = false;
     });
   };
 

@@ -10,7 +10,6 @@ import { FormApi } from "final-form";
 import { combineDateAndTime } from "../../../helpers/util";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
-import { format } from "date-fns";
 
 const validate = combineValidators({
   date: isRequired("Date"),
@@ -27,9 +26,11 @@ const ShiftForm = () => {
   } = rootStore.technologistStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
+  const { createShift } = rootStore.shiftStore;
   const [shift, setShift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [licenses, setLicenses] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClearForm = (
     e: SyntheticEvent,
@@ -52,23 +53,22 @@ const ShiftForm = () => {
     setLicenses(true);
   };
 
-  const handleFinalFormSubmit = (values: any) => {
+  const handleFinalFormSubmit = (values: any, form: any) => {
     const { date, end, start, ...shift } = values;
     const shiftStart = combineDateAndTime(date, start);
     const shiftEnd = combineDateAndTime(date, end);
 
-    shift.start = shiftStart;
-    shift.end = shiftEnd;
+    let newShift = shift as ShiftFormValues;
+    newShift.start = shiftStart;
+    newShift.end = shiftEnd;
+    newShift.modalityId = "288eb0dd-f9ef-4e67-b5c8-acf8b3366037";
+    newShift.id = uuid();
+    console.log(newShift);
 
-    console.log(shift);
-
-    // if (shift.id?.length === 0) {
-    //   let newShift = {
-    //     ...shift,
-    //     id: uuid(),
-    //   };
-    //   console.log(newShift);
-    // }
+    setLoading(true);
+    createShift(newShift)
+      .then(() => form.restart())
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -78,7 +78,7 @@ const ShiftForm = () => {
         initialValues={shift}
         onSubmit={handleFinalFormSubmit}
         render={({ form, handleSubmit, invalid, pristine }) => (
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} loading={loading}>
             <Field
               component={DateInput}
               placeholder="Date"
@@ -101,7 +101,7 @@ const ShiftForm = () => {
               value={shift.end}
             />
             <Field
-              name="location"
+              name="locationId"
               placeholder="Location"
               value={shift.locationId}
               component={SelectInput}
@@ -116,7 +116,7 @@ const ShiftForm = () => {
             />
 
             <Field
-              name="room"
+              name="roomId"
               placeholder="Room"
               disabled={!rooms}
               value={shift.roomId}
@@ -131,7 +131,7 @@ const ShiftForm = () => {
             />
 
             <Field
-              name="technologist"
+              name="technologistId"
               placeholder="Technologist"
               value={shift.technologistId}
               component={SelectInput}
@@ -147,7 +147,7 @@ const ShiftForm = () => {
 
             <Field
               placeholder="License"
-              name="license"
+              name="licenseId"
               value={shift.licenseId}
               component={SelectInput}
               disabled={!licenses}
@@ -169,6 +169,7 @@ const ShiftForm = () => {
               onClick={(e) => handleClearForm(e, form)}
               content="Clear"
               color="blue"
+              disabled={loading || invalid || pristine}
             />
           </Form>
         )}

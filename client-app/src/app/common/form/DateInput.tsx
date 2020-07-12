@@ -28,6 +28,7 @@ const DateInput: React.FC<IProps> = ({
         onKeyDown={(e) => e.preventDefault()}
         date={date}
         time={time}
+        format={timeFormat}
         timeFormat={timeFormat}
         {...rest}
       />

@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IShift } from "../models/shift";
+import { IShift, ShiftFormValues } from "../models/shift";
 import { IModality } from "../models/modality";
 import { history } from "../..";
 import { toast } from "react-toastify";
@@ -55,7 +55,7 @@ const requests = {
 
 const Shifts = {
   list: (): Promise<IShift[]> => requests.get("/shifts"),
-  create: (shift: IShift) => requests.post("/shifts", shift),
+  create: (shift: ShiftFormValues) => requests.post("/shifts", shift),
   details: (id: string) => requests.get(`/shifts/${id}`),
   edit: (shift: IShift) => requests.put(`/shifts/${shift.id}`, shift),
   delete: (id: string) => requests.delete(`/shifts/${id}`),

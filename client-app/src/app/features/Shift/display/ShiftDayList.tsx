@@ -66,7 +66,7 @@ const ShiftDayList = () => {
 
         <Table.Body>
           {shiftsByDay.map((shift) => (
-            <Table.Row>
+            <Table.Row key={shift.id}>
               <Table.Cell>{shift.locationName}</Table.Cell>
               <Table.Cell>{shift.roomName}</Table.Cell>
               <Table.Cell>{shift.licenseDisplayName}</Table.Cell>
