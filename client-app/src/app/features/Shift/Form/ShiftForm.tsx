@@ -10,6 +10,7 @@ import { FormApi } from "final-form";
 import { combineDateAndTime } from "../../../helpers/util";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
+import { format } from "date-fns";
 
 const validate = combineValidators({
   date: isRequired("Date"),
@@ -56,13 +57,18 @@ const ShiftForm = () => {
     const shiftStart = combineDateAndTime(date, start);
     const shiftEnd = combineDateAndTime(date, end);
 
-    if (shift.id?.length === 0) {
-      let newShift = {
-        ...shift,
-        id: uuid(),
-      };
-      console.log(newShift);
-    }
+    shift.start = shiftStart;
+    shift.end = shiftEnd;
+
+    console.log(shift);
+
+    // if (shift.id?.length === 0) {
+    //   let newShift = {
+    //     ...shift,
+    //     id: uuid(),
+    //   };
+    //   console.log(newShift);
+    // }
   };
 
   return (
@@ -154,7 +160,7 @@ const ShiftForm = () => {
                         text: license.licenseDisplayName,
                       };
                     })
-                  : undefined
+                  : [{ value: "", text: "" }]
               }
             />
 

@@ -31,7 +31,6 @@ export default class LocationStore {
       const locations = await agent.Locations.list();
       runInAction("loading Locations", () => {
         locations.forEach((location) => {
-          console.log(location);
           this.locationRegistry.set(location.id, location);
         });
       });
