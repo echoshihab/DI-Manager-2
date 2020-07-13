@@ -13,6 +13,7 @@ const DateInput: React.FC<IProps> = ({
   time = false,
   placeholder,
   id,
+  defaultValue,
   timeFormat,
   meta: { touched, error },
   ...rest
@@ -29,6 +30,7 @@ const DateInput: React.FC<IProps> = ({
         date={date}
         time={time}
         format={timeFormat}
+        defaultValue={defaultValue}
         timeFormat={timeFormat}
         {...rest}
       />

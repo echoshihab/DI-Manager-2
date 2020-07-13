@@ -164,12 +164,16 @@ const ShiftForm = () => {
               }
             />
 
-            <Button type="submit" content="Add Shift" color="green" />
+            <Button
+              type="submit"
+              content="Add Shift"
+              color="green"
+              disabled={loading || invalid || pristine}
+            />
             <Button
               onClick={(e) => handleClearForm(e, form)}
               content="Clear"
               color="blue"
-              disabled={loading || invalid || pristine}
             />
           </Form>
         )}

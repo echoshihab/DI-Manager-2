@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import ShiftMonthList from "../display/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
-import ShiftDayList from "../display/ShiftDayList";
+import ShiftDayList from "../display/day/ShiftDayList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../stores/rootStore";
 
@@ -12,11 +12,19 @@ interface IProps {
 
 const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
+  const { loadLocations } = rootStore.locationStore;
+  const { loadTechnologists } = rootStore.technologistStore;
+  const { setAppLoaded, appLoaded } = rootStore.commonStore;
   const { loadShifts } = rootStore.shiftStore;
 
   useEffect(() => {
-    loadShifts();
-  }, [loadShifts]);
+    Promise.all([
+      loadLocations(),
+      loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
+      loadShifts(),
+    ]).finally(() => setAppLoaded());
+  }, [loadShifts, loadLocations, loadTechnologists, setAppLoaded]);
+
   return (
     <Grid>
       <Grid.Column width={12} floated="right">

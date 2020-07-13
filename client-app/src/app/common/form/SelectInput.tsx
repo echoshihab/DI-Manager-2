@@ -6,6 +6,7 @@ interface IProps extends FieldRenderProps<string, HTMLElement>, FormFieldProps {
   inputOnChange: (
     value: string | number | boolean | (string | number | boolean)[] | undefined
   ) => void;
+  defaultValue: string[];
 }
 
 const SelectInput: React.FC<IProps> = ({
@@ -14,6 +15,7 @@ const SelectInput: React.FC<IProps> = ({
   options,
   placeholder,
   inputOnChange,
+  defaultValue,
   disabled,
   meta: { touched, error },
 }) => {
@@ -28,6 +30,7 @@ const SelectInput: React.FC<IProps> = ({
         }}
         placeholder={placeholder}
         options={options}
+        defaultValue={defaultValue}
       />
       {touched && error && (
         <Label basic color="red">
