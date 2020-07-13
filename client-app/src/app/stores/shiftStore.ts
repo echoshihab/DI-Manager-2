@@ -60,6 +60,7 @@ export default class ShiftStore {
       runInAction("loading shifts", () => {
         shifts.forEach((shift) => {
           shift.start = new Date(shift.start);
+          shift.end = new Date(shift.end);
           this.shiftRegistry.set(shift.id, shift);
         });
       });

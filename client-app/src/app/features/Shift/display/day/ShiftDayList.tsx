@@ -44,7 +44,7 @@ const ShiftDayList = () => {
         </Accordion.Content>
       </Accordion>
 
-      <Segment compact>
+      <Segment>
         {shiftsByDay.map((shift) => (
           <ShiftDayListItem key={shift.id} shift={shift} />
         ))}

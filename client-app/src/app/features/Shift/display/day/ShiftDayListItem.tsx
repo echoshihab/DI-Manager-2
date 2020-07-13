@@ -17,13 +17,19 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
 
   const { deleteShift, submitting } = rootStore.shiftStore;
   const { sortedLocationByName } = rootStore.locationStore;
-  const { sortedRoomsByName } = rootStore.roomStore;
-  const { sortedTechnologistByInitial } = rootStore.technologistStore;
+  const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
+  const { sortedLicenseByName } = rootStore.licenseStore;
+  const {
+    selectTechnologist,
+    technologist,
+    sortedTechnologistByInitial,
+  } = rootStore.technologistStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const toggleEditMode = () => {
-    //load rooms here
+    loadRooms(shift.locationId);
+    selectTechnologist(shift.technologistId);
     setEditMode(!editMode);
   };
 
@@ -31,105 +37,109 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     console.log(values);
   };
 
-  return (
-    <Step.Group>
-      {/* {editMode && (
-            <FinalForm
-              initialValues={shift}
-              onSubmit={handleFinalFormSubmit}
-              render={({ handleSubmit, invalid, pristine }) => (
-                <Form onSubmit={handleSubmit} loading={loading}>
-                  <Label ribbon basic>
-                    <Button
-                      fluid
-                      loading={submitting}
-                      type="submit"
-                      disabled={loading || invalid || pristine}
-                    >
-                      <Icon name="check" color="green" />
-                    </Button>
-
-                    <Button fluid onClick={toggleEditMode}>
-                      <Icon name="cancel" color="red" />
-                    </Button>
-                  </Label>
-
-                  <Field
-                    name="locationId"
-                    component={SelectInput}
-                    defaultValue={shift.locationId}
-                    label="Location"
-                    options={sortedLocationByName.map((location) => {
-                      return {
-                        key: location.id,
-                        text: location.name,
-                        value: location.id,
-                      };
-                    })}
-                  />
-
-                  <Field
-                    name="roomId"
-                    component={SelectInput}
-                    defaultValue={shift.roomId}
-                    label="Room"
-                    options={sortedRoomsByName.map((room) => {
-                      return {
-                        key: room.id,
-                        text: room.name,
-                        value: room.id,
-                      };
-                    })}
-                  />
-                  
-                  <Field
-                    name="licenseId"
-                    component={SelectInput}
-                    defaultValue={shift.licenseId}
-                    label="License"
-                    options={sortedTechnologistByInitialmap((room) => {
-                      return {
-                        key: room.id,
-                        text: room.name,
-                        value: room.id,
-                      };
-                    })}
-                  />
-                {/* 
-                  <Field
-                    component={DateInput}
-                    placeholder="Start Time"
-                    time={true}
-                    name="start"
-                    defaultValue={new Date(shift.start)}
-                  />
-
-                  <Field
-                    component={DateInput}
-                    placeholder="End Time"
-                    time={true}
-                    name="end"
-                    defaultValue={new Date(shift.end)}
-                  />
-
-                  <Field
-                    name="technologistId"
-                    component={SelectInput}
-                    defaultValue={shift.technologistId}
-                    label="Technologist"
-                    options={sortedTechnologistByInitial.map((technologist) => {
-                      return {
-                        key: technologist.id,
-                        text: technologist.initial,
-                        value: technologist.id,
-                      };
-                    })}
-                  /> 
-                </Form>
-              )}
+  return editMode ? (
+    <FinalForm
+      initialValues={shift}
+      onSubmit={handleFinalFormSubmit}
+      render={({ handleSubmit, invalid, pristine }) => (
+        <Form onSubmit={handleSubmit} loading={loading}>
+          <Form.Group>
+            <Field
+              name="locationId"
+              component={SelectInput}
+              defaultValue={shift.locationId}
+              label="Location"
+              options={sortedLocationByName.map((location) => {
+                return {
+                  key: location.id,
+                  text: location.name,
+                  value: location.id,
+                };
+              })}
             />
-          )} */}
 
+            <Field
+              name="roomId"
+              component={SelectInput}
+              defaultValue={shift.roomId}
+              label="Room"
+              options={sortedRoomsByName.map((room) => {
+                console.log(room);
+                return {
+                  key: room.id,
+                  text: room.name,
+                  value: room.id,
+                };
+              })}
+            />
+            <Field
+              name="technologistId"
+              component={SelectInput}
+              defaultValue={shift.technologistId}
+              label="Technologist"
+              options={sortedTechnologistByInitial.map((technologist) => {
+                return {
+                  key: technologist.id,
+                  text: technologist.initial,
+                  value: technologist.id,
+                };
+              })}
+            />
+            <Field
+              name="licenseId"
+              component={SelectInput}
+              defaultValue={shift.licenseId}
+              label="License"
+              options={
+                technologist
+                  ? technologist.licenses.map((license) => {
+                      return {
+                        key: license.licenseId,
+                        text: license.licenseDisplayName,
+                        value: license.licenseId,
+                      };
+                    })
+                  : undefined
+              }
+            />
+          </Form.Group>
+          <Form.Group>
+            <Field
+              component={DateInput}
+              placeholder="Start Time"
+              time={true}
+              name="start"
+              defaultValue={shift.start}
+            />
+
+            <Field
+              component={DateInput}
+              placeholder="End Time"
+              time={true}
+              name="end"
+              defaultValue={shift.end}
+            />
+          </Form.Group>
+
+          <Form.Group>
+            <Button
+              fluid
+              loading={submitting}
+              type="submit"
+              disabled={loading || invalid || pristine}
+            >
+              <Icon name="check" color="green" />
+            </Button>
+
+            <Button fluid onClick={toggleEditMode}>
+              <Icon name="cancel" color="red" />
+            </Button>
+          </Form.Group>
+        </Form>
+      )}
+    />
+  ) : (
+    <Step.Group>
       <Step>
         <Step.Content>
           <Step.Title>{shift.locationName}</Step.Title>
@@ -142,6 +152,13 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
           <Step.Description>Room</Step.Description>
         </Step.Content>
       </Step>
+      <Step>
+        <Step.Content>
+          <Step.Title>{shift.technologistInitial}</Step.Title>
+          <Step.Description>Technologist</Step.Description>
+        </Step.Content>
+      </Step>
+
       <Step>
         <Step.Content>
           <Step.Title>{shift.licenseDisplayName}</Step.Title>
@@ -161,12 +178,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
         </Step.Content>
       </Step>
       <Step>
-        <Step.Content>
-          <Step.Title>{shift.technologistInitial}</Step.Title>
-          <Step.Description>Technologist</Step.Description>
-        </Step.Content>
-      </Step>
-      <Step>
         <Button circular size="mini" onClick={toggleEditMode} outline="black">
           <Icon name="edit" color="blue" />
         </Button>
@@ -178,4 +189,4 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
   );
 };
 
-export default ShiftDayListItem;
+export default observer(ShiftDayListItem);
