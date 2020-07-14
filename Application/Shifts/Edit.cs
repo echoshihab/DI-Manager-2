@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -10,14 +14,15 @@ namespace Application.Shifts
     {
         public class Command : IRequest
         {
+
             public Guid Id { get; set; }
             public DateTime? Start { get; set; }
             public DateTime? End { get; set; }
-            public string License { get; set; }
-            public string Location { get; set; }
-            public string Room { get; set; }
-            public string Technologist { get; set; }
-            public string Modality { get; set; }
+            public Guid? LicenseId { get; set; }
+            public Guid? LocationId { get; set; }
+            public Guid? RoomId { get; set; }
+            public Guid? TechnologistId { get; set; }
+            public Guid? ModalityId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -33,16 +38,50 @@ namespace Application.Shifts
                 var shift = await _context.Shifts.FindAsync(request.Id);
 
                 if (shift == null)
-                    throw new Exception("Could not find shift");
+                    throw new RestException(HttpStatusCode.NotFound, new { shift = "Shift not found" });
 
-                // shift.Start = request.Start ?? shift.Start;
-                // shift.End = request.End ?? shift.End;
-                // shift.License = request.License ?? shift.License;
-                // shift.Location = request.Location ?? shift.Location;
-                // shift.Room = request.Room ?? shift.Room;
-                // shift.Technologist = request.Technologist ?? shift.Technologist;
+                dynamic errors = new ExpandoObject();
+                var location = await _context.Locations.FindAsync(request.LocationId);
 
-                //handler logic
+                if (location == null)
+                    errors.location = "Invalid Location";
+
+
+
+                var room = await _context.Rooms.FindAsync(request.RoomId);
+                if (room == null || room.LocationId != location.Id)
+                    errors.room = "Invalid Room";
+
+
+                var modality = await _context.Modalities.FindAsync(request.ModalityId);
+                if (modality == null)
+                    errors.modality = "Invalid Modality";
+
+                var technologist = await _context.Technologists.FindAsync(request.TechnologistId);
+                if (technologist == null || technologist.ModalityId != modality.Id)
+                    errors.technologist = "Invalid Technologist";
+
+                var license = await _context.Licenses.FindAsync(request.LicenseId);
+                if (license == null)
+                    errors.license = "Invalid License";
+
+
+                int errorCount = ((ICollection<KeyValuePair<string, Object>>)errors).Count;
+
+                if (errorCount > 0)
+                {
+                    throw new RestException(HttpStatusCode.NotFound, errors);
+                }
+
+
+                shift.Start = request.Start ?? shift.Start;
+                shift.End = request.End ?? shift.End;
+                shift.Location = location;
+                shift.Modality = modality;
+                shift.Technologist = technologist;
+                shift.License = license;
+                shift.Room = room;
+
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success) return Unit.Value;

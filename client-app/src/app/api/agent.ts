@@ -57,7 +57,7 @@ const Shifts = {
   list: (): Promise<IShift[]> => requests.get("/shifts"),
   create: (shift: ShiftFormValues) => requests.post("/shifts", shift),
   details: (id: string) => requests.get(`/shifts/${id}`),
-  edit: (shift: IShift) => requests.put(`/shifts/${shift.id}`, shift),
+  edit: (shift: ShiftFormValues) => requests.put(`/shifts/${shift.id}`, shift),
   delete: (id: string) => requests.delete(`/shifts/${id}`),
 };
 

@@ -1,13 +1,22 @@
 import React, { useContext, useState, SyntheticEvent } from "react";
-import { Button, Icon, Form, Step } from "semantic-ui-react";
+import {
+  Button,
+  Icon,
+  Form,
+  Step,
+  Label,
+  Segment,
+  Container,
+} from "semantic-ui-react";
 import { format } from "date-fns";
-import { IShift } from "../../../../models/shift";
+import { IShift, ShiftFormValues } from "../../../../models/shift";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
+import { combineDateAndTime } from "../../../../helpers/util";
 
 interface IProps {
   shift: IShift;
@@ -15,7 +24,7 @@ interface IProps {
 
 const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
   const rootStore = useContext(RootStoreContext);
-  const { deleteShift, submitting } = rootStore.shiftStore;
+  const { deleteShift, editShift, submitting } = rootStore.shiftStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const {
@@ -43,10 +52,22 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     setEditMode(!editMode);
   };
 
-  const handleFinalFormSubmit = (values: any) => {
-    console.log(values);
-  };
+  const handleFinalFormSubmit = (values: any, form: any) => {
+    const { end, start, ...shift } = values;
 
+    let editedShift = shift as ShiftFormValues;
+    editedShift.start = start;
+    editedShift.end = end;
+    editedShift.modalityId = "288eb0dd-f9ef-4e67-b5c8-acf8b3366037";
+    editedShift.id = shift.id;
+    console.log(editedShift);
+
+    setLoading(true);
+    editShift(editedShift)
+      .then(() => form.restart())
+      .finally(() => setLoading(false));
+    setEditMode(false);
+  };
   const handleLocationChange = (id: string) => {
     setLoading(true);
     setRoomPlaceholder(true);
@@ -60,110 +81,124 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     setLoading(false);
   };
 
+  const handleRoomChange = () => {
+    setRoomPlaceholder(false);
+  };
+
+  const handleLicenseChange = () => {
+    setLicensePlaceHolder(false);
+  };
+
   return editMode ? (
-    <FinalForm
-      initialValues={shift}
-      onSubmit={handleFinalFormSubmit}
-      render={({ handleSubmit, invalid, pristine }) => (
-        <Form onSubmit={handleSubmit} loading={loading}>
-          <Form.Group>
-            <Field
-              name="locationId"
-              component={SelectInput}
-              defaultValue={shift.locationId}
-              inputOnChange={handleLocationChange}
-              options={sortedLocationByName.map((location) => {
-                return {
-                  key: location.id,
-                  text: location.name,
-                  value: location.id,
-                };
-              })}
-            />
+    <Segment raised>
+      <FinalForm
+        initialValues={shift}
+        onSubmit={handleFinalFormSubmit}
+        render={({ handleSubmit, invalid, pristine }) => (
+          <Form onSubmit={handleSubmit} loading={loading}>
+            <Form.Group>
+              <Label size="medium">Location: </Label>
 
-            <Field
-              name="roomId"
-              component={SelectInput}
-              defaultValue={shift.roomId}
-              text={roomPlaceholder ? "Select a room" : undefined} //add placeholder on location change
-              options={sortedRoomsByName.map((room) => {
-                return {
-                  key: room.id,
-                  text: room.name,
-                  value: room.id,
-                };
-              })}
-            />
-            <Field
-              name="technologistId"
-              component={SelectInput}
-              defaultValue={shift.technologistId}
-              inputOnChange={handleTechnologistChange}
-              options={sortedTechnologistByInitial.map((technologist) => {
-                return {
-                  key: technologist.id,
-                  text: technologist.initial,
-                  value: technologist.id,
-                };
-              })}
-            />
-            <Field
-              name="licenseId"
-              component={SelectInput}
-              defaultValue={shift.licenseId}
-              text={licensePlaceholder ? "Select License" : undefined}
-              options={
-                technologist
-                  ? technologist.licenses.map((license) => {
-                      return {
-                        key: license.licenseId,
-                        text: license.licenseDisplayName,
-                        value: license.licenseId,
-                      };
-                    })
-                  : undefined
-              }
-            />
-          </Form.Group>
-          <Form.Group>
-            <Field
-              component={DateInput}
-              placeholder="Start Time"
-              time={true}
-              name="start"
-              defaultValue={shift.start}
-            />
+              <Field
+                name="locationId"
+                component={SelectInput}
+                defaultValue={shift.locationId}
+                inputOnChange={handleLocationChange}
+                options={sortedLocationByName.map((location) => {
+                  return {
+                    key: location.id,
+                    text: location.name,
+                    value: location.id,
+                  };
+                })}
+              />
+              <Label size="medium">Room: </Label>
+              <Field
+                name="roomId"
+                inputOnChange={handleRoomChange}
+                component={SelectInput}
+                defaultValue={shift.roomId}
+                text={roomPlaceholder ? "Select a room" : undefined} //add placeholder on location change
+                options={sortedRoomsByName.map((room) => {
+                  return {
+                    key: room.id,
+                    text: room.name,
+                    value: room.id,
+                  };
+                })}
+              />
+              <Label size="medium">Technologist: </Label>
+              <Field
+                name="technologistId"
+                component={SelectInput}
+                defaultValue={shift.technologistId}
+                inputOnChange={handleTechnologistChange}
+                options={sortedTechnologistByInitial.map((technologist) => {
+                  return {
+                    key: technologist.id,
+                    text: technologist.initial,
+                    value: technologist.id,
+                  };
+                })}
+              />
+              <Label size="medium">License: </Label>
+              <Field
+                name="licenseId"
+                component={SelectInput}
+                defaultValue={shift.licenseId}
+                inputOnChange={handleLicenseChange}
+                text={licensePlaceholder ? "Select License" : undefined}
+                options={
+                  technologist
+                    ? technologist.licenses.map((license) => {
+                        return {
+                          key: license.licenseId,
+                          text: license.licenseDisplayName,
+                          value: license.licenseId,
+                        };
+                      })
+                    : undefined
+                }
+              />
+            </Form.Group>
+            <Form.Group>
+              <Label size="medium">Start: </Label>
+              <Field
+                component={DateInput}
+                placeholder="Start Time"
+                time={true}
+                name="start"
+                defaultValue={shift.start}
+                label="start"
+              />
+              <Label size="medium">End: </Label>
+              <Field
+                component={DateInput}
+                placeholder="End Time"
+                time={true}
+                name="end"
+                defaultValue={shift.end}
+              />
+              <Button
+                loading={submitting}
+                type="submit"
+                disabled={loading || invalid || pristine}
+              >
+                <Icon name="check" color="green" />
+              </Button>
 
-            <Field
-              component={DateInput}
-              placeholder="End Time"
-              time={true}
-              name="end"
-              defaultValue={shift.end}
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Button
-              fluid
-              loading={submitting}
-              type="submit"
-              disabled={loading || invalid || pristine}
-            >
-              <Icon name="check" color="green" />
-            </Button>
-
-            <Button fluid onClick={toggleEditMode} id="cancelForm">
-              <Icon name="cancel" color="red" />
-            </Button>
-          </Form.Group>
-        </Form>
-      )}
-    />
+              <Button onClick={toggleEditMode} id="cancelForm">
+                <Icon name="cancel" color="red" />
+              </Button>
+            </Form.Group>
+          </Form>
+        )}
+      />
+    </Segment>
   ) : loading ? (
     <LoadingComponent content="Loading technologists..." />
   ) : (
-    <Step.Group>
+    <Step.Group fluid>
       <Step>
         <Step.Content>
           <Step.Title>{shift.locationName}</Step.Title>

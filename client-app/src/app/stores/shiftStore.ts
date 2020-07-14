@@ -116,6 +116,51 @@ export default class ShiftStore {
     });
   };
 
+  @action editShift = async (shift: ShiftFormValues) => {
+    this.submitting = true;
+
+    let technologist: ITechnologist = this.rootStore.technologistStore.technologistRegistry.get(
+      shift.technologistId
+    );
+    let license = technologist.licenses.filter(
+      (license) => license.licenseId === shift.licenseId
+    );
+
+    let room: IRoom = this.rootStore.roomStore.roomRegistry.get(shift.roomId);
+
+    let location: ILocation = this.rootStore.locationStore.locationRegistry.get(
+      shift.locationId
+    );
+
+    let newShift: IShiftFormValues = {
+      id: shift.id,
+      start: shift.start,
+      end: shift.end,
+      licenseId: shift.licenseId,
+      licenseDisplayName: license[0].licenseDisplayName,
+      locationId: shift.locationId,
+      locationName: location.name,
+      roomId: shift.roomId,
+      roomName: room.name,
+      technologistId: shift.technologistId,
+      technologistInitial: technologist.initial,
+      modalityId: shift.modalityId,
+    };
+
+    try {
+      await agent.Shifts.edit(shift);
+      runInAction("create shift", () => {
+        this.shiftRegistry.set(shift.id, newShift);
+      });
+    } catch (error) {
+      toast.error("Problem submitting data");
+      console.log(error.response);
+    }
+    runInAction("toggle button loading indicator", () => {
+      this.submitting = false;
+    });
+  };
+
   @action setPredicate = (predicate: string, value: string | Date) => {
     this.predicate.clear();
     if (predicate !== "all") {
