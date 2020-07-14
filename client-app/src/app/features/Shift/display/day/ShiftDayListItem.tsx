@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Table, Label, Button, Icon, Form, Step } from "semantic-ui-react";
+import { Button, Icon, Form, Step, Label } from "semantic-ui-react";
 import { format } from "date-fns";
 import { IShift } from "../../../../models/shift";
 import { RootStoreContext } from "../../../../stores/rootStore";
@@ -7,6 +7,8 @@ import { observer } from "mobx-react-lite";
 import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
+import LoadingComponent from "../../../../layout/LoadingComponent";
+import { roomPlaceholder, licensePlaceholder } from "../../../../helpers/util";
 
 interface IProps {
   shift: IShift;
@@ -14,27 +16,42 @@ interface IProps {
 
 const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
   const rootStore = useContext(RootStoreContext);
-
   const { deleteShift, submitting } = rootStore.shiftStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
-  const { sortedLicenseByName } = rootStore.licenseStore;
   const {
     selectTechnologist,
     technologist,
     sortedTechnologistByInitial,
   } = rootStore.technologistStore;
+
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [roomPlaceholder, setRoomPlaceholder] = useState(false);
+  const [licensePlaceholder, setLicensePlaceHolder] = useState(false);
 
   const toggleEditMode = () => {
-    loadRooms(shift.locationId);
+    setLoading(true);
     selectTechnologist(shift.technologistId);
+    loadRooms(shift.locationId).finally(() => setLoading(false));
     setEditMode(!editMode);
   };
 
   const handleFinalFormSubmit = (values: any) => {
     console.log(values);
+  };
+
+  const handleLocationChange = (id: string) => {
+    setLoading(true);
+    setRoomPlaceholder(true);
+    loadRooms(id).finally(() => setLoading(false));
+  };
+
+  const handleTechnologistChange = (id: string) => {
+    setLoading(true);
+    setLicensePlaceHolder(true);
+    selectTechnologist(id);
+    setLoading(false);
   };
 
   return editMode ? (
@@ -49,6 +66,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               component={SelectInput}
               defaultValue={shift.locationId}
               label="Location"
+              inputOnChange={handleLocationChange}
               options={sortedLocationByName.map((location) => {
                 return {
                   key: location.id,
@@ -63,8 +81,8 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               component={SelectInput}
               defaultValue={shift.roomId}
               label="Room"
+              text={roomPlaceholder && "Select a room"} //add placeholder on location change
               options={sortedRoomsByName.map((room) => {
-                console.log(room);
                 return {
                   key: room.id,
                   text: room.name,
@@ -77,6 +95,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               component={SelectInput}
               defaultValue={shift.technologistId}
               label="Technologist"
+              inputOnChange={handleTechnologistChange}
               options={sortedTechnologistByInitial.map((technologist) => {
                 return {
                   key: technologist.id,
@@ -89,6 +108,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               name="licenseId"
               component={SelectInput}
               defaultValue={shift.licenseId}
+              text={licensePlaceholder && "Select License"}
               label="License"
               options={
                 technologist
@@ -138,6 +158,8 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
         </Form>
       )}
     />
+  ) : loading ? (
+    <LoadingComponent content="Loading technologists..." />
   ) : (
     <Step.Group>
       <Step>

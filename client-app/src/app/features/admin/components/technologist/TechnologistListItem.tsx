@@ -12,7 +12,6 @@ import TextInput from "../../../../common/form/TextInput";
 import { observer } from "mobx-react-lite";
 import { ILicense } from "../../../../models/license";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
-import { equal } from "assert";
 
 interface IProps {
   technologist: ITechnologist;

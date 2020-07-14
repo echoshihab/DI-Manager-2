@@ -18,6 +18,7 @@ const SelectInput: React.FC<IProps> = ({
   defaultValue,
   disabled,
   meta: { touched, error },
+  text,
 }) => {
   return (
     <Form.Field error={touched && !!error} width={width}>
@@ -28,7 +29,7 @@ const SelectInput: React.FC<IProps> = ({
           input.onChange(data.value);
           inputOnChange && inputOnChange(data.value);
         }}
-        placeholder={placeholder}
+        text={text}
         options={options}
         defaultValue={defaultValue}
       />

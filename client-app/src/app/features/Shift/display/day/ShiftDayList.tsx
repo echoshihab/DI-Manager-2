@@ -2,15 +2,13 @@ import React, { useContext, Fragment, useState, useEffect } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 import {
-  Table,
   Accordion,
   Label,
   Icon,
   AccordionTitleProps,
-  Button,
   Segment,
 } from "semantic-ui-react";
-import { format } from "date-fns";
+
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
 
