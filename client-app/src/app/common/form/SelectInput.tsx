@@ -13,7 +13,6 @@ const SelectInput: React.FC<IProps> = ({
   input,
   width,
   options,
-  placeholder,
   inputOnChange,
   defaultValue,
   disabled,

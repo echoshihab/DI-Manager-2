@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Button, Icon, Form, Step, Label } from "semantic-ui-react";
+import React, { useContext, useState, SyntheticEvent } from "react";
+import { Button, Icon, Form, Step } from "semantic-ui-react";
 import { format } from "date-fns";
 import { IShift } from "../../../../models/shift";
 import { RootStoreContext } from "../../../../stores/rootStore";
@@ -8,7 +8,6 @@ import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
-import { roomPlaceholder, licensePlaceholder } from "../../../../helpers/util";
 
 interface IProps {
   shift: IShift;
@@ -30,10 +29,17 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
   const [roomPlaceholder, setRoomPlaceholder] = useState(false);
   const [licensePlaceholder, setLicensePlaceHolder] = useState(false);
 
-  const toggleEditMode = () => {
+  const toggleEditMode = (event: SyntheticEvent) => {
     setLoading(true);
-    selectTechnologist(shift.technologistId);
-    loadRooms(shift.locationId).finally(() => setLoading(false));
+    if (event.currentTarget.id === "displayForm") {
+      selectTechnologist(shift.technologistId);
+      loadRooms(shift.locationId).finally(() => setLoading(false));
+    } else {
+      setRoomPlaceholder(false);
+      setLicensePlaceHolder(false);
+      setLoading(false);
+    }
+
     setEditMode(!editMode);
   };
 
@@ -65,7 +71,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               name="locationId"
               component={SelectInput}
               defaultValue={shift.locationId}
-              label="Location"
               inputOnChange={handleLocationChange}
               options={sortedLocationByName.map((location) => {
                 return {
@@ -80,8 +85,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               name="roomId"
               component={SelectInput}
               defaultValue={shift.roomId}
-              label="Room"
-              text={roomPlaceholder && "Select a room"} //add placeholder on location change
+              text={roomPlaceholder ? "Select a room" : undefined} //add placeholder on location change
               options={sortedRoomsByName.map((room) => {
                 return {
                   key: room.id,
@@ -94,7 +98,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               name="technologistId"
               component={SelectInput}
               defaultValue={shift.technologistId}
-              label="Technologist"
               inputOnChange={handleTechnologistChange}
               options={sortedTechnologistByInitial.map((technologist) => {
                 return {
@@ -108,8 +111,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               name="licenseId"
               component={SelectInput}
               defaultValue={shift.licenseId}
-              text={licensePlaceholder && "Select License"}
-              label="License"
+              text={licensePlaceholder ? "Select License" : undefined}
               options={
                 technologist
                   ? technologist.licenses.map((license) => {
@@ -151,7 +153,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               <Icon name="check" color="green" />
             </Button>
 
-            <Button fluid onClick={toggleEditMode}>
+            <Button fluid onClick={toggleEditMode} id="cancelForm">
               <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>
@@ -200,7 +202,13 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
         </Step.Content>
       </Step>
       <Step>
-        <Button circular size="mini" onClick={toggleEditMode} outline="black">
+        <Button
+          circular
+          size="mini"
+          onClick={toggleEditMode}
+          outline="black"
+          id="displayForm"
+        >
           <Icon name="edit" color="blue" />
         </Button>
         <Button circular size="mini" onClick={() => deleteShift(shift.id)}>
