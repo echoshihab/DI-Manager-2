@@ -55,6 +55,7 @@ const ShiftForm = () => {
 
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { date, end, start, ...shift } = values;
+
     const shiftStart = combineDateAndTime(date, start);
     const shiftEnd = combineDateAndTime(date, end);
 
@@ -63,7 +64,6 @@ const ShiftForm = () => {
     newShift.end = shiftEnd;
     newShift.modalityId = "288eb0dd-f9ef-4e67-b5c8-acf8b3366037";
     newShift.id = uuid();
-    console.log(newShift);
 
     setLoading(true);
     createShift(newShift)

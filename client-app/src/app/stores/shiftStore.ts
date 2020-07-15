@@ -8,6 +8,7 @@ import { ILicense } from "../models/license";
 import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
 import { IRoom } from "../models/room";
 import { ILocation } from "../models/location";
+import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 
 export default class ShiftStore {
   rootStore: RootStore;
@@ -60,6 +61,7 @@ export default class ShiftStore {
         shifts.forEach((shift) => {
           shift.start = new Date(shift.start);
           shift.end = new Date(shift.end);
+
           this.shiftRegistry.set(shift.id, shift);
         });
       });
@@ -101,6 +103,13 @@ export default class ShiftStore {
       technologistInitial: technologist.initial,
       modalityId: shift.modalityId,
     };
+
+    //converting to UTC for storage
+
+    shift.start = zonedTimeToUtc(shift.start as Date, "Eastern");
+    console.log("Shift start converted: " + shift.start);
+    shift.end = zonedTimeToUtc(shift.end as Date, "Eastern");
+    console.log("Shift ned converted: " + shift.end);
 
     try {
       await agent.Shifts.create(shift);
@@ -146,6 +155,9 @@ export default class ShiftStore {
       technologistInitial: technologist.initial,
       modalityId: shift.modalityId,
     };
+
+    shift.start = zonedTimeToUtc(shift.start as Date, "Eastern");
+    shift.end = zonedTimeToUtc(shift.end as Date, "Eastern");
 
     try {
       await agent.Shifts.edit(shift);

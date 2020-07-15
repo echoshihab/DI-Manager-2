@@ -16,6 +16,7 @@
     "@types/uuid": "^8.0.0",
     "axios": "^0.19.2",
     "date-fns": "^2.0.0-alpha.13",
+    "date-fns-tz": "^1.0.10",
     "final-form": "^4.20.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.7",

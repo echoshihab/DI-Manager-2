@@ -53,6 +53,9 @@ namespace Application.Shifts
                                 .Include(s => s.Technologist)
                                 .ToListAsync();
 
+
+
+
                 // if (request.FilterDate != null)
                 // {
                 //     queryable = queryable.Where(x => x.Start == request.FilterDate);
