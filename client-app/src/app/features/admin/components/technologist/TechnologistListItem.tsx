@@ -5,7 +5,7 @@ import {
   ITechnologistEdit,
 } from "../../../../models/technologist";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { Form, Button, Icon, List, Label, Header } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";

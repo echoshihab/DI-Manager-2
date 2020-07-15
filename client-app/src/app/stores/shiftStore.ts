@@ -4,11 +4,10 @@ import { RootStore } from "./rootStore";
 import agent from "../api/agent";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
-import { ILicense } from "../models/license";
-import { ITechnologist, ITechnologistLicenses } from "../models/technologist";
+import { ITechnologist } from "../models/technologist";
 import { IRoom } from "../models/room";
 import { ILocation } from "../models/location";
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { zonedTimeToUtc } from "date-fns-tz";
 
 export default class ShiftStore {
   rootStore: RootStore;

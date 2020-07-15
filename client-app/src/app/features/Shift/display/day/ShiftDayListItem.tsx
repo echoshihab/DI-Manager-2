@@ -1,13 +1,5 @@
 import React, { useContext, useState, SyntheticEvent } from "react";
-import {
-  Button,
-  Icon,
-  Form,
-  Step,
-  Label,
-  Segment,
-  Container,
-} from "semantic-ui-react";
+import { Button, Icon, Form, Step, Label, Segment } from "semantic-ui-react";
 import { format } from "date-fns";
 import { IShift, ShiftFormValues } from "../../../../models/shift";
 import { RootStoreContext } from "../../../../stores/rootStore";
@@ -16,7 +8,6 @@ import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
-import { combineDateAndTime } from "../../../../helpers/util";
 
 interface IProps {
   shift: IShift;

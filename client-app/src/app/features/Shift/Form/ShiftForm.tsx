@@ -27,7 +27,7 @@ const ShiftForm = () => {
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { createShift } = rootStore.shiftStore;
-  const [shift, setShift] = useState(new ShiftFormValues());
+  const [shift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [licenses, setLicenses] = useState(false);
   const [loading, setLoading] = useState(false);

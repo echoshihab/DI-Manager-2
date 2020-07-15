@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
 import ShiftMonthList from "../display/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
@@ -14,7 +14,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
   const { loadLocations } = rootStore.locationStore;
   const { loadTechnologists } = rootStore.technologistStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+  const { setAppLoaded } = rootStore.commonStore;
   const { loadShifts } = rootStore.shiftStore;
 
   useEffect(() => {
