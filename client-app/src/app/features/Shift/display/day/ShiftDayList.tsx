@@ -7,14 +7,16 @@ import {
   Icon,
   AccordionTitleProps,
   Segment,
+  Header,
 } from "semantic-ui-react";
 
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
+import { format } from "date-fns";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByDay } = rootStore.shiftStore;
+  const { shiftsByDay, predicate } = rootStore.shiftStore;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -43,6 +45,9 @@ const ShiftDayList = () => {
       </Accordion>
 
       <Segment>
+        <Header as="h2" attached="top" textAlign="center">
+          {predicate.get("selectedDate") || new Date().toDateString()}
+        </Header>
         {shiftsByDay.map((shift) => (
           <ShiftDayListItem key={shift.id} shift={shift} />
         ))}

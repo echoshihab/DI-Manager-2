@@ -173,6 +173,7 @@ export default class ShiftStore {
   };
 
   @action setPredicate = (predicate: string, value: string | Date) => {
+    console.log(value);
     this.predicate.clear();
     if (predicate !== "all") {
       this.predicate.set(predicate, value);

@@ -1,8 +1,9 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { Calendar } from "react-widgets";
 import { Menu, Header, Button } from "semantic-ui-react";
 import { CalendarView } from "react-widgets/lib/Calendar";
 import { RootStoreContext } from "../../../stores/rootStore";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   view: string;
@@ -10,7 +11,8 @@ interface IProps {
 
 const ShiftFilters: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
-  const { predicate, setPredicate } = rootStore.shiftStore;
+  const { setPredicate } = rootStore.shiftStore;
+  const [date, setDate] = useState(new Date());
 
   const params: CalendarView[] =
     view === "Month" ? ["year", "decade"] : ["month", "decade", "year"];
@@ -28,8 +30,8 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
         />
         <Calendar
           views={params}
-          onChange={(date) => setPredicate("selectedDate", date!)}
-          value={predicate.get("selectedDate") || new Date()}
+          onChange={(date) => setDate(date!)}
+          value={date}
           footer={false}
         />
         <Menu.Item content={"Select Technologist"} />
@@ -43,4 +45,4 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
   );
 };
 
-export default ShiftFilters;
+export default observer(ShiftFilters);

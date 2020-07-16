@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import ShiftMonthList from "../display/ShiftMonthList";
+import ShiftMonthList from "../display/month/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
 import ShiftDayList from "../display/day/ShiftDayList";
 import { observer } from "mobx-react-lite";
