@@ -38,7 +38,7 @@ const ShiftMonthList = () => {
               {d.slice(3, 5)}
 
               {shiftsByMonth[d]?.map((shift) => (
-                <Fragment>
+                <Fragment key={shift.id}>
                   <Label color="blue">
                     {shift.roomName}
                     <Label.Detail>
