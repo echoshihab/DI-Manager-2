@@ -83,7 +83,7 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
 
           <Form.Group widths="equal" inline>
             <Label size="large" ribbon>
-              Licenses:{" "}
+              Licenses:
             </Label>
             <Field
               name="licenses_mod"

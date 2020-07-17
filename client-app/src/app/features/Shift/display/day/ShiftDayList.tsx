@@ -13,6 +13,7 @@ import {
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
 import { format } from "date-fns";
+import { filterDate } from "../../../../helpers/util";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
@@ -46,7 +47,7 @@ const ShiftDayList = () => {
 
       <Segment>
         <Header as="h2" attached="top" textAlign="center">
-          {predicate.get("selectedDate") || new Date().toDateString()}
+          {predicate.get(filterDate) || new Date().toDateString()}
         </Header>
         {shiftsByDay.map((shift) => (
           <ShiftDayListItem key={shift.id} shift={shift} />

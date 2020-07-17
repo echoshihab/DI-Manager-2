@@ -4,3 +4,9 @@ export const combineDateAndTime = (date: Date, time: Date) => {
 
   return new Date(dateString + " " + timeString);
 };
+
+//filter strings
+export const filterDate: string = "filterDate";
+export const filterTechnologist: string = "filterTechnologist";
+export const filterLicense: string = "filterLicense";
+export const filterLocation: string = "filterLocation";

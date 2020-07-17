@@ -14,6 +14,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
   const { loadLocations } = rootStore.locationStore;
   const { loadTechnologists } = rootStore.technologistStore;
+  const { loadLicenses } = rootStore.licenseStore;
   const { setAppLoaded } = rootStore.commonStore;
   const { loadShifts } = rootStore.shiftStore;
 
@@ -22,6 +23,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
       loadLocations(),
       loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
       loadShifts(),
+      loadLicenses("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
     ]).finally(() => setAppLoaded());
   }, [loadShifts, loadLocations, loadTechnologists, setAppLoaded]);
 

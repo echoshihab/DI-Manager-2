@@ -7,12 +7,12 @@ import {
   Segment,
   Header,
   Container,
-  Sidebar,
   Label,
   Divider,
 } from "semantic-ui-react";
 import { IShift } from "../../../../models/shift";
 import { format } from "date-fns";
+import { filterDate } from "../../../../helpers/util";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
@@ -29,7 +29,7 @@ const ShiftMonthList = () => {
   return (
     <Segment>
       <Header as="h2" attached="top" textAlign="center">
-        {predicate.get("selectedDate") || format(new Date(), "MMMM YYYY")}
+        {predicate.get(filterDate) || format(new Date(), "MMMM YYYY")}
       </Header>
       <Container>
         <Grid columns={7} divided style={{ marginTop: "20px" }}>
