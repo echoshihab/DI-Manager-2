@@ -19,16 +19,20 @@ namespace Application.Shifts
         }
         public class Query : IRequest<List<ShiftDto>>
         {
-            //add additional filters here
-            public Query(DateTime? filterDate)
+            public DateTime? FilterDate { get; set; }
+            public Guid? FilterLocation { get; set; }
+            public Guid? FilterLicense { get; set; }
+            public Guid? FilterTecnologist { get; set; }
+            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTecnologist)
             {
-                //for paging
-
-                //for filtering
+                this.FilterTecnologist = filterTecnologist;
+                this.FilterLicense = filterLicense;
+                this.FilterLocation = filterLocation;
                 FilterDate = filterDate;
+
             }
 
-            public DateTime? FilterDate { get; set; }
+
 
         }
 
@@ -45,24 +49,34 @@ namespace Application.Shifts
 
             public async Task<List<ShiftDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var shifts = await _context.Shifts
-                                .Include(s => s.License)
+                var queryable = _context.Shifts.Include(s => s.License)
                                 .Include(s => s.Modality)
                                 .Include(s => s.Location)
                                 .Include(s => s.Room)
-                                .Include(s => s.Technologist)
-                                .ToListAsync();
+                                .Include(s => s.Technologist).AsQueryable();
+
+                if (request.FilterDate != null)
+                {
+                    queryable = queryable.Where(x => x.Start == request.FilterDate);
+
+                }
+                if (request.FilterLocation != null)
+                {
+                    queryable = queryable.Where(x => x.LocationId == request.FilterLocation);
+
+                }
+                if (request.FilterTecnologist != null)
+                {
+                    queryable.Where(x => x.TechnologistId == request.FilterTecnologist);
+                }
+                if (request.FilterLicense != null)
+                {
+                    queryable.Where(x => x.LicenseId == request.FilterLicense);
+                }
 
 
+                var shifts = await queryable.ToListAsync();
 
-
-                // if (request.FilterDate != null)
-                // {
-                //     queryable = queryable.Where(x => x.Start == request.FilterDate);
-                //     var shifts = await queryable.ToListAsync();
-                //     return shifts;
-
-                // }
 
                 var shiftsToReturn = _mapper.Map<List<Shift>, List<ShiftDto>>(shifts);
                 return shiftsToReturn;

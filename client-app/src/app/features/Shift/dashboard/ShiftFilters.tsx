@@ -4,6 +4,12 @@ import { Menu, Header, Button, Dropdown } from "semantic-ui-react";
 import { CalendarView } from "react-widgets/lib/Calendar";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
+import {
+  filterLocation,
+  filterLicense,
+  filterTechnologist,
+  filterDate,
+} from "../../../helpers/util";
 
 interface IProps {
   view: string;
@@ -45,7 +51,10 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
   };
 
   const handleApply = () => {
-    console.log(location, license, technologist, date);
+    if (location.length > 0) setPredicate(filterLocation, location);
+    if (license.length > 0) setPredicate(filterLicense, license);
+    if (technologist.length > 0) setPredicate(filterTechnologist, technologist);
+    setPredicate(filterDate, date);
     handleClear();
   };
 
@@ -126,9 +135,13 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
           />
         </Menu.Item>
 
-        <Menu.Item>
-          <Button onClick={handleApply}>Apply</Button>
-          <Button onClick={handleClear}>Clear</Button>
+        <Menu.Item cl>
+          <Button basic color="grey" onClick={handleApply}>
+            Apply
+          </Button>
+          <Button basic color="grey" onClick={handleClear}>
+            Clear
+          </Button>
         </Menu.Item>
       </Menu>
     </Fragment>
