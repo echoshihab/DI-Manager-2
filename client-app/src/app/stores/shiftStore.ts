@@ -103,7 +103,7 @@ export default class ShiftStore {
       modalityId: shift.modalityId,
     };
 
-    //converting to UTC for storage
+    //converting to UTC for API
 
     shift.start = zonedTimeToUtc(shift.start as Date, "Eastern");
     console.log("Shift start converted: " + shift.start);

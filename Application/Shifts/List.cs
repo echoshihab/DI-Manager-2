@@ -25,9 +25,9 @@ namespace Application.Shifts
             public Guid? FilterTecnologist { get; set; }
             public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTecnologist)
             {
-                this.FilterTecnologist = filterTecnologist;
-                this.FilterLicense = filterLicense;
-                this.FilterLocation = filterLocation;
+                FilterTecnologist = filterTecnologist;
+                FilterLicense = filterLicense;
+                FilterLocation = filterLocation;
                 FilterDate = filterDate;
 
             }
@@ -57,7 +57,7 @@ namespace Application.Shifts
 
                 if (request.FilterDate != null)
                 {
-                    queryable = queryable.Where(x => x.Start == request.FilterDate);
+                    queryable = queryable.Where(x => x.Start.Date == Convert.ToDateTime(request.FilterDate).Date);
 
                 }
                 if (request.FilterLocation != null)
