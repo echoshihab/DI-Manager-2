@@ -54,7 +54,8 @@ const requests = {
 };
 
 const Shifts = {
-  list: (): Promise<IShift[]> => requests.get("/shifts"),
+  list: (params: URLSearchParams): Promise<IShift[]> =>
+    axios.get("/shifts", { params: params }), //used axios directly here to pass params
   create: (shift: ShiftFormValues) => requests.post("/shifts", shift),
   details: (id: string) => requests.get(`/shifts/${id}`),
   edit: (shift: ShiftFormValues) => requests.put(`/shifts/${shift.id}`, shift),

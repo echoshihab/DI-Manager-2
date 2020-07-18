@@ -8,6 +8,7 @@ import { ITechnologist } from "../models/technologist";
 import { IRoom } from "../models/room";
 import { ILocation } from "../models/location";
 import { zonedTimeToUtc } from "date-fns-tz";
+import { filterDate } from "../helpers/util";
 
 export default class ShiftStore {
   rootStore: RootStore;
@@ -34,6 +35,21 @@ export default class ShiftStore {
     return this.sortShiftsForDay(Array.from(this.shiftRegistry.values()));
   }
 
+  @computed get axiosParams() {
+    const params = new URLSearchParams();
+    this.predicate.forEach((value, key) => {
+      if (key === filterDate) {
+        params.append(
+          key,
+          zonedTimeToUtc(value as Date, "Eastern").toDateString()
+        );
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
   groupShiftsByDateForMonth(shifts: IShift[]) {
     const monthObj = {} as { [key: string]: IShift[] };
     shifts.forEach((s) => {
@@ -55,7 +71,7 @@ export default class ShiftStore {
   @action loadShifts = async () => {
     this.loading = true;
     try {
-      const shifts = await agent.Shifts.list();
+      const shifts = await agent.Shifts.list(this.axiosParams);
       runInAction("loading shifts", () => {
         shifts.forEach((shift) => {
           shift.start = new Date(shift.start);
