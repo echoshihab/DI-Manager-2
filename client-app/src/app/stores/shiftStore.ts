@@ -39,10 +39,7 @@ export default class ShiftStore {
     const params = new URLSearchParams();
     this.predicate.forEach((value, key) => {
       if (key === filterDate) {
-        params.append(
-          key,
-          zonedTimeToUtc(value as Date, "Eastern").toDateString()
-        );
+        params.append(key, (value as Date).toDateString());
       } else {
         params.append(key, value);
       }
@@ -69,6 +66,7 @@ export default class ShiftStore {
   }
 
   @action loadShifts = async () => {
+    this.shiftRegistry.clear();
     this.loading = true;
     try {
       const shifts = await agent.Shifts.list(this.axiosParams);
@@ -122,9 +120,7 @@ export default class ShiftStore {
     //converting to UTC for API
 
     shift.start = zonedTimeToUtc(shift.start as Date, "Eastern");
-    console.log("Shift start converted: " + shift.start);
     shift.end = zonedTimeToUtc(shift.end as Date, "Eastern");
-    console.log("Shift ned converted: " + shift.end);
 
     try {
       await agent.Shifts.create(shift);

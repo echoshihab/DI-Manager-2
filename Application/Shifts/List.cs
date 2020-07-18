@@ -67,11 +67,11 @@ namespace Application.Shifts
                 }
                 if (request.FilterTecnologist != null)
                 {
-                    queryable.Where(x => x.TechnologistId == request.FilterTecnologist);
+                    queryable = queryable.Where(x => x.TechnologistId == request.FilterTecnologist);
                 }
                 if (request.FilterLicense != null)
                 {
-                    queryable.Where(x => x.LicenseId == request.FilterLicense);
+                    queryable = queryable.Where(x => x.LicenseId == request.FilterLicense);
                 }
 
 

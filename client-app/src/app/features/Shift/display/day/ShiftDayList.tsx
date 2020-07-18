@@ -12,7 +12,6 @@ import {
 
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
-import { format } from "date-fns";
 import { filterDate } from "../../../../helpers/util";
 
 const ShiftDayList = () => {
@@ -47,7 +46,9 @@ const ShiftDayList = () => {
 
       <Segment>
         <Header as="h2" attached="top" textAlign="center">
-          {predicate.get(filterDate) || new Date().toDateString()}
+          {predicate.has(filterDate)
+            ? (predicate.get(filterDate) as Date).toDateString()
+            : new Date().toDateString()}
         </Header>
         {shiftsByDay.map((shift) => (
           <ShiftDayListItem key={shift.id} shift={shift} />

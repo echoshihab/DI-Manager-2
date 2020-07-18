@@ -13,11 +13,12 @@ import {
 
 interface IProps {
   view: string;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShiftFilters: React.FC<IProps> = ({ view }) => {
+const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
   const rootStore = useContext(RootStoreContext);
-  const { setPredicate } = rootStore.shiftStore;
+  const { setPredicate, loadShifts } = rootStore.shiftStore;
   const { sortedTechnologistByInitial } = rootStore.technologistStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { sortedLicenseByName } = rootStore.licenseStore;
@@ -51,11 +52,12 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
   };
 
   const handleApply = () => {
+    setLoading(true);
     if (location.length > 0) setPredicate(filterLocation, location);
     if (license.length > 0) setPredicate(filterLicense, license);
     if (technologist.length > 0) setPredicate(filterTechnologist, technologist);
     setPredicate(filterDate, date);
-    handleClear();
+    loadShifts().finally(() => setLoading(false));
   };
 
   return (
@@ -135,7 +137,7 @@ const ShiftFilters: React.FC<IProps> = ({ view }) => {
           />
         </Menu.Item>
 
-        <Menu.Item cl>
+        <Menu.Item>
           <Button basic color="grey" onClick={handleApply}>
             Apply
           </Button>
