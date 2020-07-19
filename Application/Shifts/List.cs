@@ -25,12 +25,14 @@ namespace Application.Shifts
             public Guid? FilterLocation { get; set; }
             public Guid? FilterLicense { get; set; }
             public Guid? FilterTechnologist { get; set; }
-            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist)
+            public Boolean? MonthFlag { get; set; }
+            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist, Boolean? monthFlag)
             {
                 FilterTechnologist = filterTechnologist;
                 FilterLicense = filterLicense;
                 FilterLocation = filterLocation;
                 FilterDate = filterDate;
+                MonthFlag = monthFlag;
 
             }
 
@@ -61,10 +63,18 @@ namespace Application.Shifts
                 {
                     throw new RestException(HttpStatusCode.NotFound, new { error = "Invalid Date" });
                 }
+                var filterDateTime = Convert.ToDateTime(request.FilterDate);
 
+                if (request.MonthFlag.HasValue)
+                {
+                    queryable = queryable.Where(x => x.Start.Year == filterDateTime.Year && x.Start.Month == filterDateTime.Month);
+                }
+                else
+                {
+                    queryable = queryable.Where(x =>
+                (x.Start.Date == filterDateTime.Date));
+                }
 
-                queryable = queryable.Where(x =>
-                (x.Start.Date == Convert.ToDateTime(request.FilterDate).Date));
 
                 if (request.FilterLocation.HasValue)
                     queryable = queryable.Where(x => x.LocationId == request.FilterLocation);

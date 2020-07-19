@@ -1,4 +1,4 @@
-import React, { useContext, Fragment, useState } from "react";
+import React, { useContext, Fragment, useState, useEffect } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 import {
@@ -12,11 +12,11 @@ import {
 
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
-import { filterDate } from "../../../../helpers/util";
+import { filterDate, monthFlag } from "../../../../helpers/util";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByDay, predicate } = rootStore.shiftStore;
+  const { shiftsByDay, predicate, clearPredicate } = rootStore.shiftStore;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -25,6 +25,12 @@ const ShiftDayList = () => {
     const newIndex = activeIndex === index ? 1 : 0;
     setActiveIndex(newIndex);
   };
+
+  useEffect(() => {
+    if (predicate.has(monthFlag)) {
+      clearPredicate();
+    }
+  }, [clearPredicate]);
 
   return (
     <Fragment>

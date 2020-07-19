@@ -12,16 +12,17 @@ import {
 } from "semantic-ui-react";
 import { IShift } from "../../../../models/shift";
 import { format } from "date-fns";
-import { filterDate } from "../../../../helpers/util";
+import { filterDate, monthFlag } from "../../../../helpers/util";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByMonth, predicate } = rootStore.shiftStore;
+  const { shiftsByMonth, predicate, setPredicate } = rootStore.shiftStore;
   const [daysInMonth, setDaysInMonth] = useState<{
     [key: string]: IShift[] | [];
   }>({});
 
   useEffect(() => {
+    setPredicate(monthFlag, true);
     let monthDates = getMonthDates();
     setDaysInMonth(monthDates);
   }, [setDaysInMonth]);
@@ -29,7 +30,9 @@ const ShiftMonthList = () => {
   return (
     <Segment>
       <Header as="h2" attached="top" textAlign="center">
-        {predicate.get(filterDate) || format(new Date(), "MMMM YYYY")}
+        {predicate.has(filterDate)
+          ? format(predicate.get(filterDate) as Date, "MMMM YYYY")
+          : format(new Date().toDateString(), "MMMM YYYY")}
       </Header>
       <Container>
         <Grid columns={7} divided style={{ marginTop: "20px" }}>

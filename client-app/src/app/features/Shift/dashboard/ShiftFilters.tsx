@@ -9,6 +9,7 @@ import {
   filterLicense,
   filterTechnologist,
   filterDate,
+  monthFlag,
 } from "../../../helpers/util";
 
 interface IProps {
@@ -57,6 +58,7 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
     if (location.length > 0) setPredicate(filterLocation, location);
     if (license.length > 0) setPredicate(filterLicense, license);
     if (technologist.length > 0) setPredicate(filterTechnologist, technologist);
+    if (view === "Month") setPredicate(monthFlag, true);
 
     setPredicate(filterDate, date);
     loadShifts().finally(() => setLoading(false));

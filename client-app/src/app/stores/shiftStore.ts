@@ -184,7 +184,10 @@ export default class ShiftStore {
     });
   };
 
-  @action setPredicate = (predicate: string, value: string | Date) => {
+  @action setPredicate = (
+    predicate: string,
+    value: string | Date | boolean
+  ) => {
     this.predicate.set(predicate, value);
   };
 
