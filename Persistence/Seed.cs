@@ -18,7 +18,8 @@ namespace Persistence
                 var roles = new List<IdentityRole>
                     {
                         new IdentityRole(StaticDetail.Role_Admin),
-                        new IdentityRole(StaticDetail.Role_Coordinator)
+                        new IdentityRole(StaticDetail.Role_Coordinator),
+                        new IdentityRole(StaticDetail.Role_NoAccess)
 
                     };
                 foreach (var role in roles)
