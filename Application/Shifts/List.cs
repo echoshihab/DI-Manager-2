@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -22,10 +24,10 @@ namespace Application.Shifts
             public DateTime? FilterDate { get; set; }
             public Guid? FilterLocation { get; set; }
             public Guid? FilterLicense { get; set; }
-            public Guid? FilterTecnologist { get; set; }
-            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTecnologist)
+            public Guid? FilterTechnologist { get; set; }
+            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist)
             {
-                FilterTecnologist = filterTecnologist;
+                FilterTechnologist = filterTechnologist;
                 FilterLicense = filterLicense;
                 FilterLocation = filterLocation;
                 FilterDate = filterDate;
@@ -55,24 +57,29 @@ namespace Application.Shifts
                                 .Include(s => s.Room)
                                 .Include(s => s.Technologist).AsQueryable();
 
-                if (request.FilterDate != null)
+                if (!request.FilterDate.HasValue)
                 {
-                    queryable = queryable.Where(x => x.Start.Date == Convert.ToDateTime(request.FilterDate).Date);
+                    throw new RestException(HttpStatusCode.NotFound, new { error = "Invalid Date" });
+                }
 
-                }
-                if (request.FilterLocation != null)
-                {
-                    queryable = queryable.Where(x => x.LocationId == request.FilterLocation);
 
-                }
-                if (request.FilterTecnologist != null)
-                {
-                    queryable = queryable.Where(x => x.TechnologistId == request.FilterTecnologist);
-                }
-                if (request.FilterLicense != null)
-                {
-                    queryable = queryable.Where(x => x.LicenseId == request.FilterLicense);
-                }
+                Boolean filterByLocation = request.FilterLocation.HasValue;
+                Boolean filterByTechnologist = request.FilterTechnologist.HasValue;
+                Boolean filterByLicense = request.FilterLicense.HasValue;
+
+
+                queryable = queryable.Where(x =>
+                (x.Start.Date == Convert.ToDateTime(request.FilterDate).Date)
+                &&
+                (
+                (filterByTechnologist && x.TechnologistId == request.FilterTechnologist)
+                ||
+                (filterByLicense && x.LicenseId == request.FilterLicense)
+                ||
+                (filterByLocation && x.LocationId == request.FilterLocation)
+                ));
+
+
 
 
                 var shifts = await queryable.ToListAsync();

@@ -18,7 +18,7 @@ interface IProps {
 
 const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
   const rootStore = useContext(RootStoreContext);
-  const { setPredicate, loadShifts } = rootStore.shiftStore;
+  const { setPredicate, loadShifts, clearPredicate } = rootStore.shiftStore;
   const { sortedTechnologistByInitial } = rootStore.technologistStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { sortedLicenseByName } = rootStore.licenseStore;
@@ -52,10 +52,12 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
   };
 
   const handleApply = () => {
+    clearPredicate();
     setLoading(true);
     if (location.length > 0) setPredicate(filterLocation, location);
     if (license.length > 0) setPredicate(filterLicense, license);
     if (technologist.length > 0) setPredicate(filterTechnologist, technologist);
+
     setPredicate(filterDate, date);
     loadShifts().finally(() => setLoading(false));
   };

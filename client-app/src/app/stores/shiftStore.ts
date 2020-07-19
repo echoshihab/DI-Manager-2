@@ -185,8 +185,11 @@ export default class ShiftStore {
   };
 
   @action setPredicate = (predicate: string, value: string | Date) => {
-    this.predicate.clear();
     this.predicate.set(predicate, value);
+  };
+
+  @action clearPredicate = () => {
+    this.predicate.clear();
   };
 
   @action deleteShift = async (id: string) => {

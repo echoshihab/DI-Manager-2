@@ -6,6 +6,7 @@ import ShiftDayList from "../display/day/ShiftDayList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../stores/rootStore";
 import LoadingComponent from "../../../layout/LoadingComponent";
+import { filterDate } from "../../../helpers/util";
 
 interface IProps {
   view: string;
@@ -18,9 +19,12 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const { loadLicenses } = rootStore.licenseStore;
   const { setAppLoaded } = rootStore.commonStore;
   const [loading, setLoading] = useState(false);
-  const { loadShifts } = rootStore.shiftStore;
+  const { loadShifts, predicate, setPredicate } = rootStore.shiftStore;
 
   useEffect(() => {
+    if (!predicate.has(filterDate)) {
+      setPredicate(filterDate, new Date());
+    }
     Promise.all([
       loadLocations(),
       loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
@@ -33,6 +37,8 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
     loadTechnologists,
     setAppLoaded,
     loadLicenses,
+    predicate,
+    setPredicate,
   ]);
 
   return (
