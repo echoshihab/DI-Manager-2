@@ -63,22 +63,15 @@ namespace Application.Shifts
                 }
 
 
-                Boolean filterByLocation = request.FilterLocation.HasValue;
-                Boolean filterByTechnologist = request.FilterTechnologist.HasValue;
-                Boolean filterByLicense = request.FilterLicense.HasValue;
-
-
                 queryable = queryable.Where(x =>
-                (x.Start.Date == Convert.ToDateTime(request.FilterDate).Date)
-                &&
-                (
-                (filterByTechnologist && x.TechnologistId == request.FilterTechnologist)
-                ||
-                (filterByLicense && x.LicenseId == request.FilterLicense)
-                ||
-                (filterByLocation && x.LocationId == request.FilterLocation)
-                ));
+                (x.Start.Date == Convert.ToDateTime(request.FilterDate).Date));
 
+                if (request.FilterLocation.HasValue)
+                    queryable = queryable.Where(x => x.LocationId == request.FilterLocation);
+                if (request.FilterTechnologist.HasValue)
+                    queryable = queryable.Where(x => x.TechnologistId == request.FilterTechnologist);
+                if (request.FilterLicense.HasValue)
+                    queryable = queryable.Where(x => x.LicenseId == request.FilterLicense);
 
 
 
