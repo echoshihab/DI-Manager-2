@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -7,8 +9,10 @@ namespace Domain
     {
         public string DisplayName { get; set; }
 
+        public Guid? ModalityId { get; set; }
+        public Modality Modality { get; set; }
 
-        //add modality as collection here
-        //give this a role of coordinator
+        [NotMapped]
+        public string Role { get; set; }
     }
 }

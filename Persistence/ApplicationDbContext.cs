@@ -19,6 +19,7 @@ namespace Persistence
         public DbSet<Modality> Modalities { get; set; }
         public DbSet<License> Licenses { get; set; }
         public DbSet<TechnologistLicense> TechnologistLicenses { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

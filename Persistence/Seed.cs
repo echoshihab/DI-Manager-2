@@ -34,21 +34,23 @@ namespace Persistence
                 if (!userManager.Users.Any())
                 {
                     var users = new List<AppUser>
+
                 {
                     new AppUser
                     {
                         Id = "a",
                         DisplayName = "Shihab",
                         UserName = "shihab",
-                        Email = "shihab@test.com"
+                        Email = "shihab@test.com",
                     },
                     new AppUser
                     {
                         Id = "b",
                         DisplayName = "James",
                         UserName = "james",
-                        Email = "james@test.com"
-                    },
+                        Email = "james@test.com",
+                        ModalityId = new Guid("288eb0dd-f9ef-4e67-b5c8-acf8b3366037")
+                },
                     new AppUser
                     {
                         Id = "c",
