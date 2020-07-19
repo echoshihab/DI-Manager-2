@@ -86,6 +86,10 @@ export default class ShiftStore {
     });
   };
 
+  @action clearShifts = () => {
+    this.shiftRegistry.clear();
+  };
+
   @action createShift = async (shift: ShiftFormValues) => {
     this.submitting = true;
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, Fragment } from "react";
 import { Grid } from "semantic-ui-react";
 import ShiftMonthList from "../display/month/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
@@ -17,40 +17,49 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const { loadLocations } = rootStore.locationStore;
   const { loadTechnologists } = rootStore.technologistStore;
   const { loadLicenses } = rootStore.licenseStore;
-  const { setAppLoaded } = rootStore.commonStore;
   const [loading, setLoading] = useState(false);
-  const { loadShifts, predicate, setPredicate } = rootStore.shiftStore;
+  const {
+    loadShifts,
+    predicate,
+    setPredicate,
+    clearShifts,
+  } = rootStore.shiftStore;
 
   useEffect(() => {
     if (!predicate.has(filterDate)) {
       setPredicate(filterDate, new Date());
     }
+    setLoading(true);
     Promise.all([
       loadLocations(),
       loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
       loadShifts(),
       loadLicenses("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
-    ]).finally(() => setAppLoaded());
+    ]).finally(() => setLoading(false));
+    return () => clearShifts();
   }, [
     loadShifts,
     loadLocations,
     loadTechnologists,
-    setAppLoaded,
     loadLicenses,
     predicate,
     setPredicate,
+    clearShifts,
   ]);
 
   return (
     <Grid>
-      {loading ? (
-        <LoadingComponent content="Loading technologists..." />
-      ) : (
-        <Grid.Column width={12} floated="right">
-          {view === "Month" && <ShiftMonthList />}
-          {view === "Date" && <ShiftDayList />}
-        </Grid.Column>
-      )}
+      <Grid.Column width={12} floated="right">
+        {loading ? (
+          <LoadingComponent content="Loading shifts..." inverted />
+        ) : (
+          <Fragment>
+            {view === "Month" && <ShiftMonthList />}
+            {view === "Date" && <ShiftDayList />}
+          </Fragment>
+        )}
+      </Grid.Column>
+
       <Grid.Column floated="left">
         <ShiftFilters view={view} setLoading={setLoading} />
       </Grid.Column>
