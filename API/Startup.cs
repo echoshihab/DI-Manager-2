@@ -1,9 +1,11 @@
 
 using API.Middleware;
+using Application.Interfaces;
 using Application.Shifts;
 using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,6 +58,8 @@ namespace API
             identityBuilder.AddRoles<IdentityRole>();
             identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
 
             services.AddAuthentication();
 

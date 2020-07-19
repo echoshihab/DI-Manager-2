@@ -44,6 +44,7 @@ namespace Application.User
                 {
                     return new User
                     {
+                        UserName = user.UserName,
                         DisplayName = user.DisplayName,
                         ModalityId = user.ModalityId,
                         Role = roleName
