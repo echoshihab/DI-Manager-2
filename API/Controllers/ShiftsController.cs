@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Shifts;
 using Domain;
+using Domain.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-
+    [Authorize(Roles = StaticDetail.Role_Coordinator)]
     public class ShiftsController : BaseController
     {
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ShiftDto>>> List(DateTime? filterDate,
         Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist, Boolean? monthFlag)
         {

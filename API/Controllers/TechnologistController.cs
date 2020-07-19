@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Technologists;
 using Domain;
+using Domain.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = StaticDetail.Role_Admin)]
     public class TechnologistController : BaseController
     {
         [HttpGet("{id}")]
@@ -23,6 +26,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<TechnologistDto>>> List(Guid? modalityId)
         {
             return await Mediator.Send(new List.Query(modalityId));

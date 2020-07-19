@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Modalities;
 using Domain;
+using Domain.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = StaticDetail.Role_Admin)]
     public class ModalityController : BaseController
     {
 

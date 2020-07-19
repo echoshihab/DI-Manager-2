@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Rooms;
 using Domain;
+using Domain.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+
+    [Authorize(Roles = StaticDetail.Role_Admin)]
     public class RoomController : BaseController
     {
 
@@ -24,6 +28,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<RoomDto>>> List(Guid? locationId)
         {
             return await Mediator.Send(new List.Query(locationId));

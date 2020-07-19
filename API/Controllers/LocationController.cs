@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Locations;
 using Domain;
+using Domain.Utility;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = StaticDetail.Role_Admin)]
     public class LocationController : BaseController
     {
         [HttpGet("{id}")]
@@ -23,12 +26,14 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<LocationDto>>> List()
         {
             return await Mediator.Send(new List.Query());
         }
 
         [HttpPut("{id}")]
+
         public async Task<ActionResult<Unit>> Edit(Guid id, Edit.Command command)
         {
             command.Id = id;
