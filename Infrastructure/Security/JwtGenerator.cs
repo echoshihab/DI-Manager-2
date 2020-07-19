@@ -5,17 +5,20 @@ using System.Security.Claims;
 using System.Text;
 using Application.Interfaces;
 using Domain;
+using Domain.Utility;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Security
 {
     public class JwtGenerator : IJwtGenerator
     {
-        public string CreateToken(AppUser user)
+        public string CreateToken(AppUser user, string role)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
+                new Claim(ClaimTypes.Role, role ),
+
             };
 
             //generate signing credentials
