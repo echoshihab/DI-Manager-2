@@ -80,7 +80,7 @@ namespace Application.User
                     return new User
                     {
                         DisplayName = user.DisplayName,
-                        Token = _jwtGenerator.CreateToken(user, StaticDetail.Role_NoAccess),
+                        Token = _jwtGenerator.CreateToken(user),
                         UserName = user.UserName,
                         Role = StaticDetail.Role_NoAccess
                     };

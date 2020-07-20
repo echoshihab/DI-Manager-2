@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Application.Interfaces;
 using Domain;
 using Domain.Utility;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -14,13 +16,19 @@ namespace Infrastructure.Security
     public class JwtGenerator : IJwtGenerator
     {
         private readonly SymmetricSecurityKey _key;
-        public JwtGenerator(IConfiguration config)
+        private readonly UserManager<AppUser> _userManager;
+
+        public JwtGenerator(IConfiguration config, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
 
-        public string CreateToken(AppUser user, string role)
+
+
+        public string CreateToken(AppUser user)
         {
+            var role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
