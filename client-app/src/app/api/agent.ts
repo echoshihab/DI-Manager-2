@@ -11,6 +11,8 @@ import {
   ITechnologistForm,
   ITechnologistEdit,
 } from "../models/technologist";
+import { request } from "http";
+import { IUserFormValues, IUser } from "../models/user";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -105,6 +107,14 @@ const Technologists = {
   edit: (technologist: ITechnologistEdit) =>
     requests.put(`/technologist/${technologist.id}`, technologist),
   delete: (id: string) => requests.delete(`/technologist/${id}`),
+};
+
+const User = {
+  current: (): Promise<IUser> => requests.get("/user"),
+  login: (user: IUserFormValues): Promise<IUser> =>
+    requests.post(`/user/login`, user),
+  register: (user: IUserFormValues): Promise<IUser> =>
+    requests.post(`/user/register`, user),
 };
 
 export default {
