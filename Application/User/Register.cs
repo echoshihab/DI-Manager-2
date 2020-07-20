@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Application.Interfaces;
+using Application.Validators;
 using Domain;
 using Domain.Utility;
 using FluentValidation;
@@ -31,7 +32,7 @@ namespace Application.User
                 RuleFor(x => x.DisplayName).NotEmpty();
                 RuleFor(x => x.UserName).NotEmpty();
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
-                RuleFor(x => x.Password).MinimumLength(6).WithMessage("Password must be at least 6 characters");
+                RuleFor(x => x.Password).Password();
 
             }
         }
@@ -80,7 +81,8 @@ namespace Application.User
                     {
                         DisplayName = user.DisplayName,
                         Token = _jwtGenerator.CreateToken(user, StaticDetail.Role_NoAccess),
-                        UserName = user.UserName
+                        UserName = user.UserName,
+                        Role = StaticDetail.Role_NoAccess
                     };
 
                 }

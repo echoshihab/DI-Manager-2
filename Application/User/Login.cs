@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Application.Interfaces;
 using Domain;
 using MediatR;
@@ -37,9 +39,11 @@ namespace Application.User
             public async Task<User> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null) throw new RestException(HttpStatusCode.NotFound, new { user = "Cannot find user" });
+
                 var roleName = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
 
-                if (user == null) throw new Exception("Cannot find user");
+
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
