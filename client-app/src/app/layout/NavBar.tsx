@@ -12,10 +12,6 @@ const NavBar = () => (
     visible
     width="thin"
   >
-    <Menu.Item as={NavLink} exact to="/">
-      <Icon name="home" />
-      Home
-    </Menu.Item>
     <Menu.Item as={NavLink} to="/dayview">
       <Icon name="calendar alternate outline" />
       Day
@@ -23,6 +19,10 @@ const NavBar = () => (
     <Menu.Item as={NavLink} to="/monthview">
       <Icon name="calendar outline" />
       Month
+    </Menu.Item>
+    <Menu.Item as={NavLink} exact to="/">
+      <Icon name="sign in" />
+      Sign In
     </Menu.Item>
   </Sidebar>
 );

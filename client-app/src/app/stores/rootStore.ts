@@ -7,6 +7,7 @@ import LocationStore from "./locationStore";
 import RoomStore from "./RoomStore";
 import LicenseStore from "./LicenseStore";
 import TechnologistStore from "./TechnologistStore";
+import UserStore from "./userStore";
 
 configure({ enforceActions: "always" });
 
@@ -18,6 +19,7 @@ export class RootStore {
   roomStore: RoomStore;
   licenseStore: LicenseStore;
   technologistStore: TechnologistStore;
+  userStore: UserStore;
 
   constructor() {
     this.shiftStore = new ShiftStore(this);
@@ -27,6 +29,7 @@ export class RootStore {
     this.roomStore = new RoomStore(this);
     this.licenseStore = new LicenseStore(this);
     this.technologistStore = new TechnologistStore(this);
+    this.userStore = new UserStore(this);
   }
 }
 export const RootStoreContext = createContext(new RootStore());
