@@ -124,4 +124,5 @@ export default {
   Rooms,
   Licenses,
   Technologists,
+  User,
 };
