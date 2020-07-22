@@ -15,10 +15,12 @@ const App = () => {
   return (
     <Fragment>
       <ToastContainer position="bottom-right" />
-      <NavBar />
+
       <Container fluid>
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <NavBar />
+
           <Route
             path="/monthview"
             component={(props: RouteComponentProps<any>) => (
