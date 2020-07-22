@@ -20,9 +20,9 @@ const NavBar = () => (
       <Icon name="calendar outline" />
       Month
     </Menu.Item>
-    <Menu.Item as={NavLink} exact to="/">
-      <Icon name="sign in" />
-      Sign In
+    <Menu.Item as={NavLink} exact to="/admin">
+      <Icon name="settings" />
+      Admin
     </Menu.Item>
   </Sidebar>
 );

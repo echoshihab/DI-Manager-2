@@ -30,7 +30,7 @@ const ShiftDayList = () => {
     if (predicate.has(monthFlag)) {
       clearPredicate();
     }
-  }, [clearPredicate]);
+  }, [predicate, clearPredicate]);
 
   return (
     <Fragment>

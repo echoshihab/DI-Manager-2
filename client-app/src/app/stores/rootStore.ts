@@ -8,6 +8,7 @@ import RoomStore from "./RoomStore";
 import LicenseStore from "./LicenseStore";
 import TechnologistStore from "./TechnologistStore";
 import UserStore from "./userStore";
+import ModalStore from "./modalStore";
 
 configure({ enforceActions: "always" });
 
@@ -20,6 +21,7 @@ export class RootStore {
   licenseStore: LicenseStore;
   technologistStore: TechnologistStore;
   userStore: UserStore;
+  modalStore: ModalStore;
 
   constructor() {
     this.shiftStore = new ShiftStore(this);
@@ -30,6 +32,7 @@ export class RootStore {
     this.licenseStore = new LicenseStore(this);
     this.technologistStore = new TechnologistStore(this);
     this.userStore = new UserStore(this);
+    this.modalStore = new ModalStore(this);
   }
 }
 export const RootStoreContext = createContext(new RootStore());
