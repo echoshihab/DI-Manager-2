@@ -4,25 +4,27 @@ import { Form, Button, Header } from "semantic-ui-react";
 
 import { FORM_ERROR } from "final-form";
 import { combineValidators, isRequired } from "revalidate";
-
 import { RootStoreContext } from "../../stores/rootStore";
-import TextInput from "../../common/form/TextInput";
 import { IUserFormValues } from "../../models/user";
+
 import ErrorMessage from "../../common/form/ErrorMessage";
+import TextInput from "../../common/form/TextInput";
 
 const validate = combineValidators({
+  userName: isRequired("Username"),
+  displayName: isRequired("Display Name"),
   email: isRequired("email"),
   password: isRequired("password"),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const rootStore = useContext(RootStoreContext);
-  const { login } = rootStore.userStore;
+  const { register } = rootStore.userStore;
 
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch((error) => ({
+        register(values).catch((error) => ({
           [FORM_ERROR]: error,
         }))
       }
@@ -38,9 +40,15 @@ const LoginForm = () => {
         <Form onSubmit={handleSubmit} error>
           <Header
             as="h2"
-            content="Administrative Login"
-            color="black"
+            content="Sign up to Request Coordinator Access"
+            color="blue"
             text-align="center"
+          />
+          <Field name="userName" component={TextInput} placeholder="Username" />
+          <Field
+            name="displayName"
+            component={TextInput}
+            placeholder="Display name"
           />
           <Field name="email" component={TextInput} placeholder="Email" />
 
@@ -51,16 +59,13 @@ const LoginForm = () => {
             placeholder="Password"
           />
           {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage
-              error={submitError}
-              text="Invalid email or password"
-            />
+            <ErrorMessage error={submitError} />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
-            color="blue"
-            content="Login"
+            color="green"
+            content="Register"
             fluid
           />
         </Form>
@@ -69,4 +74,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

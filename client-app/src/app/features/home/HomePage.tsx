@@ -11,6 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import LoginForm from "../user/LoginForm";
 import { RootStoreContext } from "../../stores/rootStore";
+import RegisterForm from "../user/RegisterForm";
 
 const HomePage = () => {
   const rootStore = useContext(RootStoreContext);
@@ -71,12 +72,12 @@ const HomePage = () => {
             <Divider style={{ backgroundColor: "#2185d0" }} />
 
             <Card centered style={{ marginTop: "10vh" }}>
-              <Card.Content>
-                <Card.Header textAlign="center">
+              <Card.Content style={{ backgroundColor: "#2185d0" }}>
+                <Card.Header textAlign="center" style={{ color: "white" }}>
                   Administration <Icon name="settings" />
                 </Card.Header>
 
-                <Card.Description textAlign="center">
+                <Card.Description textAlign="center" style={{ color: "white" }}>
                   <strong>Coordinators &amp; Admins</strong>
                 </Card.Description>
               </Card.Content>
@@ -86,7 +87,9 @@ const HomePage = () => {
                     Login
                   </Button>
                   <Button.Or />
-                  <Button positive>Sign up</Button>
+                  <Button positive onClick={() => openModal(<RegisterForm />)}>
+                    Sign up
+                  </Button>
                 </Button.Group>
               </Card.Content>
             </Card>

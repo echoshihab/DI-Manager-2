@@ -28,4 +28,17 @@ export default class UserStore {
       throw error;
     }
   };
+
+  @action register = async (values: IUserFormValues) => {
+    try {
+      const user = await agent.User.register(values);
+      runInAction(() => {
+        this.rootStore.commonStore.setToken(user.token);
+        this.rootStore.modalStore.closeModal();
+        history.push("/dayview");
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
 }

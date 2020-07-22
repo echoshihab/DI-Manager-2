@@ -25,7 +25,7 @@ const ShiftMonthList = () => {
     setPredicate(monthFlag, true);
     let monthDates = getMonthDates();
     setDaysInMonth(monthDates);
-  }, [setDaysInMonth]);
+  }, [setDaysInMonth, setPredicate]);
 
   return (
     <Segment>
