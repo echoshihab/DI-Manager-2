@@ -3,10 +3,12 @@ import { Icon, Menu, Sidebar, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { RootStoreContext } from "../stores/rootStore";
 import { admin } from "../helpers/util";
+import { observer } from "mobx-react-lite";
 
 const NavBar = () => {
   const rootStore = useContext(RootStoreContext);
-  const { user, logout } = rootStore.userStore;
+  const { logout } = rootStore.userStore;
+  const { role, token } = rootStore.commonStore;
 
   return (
     <Sidebar
@@ -26,13 +28,13 @@ const NavBar = () => {
         <Icon name="calendar outline" />
         Month
       </Menu.Item>
-      {user?.role === admin && (
+      {role === admin && (
         <Menu.Item as={NavLink} exact to="/admin">
           <Icon name="settings" />
           Admin
         </Menu.Item>
       )}
-      {user && (
+      {token && (
         <Menu.Item>
           <Button inverted color="red" onClick={() => logout()}>
             Log Out
@@ -43,4 +45,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default observer(NavBar);

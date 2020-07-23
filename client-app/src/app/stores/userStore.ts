@@ -25,7 +25,7 @@ export default class UserStore {
       });
       this.rootStore.commonStore.setToken(user.token);
       this.rootStore.modalStore.closeModal();
-      if (user.role === admin) {
+      if (this.rootStore.commonStore.role === admin) {
         history.push("/admin");
       } else {
         history.push("/dayview");

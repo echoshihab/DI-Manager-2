@@ -17,7 +17,7 @@ import { filterDate, monthFlag, coordinator } from "../../../../helpers/util";
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
   const { shiftsByDay, predicate, clearPredicate } = rootStore.shiftStore;
-  const { user } = rootStore.userStore;
+  const { role } = rootStore.commonStore;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -35,7 +35,7 @@ const ShiftDayList = () => {
 
   return (
     <Fragment>
-      {user?.role === coordinator && (
+      {role === coordinator && (
         <Accordion>
           <Accordion.Title
             active={activeIndex === 1}

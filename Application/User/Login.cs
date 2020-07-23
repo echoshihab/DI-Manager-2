@@ -55,7 +55,7 @@ namespace Application.User
                         Token = _jwtGenerator.CreateToken(user),
                         DisplayName = user.DisplayName,
                         ModalityId = user.ModalityId,
-                        Role = roleName
+
 
                     };
                 }
