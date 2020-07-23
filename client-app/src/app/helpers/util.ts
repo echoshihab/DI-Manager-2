@@ -12,3 +12,7 @@ export const filterTechnologist: string = "filterTechnologist";
 export const filterLicense: string = "filterLicense";
 export const filterLocation: string = "filterLocation";
 export const monthFlag: string = "monthFlag";
+
+//roles
+export const admin: string = "Admin";
+export const coordinator: string = "Coordinator";

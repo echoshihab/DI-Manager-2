@@ -11,7 +11,6 @@ import {
   ITechnologistForm,
   ITechnologistEdit,
 } from "../models/technologist";
-import { request } from "http";
 import { IUserFormValues, IUser } from "../models/user";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
