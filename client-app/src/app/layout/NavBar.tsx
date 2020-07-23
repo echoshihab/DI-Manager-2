@@ -11,16 +11,12 @@ const NavBar = () => {
   const { role } = rootStore.commonStore;
 
   return (
-    <Sidebar
-      as={Menu}
-      animation="overlay"
-      icon="labeled"
-      inverted
-      vertical
-      visible
-      width="thin"
-    >
-      <Menu.Item as={NavLink} to="/dayview">
+    <Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
+      <Menu.Item
+        as={NavLink}
+        to="/dayview"
+        style={{ border: "1px solid black" }}
+      >
         <Icon name="calendar alternate outline" />
         Day
       </Menu.Item>
@@ -29,14 +25,14 @@ const NavBar = () => {
         Month
       </Menu.Item>
       {role === admin && (
-        <Menu.Item as={NavLink} exact to="/admin">
+        <Menu.Item as={NavLink} to="/admin">
           <Icon name="settings" />
           Admin
         </Menu.Item>
       )}
       {user && (
         <Menu.Item>
-          <Button inverted color="red" onClick={() => logout()}>
+          <Button inverted onClick={() => logout()}>
             Log Out
           </Button>
         </Menu.Item>

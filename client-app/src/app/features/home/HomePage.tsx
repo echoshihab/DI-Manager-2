@@ -21,7 +21,7 @@ const HomePage = () => {
     <Container
       fluid
       style={{
-        background: "#2185d0",
+        background: "black",
         height: "100vh",
       }}
     >
@@ -29,7 +29,7 @@ const HomePage = () => {
         <Grid.Column
           style={{
             height: "80vh",
-            background: `#2185d0`,
+            background: `black`,
 
             backgroundSize: "cover",
             backgroundBlendMode: "darken",
@@ -47,12 +47,12 @@ const HomePage = () => {
                 <Card.Content
                   extra
                   textAlign="center"
-                  style={{ backgroundColor: "#2185d0", color: "white" }}
+                  style={{ backgroundColor: "black", color: "white" }}
                 >
                   <strong>View Schedules By Day</strong>
                 </Card.Content>
               </Card>
-              <Card onClick={() => console.log("test")} centered>
+              <Card as={Link} to="/monthview" centered>
                 <Card.Content>
                   <Card.Header textAlign="center">
                     Month View <Icon name="calendar outline" />
@@ -61,7 +61,7 @@ const HomePage = () => {
                 <Card.Content
                   extra
                   textAlign="center"
-                  style={{ backgroundColor: "#2185d0", color: "white" }}
+                  style={{ backgroundColor: "black", color: "white" }}
                 >
                   <strong>View Schedules By Month</strong>
                 </Card.Content>
@@ -69,10 +69,9 @@ const HomePage = () => {
             </Card.Group>
           </Grid.Row>
           <Grid.Row style={{ backgroundColor: "white" }}>
-            <Divider style={{ backgroundColor: "#2185d0" }} />
-
+            <Divider style={{ backgroundColor: "black" }} />
             <Card centered style={{ marginTop: "10vh" }}>
-              <Card.Content style={{ backgroundColor: "#2185d0" }}>
+              <Card.Content style={{ backgroundColor: "black" }}>
                 <Card.Header textAlign="center" style={{ color: "white" }}>
                   Administration <Icon name="settings" />
                 </Card.Header>
@@ -93,8 +92,11 @@ const HomePage = () => {
                 </Button.Group>
               </Card.Content>
             </Card>
-            <Divider style={{ backgroundColor: "#2185d0" }} />
+            <Divider style={{ backgroundColor: "black" }} />
           </Grid.Row>
+          <Header inverted textAlign="center" size="huge" block>
+            DI MANAGER
+          </Header>
         </Grid.Column>
       </Grid>
       <Divider style={{ border: "3px solid white" }} />
