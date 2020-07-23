@@ -47,4 +47,10 @@ export default class UserStore {
       throw error;
     }
   };
+
+  @action logout = () => {
+    this.rootStore.commonStore.setToken(null);
+    this.user = null;
+    history.push("/");
+  };
 }

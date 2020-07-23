@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { Icon, Menu, Sidebar } from "semantic-ui-react";
+import { Icon, Menu, Sidebar, Button } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
 import { RootStoreContext } from "../stores/rootStore";
 import { admin } from "../helpers/util";
 
 const NavBar = () => {
   const rootStore = useContext(RootStoreContext);
-  const { user } = rootStore.userStore;
+  const { user, logout } = rootStore.userStore;
 
   return (
     <Sidebar
@@ -30,6 +30,13 @@ const NavBar = () => {
         <Menu.Item as={NavLink} exact to="/admin">
           <Icon name="settings" />
           Admin
+        </Menu.Item>
+      )}
+      {user && (
+        <Menu.Item>
+          <Button inverted color="red" onClick={() => logout()}>
+            Log Out
+          </Button>
         </Menu.Item>
       )}
     </Sidebar>
