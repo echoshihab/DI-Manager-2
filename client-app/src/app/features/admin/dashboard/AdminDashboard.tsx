@@ -4,7 +4,7 @@ import LocationManager from "../components/location/LocationManager";
 import RoomManager from "../components/room/RoomManager";
 import ModalityManager from "../components/modality/ModalityManager";
 import RoleManager from "../components/role/RoleManager";
-import { Grid, Header } from "semantic-ui-react";
+import { Grid } from "semantic-ui-react";
 import AdminNavBar from "../navigation/AdminNavBar";
 import LicenseManager from "../components/license/LicenseManager";
 

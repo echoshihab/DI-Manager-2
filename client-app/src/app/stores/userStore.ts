@@ -4,6 +4,7 @@ import { IUser, IUserFormValues } from "../models/user";
 import agent from "../api/agent";
 import { history } from "../..";
 import { admin } from "../helpers/util";
+import { toast } from "react-toastify";
 
 export default class UserStore {
   rootStore: RootStore;
@@ -52,5 +53,17 @@ export default class UserStore {
     this.rootStore.commonStore.setToken(null);
     this.user = null;
     history.push("/");
+  };
+
+  @action getUser = async () => {
+    try {
+      const user = await agent.User.current();
+      runInAction(() => {
+        this.user = user;
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Authentication Problem - Please log in again");
+    }
   };
 }

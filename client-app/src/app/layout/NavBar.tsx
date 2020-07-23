@@ -7,8 +7,8 @@ import { observer } from "mobx-react-lite";
 
 const NavBar = () => {
   const rootStore = useContext(RootStoreContext);
-  const { logout } = rootStore.userStore;
-  const { role, token } = rootStore.commonStore;
+  const { logout, user } = rootStore.userStore;
+  const { role } = rootStore.commonStore;
 
   return (
     <Sidebar
@@ -34,7 +34,7 @@ const NavBar = () => {
           Admin
         </Menu.Item>
       )}
-      {token && (
+      {user && (
         <Menu.Item>
           <Button inverted color="red" onClick={() => logout()}>
             Log Out
