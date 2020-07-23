@@ -1,5 +1,3 @@
-import { ExecSyncOptionsWithBufferEncoding } from "child_process";
-
 export interface IUser {
   userName: string;
   displayName: string;

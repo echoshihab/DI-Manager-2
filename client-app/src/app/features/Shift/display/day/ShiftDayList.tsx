@@ -12,11 +12,12 @@ import {
 
 import ShiftForm from "../../Form/ShiftForm";
 import ShiftDayListItem from "./ShiftDayListItem";
-import { filterDate, monthFlag } from "../../../../helpers/util";
+import { filterDate, monthFlag, coordinator } from "../../../../helpers/util";
 
 const ShiftDayList = () => {
   const rootStore = useContext(RootStoreContext);
   const { shiftsByDay, predicate, clearPredicate } = rootStore.shiftStore;
+  const { user } = rootStore.userStore;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -34,21 +35,23 @@ const ShiftDayList = () => {
 
   return (
     <Fragment>
-      <Accordion>
-        <Accordion.Title
-          active={activeIndex === 1}
-          index={0}
-          onClick={(e, titleProps) => handleClick(titleProps)}
-        >
-          <Icon name="dropdown" />
-          <Label color="blue">
-            {activeIndex === 0 ? "Add New Shift" : "Close Form"}
-          </Label>
-        </Accordion.Title>
-        <Accordion.Content active={activeIndex === 1}>
-          <ShiftForm />
-        </Accordion.Content>
-      </Accordion>
+      {user?.role === coordinator && (
+        <Accordion>
+          <Accordion.Title
+            active={activeIndex === 1}
+            index={0}
+            onClick={(e, titleProps) => handleClick(titleProps)}
+          >
+            <Icon name="dropdown" />
+            <Label color="blue">
+              {activeIndex === 0 ? "Add New Shift" : "Close Form"}
+            </Label>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 1}>
+            <ShiftForm />
+          </Accordion.Content>
+        </Accordion>
+      )}
 
       <Segment>
         <Header as="h2" attached="top" textAlign="center">
