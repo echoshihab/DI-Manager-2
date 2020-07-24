@@ -1,6 +1,6 @@
 import { RootStore } from "./rootStore";
 import { observable, computed, action, runInAction } from "mobx";
-import { IUser, IUserFormValues } from "../models/user";
+import { IUser, IUserFormValues, IUserSlim } from "../models/user";
 import agent from "../api/agent";
 import { history } from "../..";
 import { admin } from "../helpers/util";
@@ -13,9 +13,23 @@ export default class UserStore {
   }
 
   @observable user: IUser | null = null;
+  @observable roles: string[] = [];
+  @observable userRegistry = new Map();
+  @observable selectedUser: IUserSlim | null = null;
 
   @computed get isLoggedIn() {
     return !!this.user;
+  }
+
+  @computed get sortedUserByUserName() {
+    return this.sortUserByUserName(Array.from(this.userRegistry.values()));
+  }
+
+  sortUserByUserName(users: IUserSlim[]) {
+    const sortedUsers = users.sort((a, b) =>
+      a.userName.localeCompare(b.userName)
+    );
+    return sortedUsers;
   }
 
   @action login = async (values: IUserFormValues) => {
@@ -65,5 +79,36 @@ export default class UserStore {
       console.log(error);
       toast.error("Authentication Problem - Please log in again");
     }
+  };
+
+  //role specific
+
+  @action loadRoles = async () => {
+    try {
+      const userRoles = await agent.User.roles();
+      runInAction(() => {
+        this.roles = userRoles;
+      });
+    } catch (error) {
+      toast.error("Unable to retrieve user roles");
+    }
+  };
+
+  @action loadUsers = async () => {
+    this.userRegistry.clear();
+    try {
+      const users = await agent.User.list();
+      runInAction("loading users", () => {
+        users.forEach((user) => {
+          this.userRegistry.set(user.userName, user);
+        });
+      });
+    } catch (error) {
+      toast.error("Unable to retrieve users");
+    }
+  };
+
+  @action selectUser = (userName: string) => {
+    this.selectedUser = this.userRegistry.get(userName);
   };
 }

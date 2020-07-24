@@ -15,7 +15,9 @@ export default class ModalityStore {
   @observable submitting = false;
 
   @computed get sortedModalitiesByDisplayName() {
-    return Array.from(this.modalityRegistry.values()).sort((a, b) =>
+    return Array.from(
+      this.modalityRegistry.values()
+    ).sort((a: IModality, b: IModality) =>
       a.displayName.localeCompare(b.displayName)
     );
   }

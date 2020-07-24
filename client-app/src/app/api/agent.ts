@@ -11,7 +11,7 @@ import {
   ITechnologistForm,
   ITechnologistEdit,
 } from "../models/technologist";
-import { IUserFormValues, IUser } from "../models/user";
+import { IUserFormValues, IUser, IUserSlim } from "../models/user";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -126,6 +126,8 @@ const User = {
     requests.post(`/user/login`, user),
   register: (user: IUserFormValues): Promise<IUser> =>
     requests.post(`/user/register`, user),
+  list: (): Promise<IUserSlim[]> => requests.get("/user/list"),
+  roles: (): Promise<string[]> => requests.get("user/roles"),
 };
 
 export default {
