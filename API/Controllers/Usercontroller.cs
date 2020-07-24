@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.User;
 using Domain;
@@ -25,6 +26,13 @@ namespace API.Controllers
         public async Task<ActionResult<User>> CurrentUser()
         {
             return await Mediator.Send(new CurrentUser.Query());
+        }
+
+        [HttpGet("list")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<UserSlim>>> List()
+        {
+            return await Mediator.Send(new List.Query());
         }
     }
 }
