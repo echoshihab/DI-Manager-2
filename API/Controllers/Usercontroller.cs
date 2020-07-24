@@ -34,5 +34,12 @@ namespace API.Controllers
         {
             return await Mediator.Send(new List.Query());
         }
+
+        [HttpGet("roles")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<string>>> Roles()
+        {
+            return await Mediator.Send(new Roles.Query());
+        }
     }
 }

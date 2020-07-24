@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Domain;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,25 +12,16 @@ namespace Application.User
     public class List
     {
 
-        public class Query : IRequest<List<UserSlim>>
-        {
-
-
-        }
+        public class Query : IRequest<List<UserSlim>> { }
 
         public class Handler : IRequestHandler<Query, List<UserSlim>>
         {
             private readonly ApplicationDbContext _context;
-            private readonly IMapper _mapper;
-            private readonly RoleManager<IdentityRole> _roleManager;
-            private readonly UserManager<AppUser> _userManager;
-            public Handler(ApplicationDbContext context, IMapper mapper, RoleManager<IdentityRole> roleManager,
 
-            UserManager<AppUser> userManager)
+            public Handler(ApplicationDbContext context)
+
             {
-                _userManager = userManager;
-                _roleManager = roleManager;
-                _mapper = mapper;
+
                 _context = context;
 
             }
@@ -52,16 +41,10 @@ namespace Application.User
                                        Role = role.Name
                                    }).ToListAsync();
 
-
-
                 return users;
 
 
-
-
             }
-
-
 
 
         }
