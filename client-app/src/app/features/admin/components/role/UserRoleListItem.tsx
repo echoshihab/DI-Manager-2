@@ -13,8 +13,7 @@ interface IProps {
   user: IUserSlim;
 }
 const validate = combineValidators({
-  name: isRequired({ message: "technologist name is required" }),
-  initial: isRequired({ message: "technologist initial is required" }),
+  modalityId: isRequired({ message: "Modality is required" }),
 });
 
 const UserRoleListItem: React.FC<IProps> = ({ user }) => {
@@ -29,9 +28,9 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
   };
 
   const handleFinalFormSubmit = (values: any, form: any) => {
-    const { name, modalityId, role } = values;
+    const { modalityId, role } = values;
 
-    console.log(name, modalityId, role);
+    console.log(user.userName, modalityId, role);
   };
 
   const userModalityDetail: IModality = sortedModalitiesByDisplayName.filter(
@@ -46,7 +45,7 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
       render={({ handleSubmit, invalid, pristine, submitting }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
           <Form.Group widths="equal">
-            <Header cont={user.userName} />
+            <Header textAlign="center">{user.userName.toUpperCase()} </Header>
           </Form.Group>
 
           <Form.Group widths="equal" inline>
@@ -54,7 +53,7 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
             <Field
               name="modalityId"
               defaultValue={user.modalityId}
-              text={"Select a modality"}
+              placeholder={"Select a modality"}
               component={SelectInput}
               options={sortedModalitiesByDisplayName.map(
                 (modality: IModality) => {

@@ -28,7 +28,6 @@ export default class ModalityStore {
       const modalities = await agent.Modalities.list();
       runInAction("loading modalities", () => {
         modalities.forEach((modality) => {
-          console.log(modality);
           this.modalityRegistry.set(modality.id, modality);
         });
       });

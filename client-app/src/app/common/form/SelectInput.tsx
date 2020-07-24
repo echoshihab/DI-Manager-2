@@ -18,6 +18,7 @@ const SelectInput: React.FC<IProps> = ({
   disabled,
   meta: { touched, error },
   text,
+  placeholder,
 }) => {
   return (
     <Form.Field error={touched && !!error} width={width}>
@@ -31,6 +32,7 @@ const SelectInput: React.FC<IProps> = ({
         text={text}
         options={options}
         defaultValue={defaultValue}
+        placeholder={placeholder}
       />
       {touched && error && (
         <Label basic color="red">
