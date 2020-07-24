@@ -50,12 +50,11 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
           </Form.Group>
 
           <Form.Group widths="equal" inline>
-            <Label size="large" ribbon>
-              Modality:
-            </Label>
+            <Label size="large">Modality:</Label>
             <Field
               name="modalityId"
               defaultValue={user.modalityId}
+              text={"Select a modality"}
               component={SelectInput}
               options={sortedModalitiesByDisplayName.map(
                 (modality: IModality) => {
@@ -68,9 +67,7 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
               )}
             />
 
-            <Label size="large" ribbon>
-              Role:
-            </Label>
+            <Label size="large">Role:</Label>
             <Field
               name="role"
               defaultValue={user.role}
@@ -117,7 +114,7 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
           <Icon name="user circle outline" />
           {user.userName.toUpperCase()}
           {userModalityDetail
-            ? "(" + userModalityDetail.displayName + ") "
+            ? " (" + userModalityDetail.displayName + ") "
             : " (No Modality Selected)"}
           <Label basic circular color="black">
             <Icon name="drivers license" />
