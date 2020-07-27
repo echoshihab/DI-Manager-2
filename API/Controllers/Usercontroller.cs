@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.User;
 using Domain;
+using Domain.Utility;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +42,13 @@ namespace API.Controllers
         public async Task<ActionResult<List<string>>> Roles()
         {
             return await Mediator.Send(new Roles.Query());
+        }
+
+        [HttpPut("assign")]
+        [Authorize(Roles = StaticDetail.Role_Admin)]
+        public async Task<ActionResult<Unit>> Assign(Assign.Command command)
+        {
+            return await Mediator.Send(command);
         }
     }
 }

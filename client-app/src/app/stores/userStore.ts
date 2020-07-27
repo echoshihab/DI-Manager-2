@@ -1,6 +1,11 @@
 import { RootStore } from "./rootStore";
 import { observable, computed, action, runInAction } from "mobx";
-import { IUser, IUserFormValues, IUserSlim } from "../models/user";
+import {
+  IUser,
+  IUserFormValues,
+  IUserSlim,
+  userRoleFormValues,
+} from "../models/user";
 import agent from "../api/agent";
 import { history } from "../..";
 import { admin } from "../helpers/util";
@@ -93,6 +98,8 @@ export default class UserStore {
       toast.error("Unable to retrieve user roles");
     }
   };
+
+  @action assignRole = async (formValues: userRoleFormValues) => {};
 
   @action loadUsers = async () => {
     this.userRegistry.clear();

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { IUserSlim } from "../../../../models/user";
+import { IUserSlim, userRoleFormValues } from "../../../../models/user";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
@@ -30,7 +30,11 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { modalityId, role } = values;
 
-    console.log(user.userName, modalityId, role);
+    let formValues: userRoleFormValues = {
+      userName: user.userName,
+      modalityId: modalityId,
+      role: role,
+    };
   };
 
   const userModalityDetail: IModality = sortedModalitiesByDisplayName.filter(
