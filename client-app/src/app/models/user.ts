@@ -18,9 +18,3 @@ export interface IUserFormValues {
   displayName?: string;
   userName?: string;
 }
-
-export interface userRoleFormValues {
-  userName: string;
-  modalityId: string | null;
-  role: string;
-}

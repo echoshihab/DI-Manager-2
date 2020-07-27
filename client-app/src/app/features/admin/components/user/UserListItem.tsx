@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { IUserSlim, userRoleFormValues } from "../../../../models/user";
+import { IUserSlim } from "../../../../models/user";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
@@ -16,10 +16,10 @@ const validate = combineValidators({
   modalityId: isRequired({ message: "Modality is required" }),
 });
 
-const UserRoleListItem: React.FC<IProps> = ({ user }) => {
+const UserListItem: React.FC<IProps> = ({ user }) => {
   const rootStore = useContext(RootStoreContext);
   const { sortedModalitiesByDisplayName } = rootStore.modalityStore;
-  const { roles } = rootStore.userStore;
+  const { roles, updateUser } = rootStore.userStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -30,11 +30,18 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
   const handleFinalFormSubmit = (values: any, form: any) => {
     const { modalityId, role } = values;
 
-    let formValues: userRoleFormValues = {
+    let updatedUser: IUserSlim = {
       userName: user.userName,
       modalityId: modalityId,
       role: role,
     };
+    setLoading(true);
+    updateUser(updatedUser)
+      .then(() => form.restart())
+      .finally(() => {
+        setLoading(false);
+        toggleEditMode();
+      });
   };
 
   const userModalityDetail: IModality = sortedModalitiesByDisplayName.filter(
@@ -113,17 +120,21 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
         </Label>
       </List.Item>
       <List.Item>
-        <Label size="large" basic color="black">
-          <Icon name="user circle outline" />
+        <Header size="small">
           {user.userName.toUpperCase()}
-          {userModalityDetail
-            ? " (" + userModalityDetail.displayName + ") "
-            : " (No Modality Selected)"}
+
           <Label basic circular color="black">
             <Icon name="drivers license" />
             {user.role}
           </Label>
-        </Label>
+          {userModalityDetail ? (
+            <Label basic circular color="black">
+              {userModalityDetail.displayName}
+            </Label>
+          ) : (
+            ""
+          )}
+        </Header>
       </List.Item>
 
       <List.Item></List.Item>
@@ -131,4 +142,4 @@ const UserRoleListItem: React.FC<IProps> = ({ user }) => {
   );
 };
 
-export default observer(UserRoleListItem);
+export default observer(UserListItem);

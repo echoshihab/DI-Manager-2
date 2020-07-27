@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { List, Header } from "semantic-ui-react";
-import UserRoleListItem from "./UserRoleListItem";
+import UserListItem from "./UserListItem";
+import { observer } from "mobx-react-lite";
 
-const UserRoleList = () => {
+const UserList = () => {
   const rootStore = useContext(RootStoreContext);
   const { sortedUserByUserName } = rootStore.userStore;
 
@@ -14,7 +15,7 @@ const UserRoleList = () => {
       {sortedUserByUserName.map((user) => (
         <List.Item key={user.userName}>
           <List.Content>
-            <UserRoleListItem user={user} />
+            <UserListItem user={user} />
           </List.Content>
         </List.Item>
       ))}
@@ -22,4 +23,4 @@ const UserRoleList = () => {
   );
 };
 
-export default UserRoleList;
+export default observer(UserList);

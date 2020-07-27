@@ -44,9 +44,9 @@ namespace API.Controllers
             return await Mediator.Send(new Roles.Query());
         }
 
-        [HttpPut("assign")]
+        [HttpPut("update")]
         [Authorize(Roles = StaticDetail.Role_Admin)]
-        public async Task<ActionResult<Unit>> Assign(Assign.Command command)
+        public async Task<ActionResult<Unit>> Update(Update.Command command)
         {
             return await Mediator.Send(command);
         }

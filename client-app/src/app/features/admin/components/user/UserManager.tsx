@@ -4,12 +4,12 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Container, Header, Grid, Segment } from "semantic-ui-react";
 
-import UserRoleList from "./UserRoleList";
+import UserRoleList from "./UserList";
 
-const RoleManager = () => {
+const UserManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
-  const { loadRoles, loadUsers, selectUser } = rootStore.userStore;
+  const { loadRoles, loadUsers } = rootStore.userStore;
 
   const [loader, setLoader] = useState(true);
 
@@ -45,4 +45,4 @@ const RoleManager = () => {
   );
 };
 
-export default observer(RoleManager);
+export default observer(UserManager);

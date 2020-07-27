@@ -11,7 +11,7 @@ using Persistence;
 
 namespace Application.User
 {
-    public class Assign
+    public class Update
     {
         public class Command : IRequest
         {

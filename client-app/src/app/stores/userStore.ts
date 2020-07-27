@@ -1,11 +1,6 @@
 import { RootStore } from "./rootStore";
 import { observable, computed, action, runInAction } from "mobx";
-import {
-  IUser,
-  IUserFormValues,
-  IUserSlim,
-  userRoleFormValues,
-} from "../models/user";
+import { IUser, IUserFormValues, IUserSlim } from "../models/user";
 import agent from "../api/agent";
 import { history } from "../..";
 import { admin } from "../helpers/util";
@@ -99,7 +94,16 @@ export default class UserStore {
     }
   };
 
-  @action assignRole = async (formValues: userRoleFormValues) => {};
+  @action updateUser = async (updatedUser: IUserSlim) => {
+    try {
+      await agent.User.update(updatedUser);
+      runInAction("update user", () => {
+        this.userRegistry.set(updatedUser.userName, updatedUser);
+      });
+    } catch (error) {
+      toast.error("Problem updating user");
+    }
+  };
 
   @action loadUsers = async () => {
     this.userRegistry.clear();

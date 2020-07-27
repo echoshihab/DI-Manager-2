@@ -128,6 +128,7 @@ const User = {
     requests.post(`/user/register`, user),
   list: (): Promise<IUserSlim[]> => requests.get("/user/list"),
   roles: (): Promise<string[]> => requests.get("user/roles"),
+  update: (user: IUserSlim) => requests.put("user/update", user),
 };
 
 export default {
