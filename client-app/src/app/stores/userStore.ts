@@ -65,6 +65,8 @@ export default class UserStore {
 
   @action logout = () => {
     this.rootStore.commonStore.setToken(null);
+    this.rootStore.shiftStore.clearPredicate();
+
     this.user = null;
     history.push("/");
   };

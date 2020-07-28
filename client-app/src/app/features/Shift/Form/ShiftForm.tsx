@@ -1,4 +1,4 @@
-import React, { useState, SyntheticEvent, useContext } from "react";
+import React, { useState, SyntheticEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { ShiftFormValues } from "../../../models/shift";
 import { v4 as uuid } from "uuid";
@@ -7,7 +7,7 @@ import { combineValidators, isRequired } from "revalidate";
 import DateInput from "../../../common/form/DateInput";
 import SelectInput from "../../../common/form/SelectInput";
 import { FormApi } from "final-form";
-import { combineDateAndTime } from "../../../helpers/util";
+import { combineDateAndTime, filterDate } from "../../../helpers/util";
 import { RootStoreContext } from "../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
 
@@ -26,8 +26,9 @@ const ShiftForm = () => {
   } = rootStore.technologistStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
-  const { createShift } = rootStore.shiftStore;
-  const [shift] = useState(new ShiftFormValues());
+  const { user } = rootStore.userStore;
+  const { createShift, predicate } = rootStore.shiftStore;
+  const [shift, setShift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [licenses, setLicenses] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,7 @@ const ShiftForm = () => {
     let newShift = shift as ShiftFormValues;
     newShift.start = shiftStart;
     newShift.end = shiftEnd;
-    newShift.modalityId = "288eb0dd-f9ef-4e67-b5c8-acf8b3366037";
+    newShift.modalityId = user?.modalityId as string;
     newShift.id = uuid();
 
     setLoading(true);
@@ -70,6 +71,14 @@ const ShiftForm = () => {
       .then(() => form.restart())
       .finally(() => setLoading(false));
   };
+
+  useEffect(() => {
+    if (predicate.has(filterDate)) {
+      let date = predicate.get(filterDate) as Date;
+      console.log(date);
+      setShift({ ...shift, date: date });
+    }
+  }, [predicate, shift.date, filterDate]);
 
   return (
     <Segment compact>
