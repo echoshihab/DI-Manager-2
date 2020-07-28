@@ -124,26 +124,28 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
           value={date}
           footer={false}
         />
+        {!user?.modalityId && (
+          <Menu.Item>
+            <Dropdown
+              fluid
+              button
+              basic
+              floating
+              value={modality}
+              name="modality"
+              onChange={handleModalityChange}
+              placeholder="Modality"
+              options={sortedModalitiesByDisplayName.map((modality) => {
+                return {
+                  key: modality.id,
+                  value: modality.id,
+                  text: `${modality.name} (${modality.displayName})`,
+                };
+              })}
+            />
+          </Menu.Item>
+        )}
 
-        <Menu.Item>
-          <Dropdown
-            fluid
-            button
-            basic
-            floating
-            value={modality}
-            name="modality"
-            onChange={handleModalityChange}
-            placeholder="Modality"
-            options={sortedModalitiesByDisplayName.map((modality) => {
-              return {
-                key: modality.id,
-                value: modality.id,
-                text: `${modality.name} (${modality.displayName})`,
-              };
-            })}
-          />
-        </Menu.Item>
         {loadingFilters && (
           <Menu.Item>
             <LoadingComponent content="Loading.." />
