@@ -22,16 +22,19 @@ namespace Application.Shifts
         public class Query : IRequest<List<ShiftDto>>
         {
             public DateTime? FilterDate { get; set; }
+            public Guid? FilterModality { get; set; }
             public Guid? FilterLocation { get; set; }
             public Guid? FilterLicense { get; set; }
             public Guid? FilterTechnologist { get; set; }
+
             public Boolean? MonthFlag { get; set; }
-            public Query(DateTime? filterDate, Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist, Boolean? monthFlag)
+            public Query(DateTime? filterDate, Guid? filterModality, Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist, Boolean? monthFlag)
             {
+                FilterDate = filterDate;
+                FilterModality = filterModality;
                 FilterTechnologist = filterTechnologist;
                 FilterLicense = filterLicense;
                 FilterLocation = filterLocation;
-                FilterDate = filterDate;
                 MonthFlag = monthFlag;
 
             }
@@ -65,6 +68,8 @@ namespace Application.Shifts
                 }
                 var filterDateTime = Convert.ToDateTime(request.FilterDate);
 
+
+
                 if (request.MonthFlag.HasValue)
                 {
                     queryable = queryable.Where(x => x.Start.Year == filterDateTime.Year && x.Start.Month == filterDateTime.Month);
@@ -76,6 +81,8 @@ namespace Application.Shifts
                 }
 
 
+                if (request.FilterModality.HasValue)
+                    queryable = queryable.Where(x => x.ModalityId == request.FilterModality);
                 if (request.FilterLocation.HasValue)
                     queryable = queryable.Where(x => x.LocationId == request.FilterLocation);
                 if (request.FilterTechnologist.HasValue)

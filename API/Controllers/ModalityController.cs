@@ -21,6 +21,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Modality>>> List()
         {
             return await Mediator.Send(new List.Query());

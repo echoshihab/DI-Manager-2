@@ -6,7 +6,7 @@ import ShiftDayList from "../display/day/ShiftDayList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../stores/rootStore";
 import LoadingComponent from "../../../layout/LoadingComponent";
-import { filterDate } from "../../../helpers/util";
+import { filterDate, coordinator } from "../../../helpers/util";
 
 interface IProps {
   view: string;
@@ -17,6 +17,9 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const { loadLocations } = rootStore.locationStore;
   const { loadTechnologists } = rootStore.technologistStore;
   const { loadLicenses } = rootStore.licenseStore;
+  const { loadModalities } = rootStore.modalityStore;
+  const { role } = rootStore.commonStore;
+  const { user } = rootStore.userStore;
   const [loading, setLoading] = useState(false);
   const {
     loadShifts,
@@ -30,12 +33,19 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
       setPredicate(filterDate, new Date());
     }
     setLoading(true);
-    Promise.all([
-      loadLocations(),
-      loadTechnologists("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
-      loadShifts(),
-      loadLicenses("288eb0dd-f9ef-4e67-b5c8-acf8b3366037"),
-    ]).finally(() => setLoading(false));
+    if (user?.modalityId) {
+      Promise.all([
+        loadLocations(),
+        loadModalities(),
+        loadTechnologists(user?.modalityId),
+        loadShifts(),
+        loadLicenses(user?.modalityId),
+      ]).finally(() => setLoading(false));
+    } else {
+      Promise.all([loadLocations(), loadModalities()]).finally(() =>
+        setLoading(false)
+      );
+    }
     return () => clearShifts();
   }, [
     loadShifts,
@@ -45,6 +55,8 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
     predicate,
     setPredicate,
     clearShifts,
+    user,
+    loadModalities,
   ]);
 
   return (

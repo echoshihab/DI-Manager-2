@@ -11,6 +11,7 @@ export const filterDate: string = "filterDate";
 export const filterTechnologist: string = "filterTechnologist";
 export const filterLicense: string = "filterLicense";
 export const filterLocation: string = "filterLocation";
+export const filterModality: string = "filterModality";
 export const monthFlag: string = "monthFlag";
 
 //roles

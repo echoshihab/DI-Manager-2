@@ -16,10 +16,10 @@ namespace API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<ShiftDto>>> List(DateTime? filterDate,
+        public async Task<ActionResult<List<ShiftDto>>> List(DateTime? filterDate, Guid? filterModality,
         Guid? filterLocation, Guid? filterLicense, Guid? filterTechnologist, Boolean? monthFlag)
         {
-            return await Mediator.Send(new List.Query(filterDate, filterLocation, filterLicense, filterTechnologist, monthFlag));
+            return await Mediator.Send(new List.Query(filterDate, filterModality, filterLocation, filterLicense, filterTechnologist, monthFlag));
         }
 
         [HttpGet("{id}")]
