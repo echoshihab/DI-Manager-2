@@ -9,14 +9,17 @@ import {
   Container,
   Label,
   Divider,
+  Icon,
 } from "semantic-ui-react";
 import { IShift } from "../../../../models/shift";
 import { format } from "date-fns";
-import { filterDate, monthFlag } from "../../../../helpers/util";
+import { filterDate, monthFlag, coordinator } from "../../../../helpers/util";
+import { Link } from "react-router-dom";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
   const { shiftsByMonth, predicate, setPredicate } = rootStore.shiftStore;
+  const { role } = rootStore.commonStore;
   const [daysInMonth, setDaysInMonth] = useState<{
     [key: string]: IShift[] | [];
   }>({});
@@ -39,6 +42,19 @@ const ShiftMonthList = () => {
           {Object.keys(daysInMonth).map((d) => (
             <Grid.Column key={d} style={{ border: "1px solid black" }}>
               {d.slice(3, 5)}
+              {role === coordinator && (
+                <Label
+                  size="small"
+                  attached="top right"
+                  as={Link}
+                  to={{
+                    pathname: "/dayview",
+                    state: d,
+                  }}
+                  basic
+                  icon="edit"
+                ></Label>
+              )}
 
               {shiftsByMonth[d]?.map((shift) => (
                 <Fragment key={shift.id}>

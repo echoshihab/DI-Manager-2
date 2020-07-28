@@ -27,7 +27,12 @@ interface IProps {
 
 const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
   const rootStore = useContext(RootStoreContext);
-  const { setPredicate, loadShifts, clearPredicate } = rootStore.shiftStore;
+  const {
+    setPredicate,
+    loadShifts,
+    clearPredicate,
+    predicate,
+  } = rootStore.shiftStore;
   const { sortedModalitiesByDisplayName } = rootStore.modalityStore;
   const {
     sortedTechnologistByInitial,
@@ -104,7 +109,8 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
       setModality(user.modalityId);
       setModalityFlag(true);
     }
-  }, [user, setModality, setModalityFlag]);
+    if (predicate.has(filterDate)) setDate(predicate.get(filterDate) as Date);
+  }, [user, setModality, setModalityFlag, predicate]);
 
   return (
     <Fragment>

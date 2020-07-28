@@ -1,6 +1,7 @@
 import React, { useContext, Fragment, useState, useEffect } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { observer } from "mobx-react-lite";
+import { useLocation } from "react-router-dom";
 import {
   Accordion,
   Label,
@@ -15,8 +16,14 @@ import ShiftDayListItem from "./ShiftDayListItem";
 import { filterDate, monthFlag, coordinator } from "../../../../helpers/util";
 
 const ShiftDayList = () => {
+  let location = useLocation();
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByDay, predicate, clearPredicate } = rootStore.shiftStore;
+  const {
+    shiftsByDay,
+    predicate,
+    clearPredicate,
+    setPredicate,
+  } = rootStore.shiftStore;
   const { role } = rootStore.commonStore;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -30,6 +37,11 @@ const ShiftDayList = () => {
   useEffect(() => {
     if (predicate.has(monthFlag)) {
       clearPredicate();
+    }
+    if (location.state) {
+      //monthview edit passing date to dayview
+      let selectedDate = new Date(location.state as string);
+      setPredicate(filterDate, selectedDate);
     }
   }, [predicate, clearPredicate]);
 
