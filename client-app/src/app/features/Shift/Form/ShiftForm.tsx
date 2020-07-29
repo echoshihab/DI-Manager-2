@@ -76,9 +76,11 @@ const ShiftForm = () => {
     if (predicate.has(filterDate)) {
       let date = predicate.get(filterDate) as Date;
       console.log(date);
-      setShift({ ...shift, date: date });
+      let updatedShift = new ShiftFormValues();
+      updatedShift.date = date;
+      setShift(updatedShift);
     }
-  }, [predicate, shift.date, filterDate]);
+  }, [predicate]);
 
   return (
     <Segment compact>

@@ -43,7 +43,7 @@ const ShiftDayList = () => {
       let selectedDate = new Date(location.state as string);
       setPredicate(filterDate, selectedDate);
     }
-  }, [predicate, clearPredicate]);
+  }, [predicate, clearPredicate, setPredicate, location.state]);
 
   return (
     <Fragment>

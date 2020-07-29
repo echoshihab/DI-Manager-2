@@ -17,7 +17,7 @@ const UserManager = () => {
     Promise.all([loadUsers(), loadRoles(), loadModalities()]).finally(() =>
       setLoader(false)
     );
-  }, [loadRoles, setLoader, loadUsers]);
+  }, [loadRoles, setLoader, loadUsers, loadModalities]);
 
   if (loader) return <LoadingComponent content="Loading app..." />;
   return (

@@ -9,7 +9,6 @@ import {
   Container,
   Label,
   Divider,
-  Icon,
 } from "semantic-ui-react";
 import { IShift } from "../../../../models/shift";
 import { format } from "date-fns";

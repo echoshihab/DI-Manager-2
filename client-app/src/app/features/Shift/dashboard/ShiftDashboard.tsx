@@ -6,7 +6,7 @@ import ShiftDayList from "../display/day/ShiftDayList";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../stores/rootStore";
 import LoadingComponent from "../../../layout/LoadingComponent";
-import { filterDate, coordinator } from "../../../helpers/util";
+import { filterDate } from "../../../helpers/util";
 
 interface IProps {
   view: string;
@@ -18,7 +18,6 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const { loadTechnologists } = rootStore.technologistStore;
   const { loadLicenses } = rootStore.licenseStore;
   const { loadModalities } = rootStore.modalityStore;
-  const { role } = rootStore.commonStore;
   const { user } = rootStore.userStore;
   const [loading, setLoading] = useState(false);
   const {
