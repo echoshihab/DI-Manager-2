@@ -3,7 +3,12 @@ import { Form as FinalForm, Field } from "react-final-form";
 import { Form, Button, Header } from "semantic-ui-react";
 
 import { FORM_ERROR } from "final-form";
-import { combineValidators, isRequired } from "revalidate";
+import {
+  combineValidators,
+  isRequired,
+  hasLengthGreaterThan,
+  composeValidators,
+} from "revalidate";
 import { RootStoreContext } from "../../stores/rootStore";
 import { IUserFormValues } from "../../models/user";
 
@@ -14,7 +19,7 @@ const validate = combineValidators({
   userName: isRequired("Username"),
   displayName: isRequired("Display Name"),
   email: isRequired("email"),
-  password: isRequired("password"),
+  password: composeValidators(isRequired, hasLengthGreaterThan(5))("password"),
 });
 
 const RegisterForm = () => {
