@@ -75,7 +75,6 @@ const ShiftForm = () => {
   useEffect(() => {
     if (predicate.has(filterDate)) {
       let date = predicate.get(filterDate) as Date;
-      console.log(date);
       let updatedShift = new ShiftFormValues();
       updatedShift.date = date;
       setShift(updatedShift);

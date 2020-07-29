@@ -12,6 +12,10 @@ const NavBar = () => {
 
   return (
     <Sidebar as={Menu} icon="labeled" inverted vertical visible width="thin">
+      <Menu.Item as={NavLink} exact to="/">
+        <Icon name="home" />
+        Home
+      </Menu.Item>
       <Menu.Item
         as={NavLink}
         to="/dayview"
