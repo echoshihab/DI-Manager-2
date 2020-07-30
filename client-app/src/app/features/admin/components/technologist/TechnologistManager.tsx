@@ -5,18 +5,25 @@ import { Container, Header, Grid, Segment } from "semantic-ui-react";
 import TechnologistList from "./TechnologistList";
 import { observer } from "mobx-react-lite";
 import TechnologistForm from "./TechnologistForm";
+import { setReactionScheduler } from "mobx/lib/internal";
+import { cleanup } from "@testing-library/react";
 
 const TechnologistManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
-  const { loadTechnologists } = rootStore.technologistStore;
+  const { loadTechnologists, clearTechnologists } = rootStore.technologistStore;
   const { loadLicenses } = rootStore.licenseStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+
   const [techLoader, setTechLoader] = useState(false);
 
   useEffect(() => {
-    loadModalities().finally(() => setAppLoaded());
-  }, [loadModalities, setAppLoaded]);
+    loadModalities();
+    return () => {
+      setTechLoader(true); //this loader takes care of the ui flicker from state update
+      clearTechnologists();
+      setTechLoader(false);
+    };
+  }, [loadModalities, clearTechnologists]);
 
   const handleModalityChange = (modalityId: string) => {
     setTechLoader(true);
@@ -26,7 +33,6 @@ const TechnologistManager = () => {
     ]).finally(() => setTechLoader(false));
   };
 
-  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header
