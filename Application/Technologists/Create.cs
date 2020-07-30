@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Domain;
+using FluentValidation;
+using System.Linq;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -23,6 +25,17 @@ namespace Application.Technologists
 
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty().WithMessage(("Name must not be empty"));
+                RuleFor(x => x.Initial).NotEmpty().WithMessage("Initial must not be empty");
+
+            }
+        }
+
         public class Handler : IRequestHandler<Command>
         {
             private readonly ApplicationDbContext _context;
@@ -39,6 +52,12 @@ namespace Application.Technologists
                 if (modality == null)
                     throw new RestException(HttpStatusCode.NotFound, new { modality = "modality not found" });
 
+                bool techInitialsExist = await _context.Technologists
+                .Where(t => t.ModalityId == request.ModalityId)
+                .AnyAsync(t => t.Initial == request.Initial);
+
+                if (techInitialsExist)
+                    throw new RestException(HttpStatusCode.BadRequest, new { technologist = "initial must be unique" });
 
                 var technologist = new Technologist
                 {

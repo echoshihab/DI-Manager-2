@@ -14,6 +14,8 @@ import { IModality } from "../../../../models/modality";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
 import { ILicense } from "../../../../models/license";
 import { observer } from "mobx-react-lite";
+import { FORM_ERROR } from "final-form";
+import ErrorMessage from "../../../../common/form/ErrorMessage";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -32,7 +34,8 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const technologist = new TechnologistFormValues();
   const [loading, setLoading] = useState(false);
 
-  const handleFinalFormSubmit = (values: any, form: any) => {
+  const handleFinalFormSubmit = async (values: any, form: any) => {
+    let errors: any;
     const { name, initial, modality, licenses: licenseIdList } = values;
 
     let newTechnologist: ITechnologistForm = {
@@ -44,9 +47,16 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
     };
 
     setLoading(true);
-    createTechnologist(newTechnologist)
+    await createTechnologist(newTechnologist)
       .then(() => form.restart())
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        errors = error;
+        return errors;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    return { [FORM_ERROR]: errors };
   };
 
   return (
@@ -54,8 +64,14 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
       onSubmit={handleFinalFormSubmit}
       validate={validate}
       initialValues={technologist}
-      render={({ handleSubmit, invalid, pristine }) => (
-        <Form onSubmit={handleSubmit} loading={loading}>
+      render={({
+        handleSubmit,
+        invalid,
+        pristine,
+        submitError,
+        dirtySinceLastSubmit,
+      }) => (
+        <Form onSubmit={handleSubmit} loading={loading} error>
           <Field
             placeholder="Select a Modality"
             name="modality"
@@ -104,8 +120,11 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
             positive
             type="submit"
             content="Add Technologist"
-            disabled={loading || invalid || pristine}
+            disabled={(invalid && !dirtySinceLastSubmit) || pristine || loading}
           />
+          {submitError && !dirtySinceLastSubmit && (
+            <ErrorMessage error={submitError} />
+          )}
         </Form>
       )}
     />

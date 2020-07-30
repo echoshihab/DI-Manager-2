@@ -20,9 +20,10 @@ const TechnologistManager = () => {
 
   const handleModalityChange = (modalityId: string) => {
     setTechLoader(true);
-    loadTechnologists(modalityId)
-      .then(() => loadLicenses(modalityId))
-      .then(() => setTechLoader(false));
+    Promise.all([
+      loadTechnologists(modalityId),
+      loadLicenses(modalityId),
+    ]).finally(() => setTechLoader(false));
   };
 
   if (!appLoaded) return <LoadingComponent content="Loading app..." />;

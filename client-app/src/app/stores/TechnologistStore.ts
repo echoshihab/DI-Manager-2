@@ -90,8 +90,7 @@ export default class TechnologistStore {
         } as ITechnologist);
       });
     } catch (error) {
-      toast.error("Problem submitting data");
-      console.log(error.response);
+      throw error;
     }
     runInAction("toggle button loading indicator", () => {
       this.submitting = false;

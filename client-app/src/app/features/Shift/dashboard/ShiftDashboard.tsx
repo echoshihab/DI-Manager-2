@@ -31,8 +31,9 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
     if (!predicate.has(filterDate)) {
       setPredicate(filterDate, new Date());
     }
-    setLoading(true);
+
     if (user?.modalityId) {
+      setLoading(true);
       Promise.all([
         loadLocations(),
         loadModalities(),
@@ -41,9 +42,8 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
         loadLicenses(user?.modalityId),
       ]).finally(() => setLoading(false));
     } else {
-      Promise.all([loadLocations(), loadModalities()]).finally(() =>
-        setLoading(false)
-      );
+      loadLocations();
+      loadModalities();
     }
     return () => clearShifts();
   }, [
