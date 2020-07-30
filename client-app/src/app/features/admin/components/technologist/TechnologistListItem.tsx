@@ -147,8 +147,6 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
             ))}
         </Label>
       </List.Item>
-
-      <List.Item></List.Item>
     </List>
   );
 };

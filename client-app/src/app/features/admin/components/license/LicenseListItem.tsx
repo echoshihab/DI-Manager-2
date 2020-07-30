@@ -3,7 +3,7 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import { combineValidators, isRequired } from "revalidate";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
-import { Form, Button, Icon, List } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
 import { ILicense } from "../../../../models/license";
@@ -79,21 +79,23 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
     <LoadingComponent content="Loading Licenses..." />
   ) : (
     <List horizontal>
-      <List.Item>{license.name}</List.Item>
       <List.Item>
-        <Button circular size="small" onClick={toggleEditMode}>
-          <Icon name="edit" color="blue" />
-        </Button>
+        <Label ribbon basic>
+          <Button circular size="mini" onClick={toggleEditMode}>
+            <Icon name="edit" color="blue" />
+          </Button>
+          <Button
+            circular
+            size="mini"
+            onClick={() => handleDeleteLicense(license.id)}
+          >
+            <Icon name="trash alternate outline" color="red" />
+          </Button>
+        </Label>
       </List.Item>
-      <List.Item>
-        <Button
-          circular
-          size="small"
-          onClick={() => handleDeleteLicense(license.id)}
-        >
-          <Icon name="trash alternate outline" color="red" />
-        </Button>
-      </List.Item>
+      <Label size="large" basic color="black">
+        <List.Item>{license.name + ` (${license.displayName})`} </List.Item>
+      </Label>
     </List>
   );
 };
