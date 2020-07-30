@@ -23,9 +23,7 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
   const [loading, setLoading] = useState(false);
 
   const toggleEditMode = () => {
-    setLoading(true);
     setEditMode(!editMode);
-    setLoading(false);
   };
 
   const handleFinalFormSubmit = (license: ILicense) => {
@@ -60,15 +58,17 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
               value={license.displayName}
               label="Display Name"
             />
-
+          </Form.Group>
+          <Form.Group inline>
             <Button
+              fluid
               loading={submitting}
               type="submit"
               disabled={loading || invalid || pristine}
             >
               <Icon name="check" color="green" />
             </Button>
-            <Button onClick={toggleEditMode}>
+            <Button fluid onClick={toggleEditMode}>
               <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>

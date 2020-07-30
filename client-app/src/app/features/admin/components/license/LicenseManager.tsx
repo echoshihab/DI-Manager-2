@@ -12,15 +12,15 @@ const LicenseManager = () => {
   const { loadLicenses } = rootStore.licenseStore;
   const { setAppLoaded, appLoaded } = rootStore.commonStore;
 
-  const [licenses, setLicenses] = useState(false);
+  const [licenseLoader, setLicenseLoader] = useState(false);
 
   useEffect(() => {
     loadModalities().finally(() => setAppLoaded());
   }, [loadModalities, setAppLoaded]);
 
   const handleModalityChange = (modalityId: string) => {
-    setLicenses(false);
-    loadLicenses(modalityId).then(() => setLicenses(true));
+    setLicenseLoader(true);
+    loadLicenses(modalityId).finally(() => setLicenseLoader(false));
   };
 
   if (!appLoaded) return <LoadingComponent content="Loading app..." />;
@@ -39,7 +39,15 @@ const LicenseManager = () => {
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">{licenses && <LicenseList />}</Segment>
+          {licenseLoader ? (
+            <Grid.Column style={{ marginTop: "20px" }}>
+              <LoadingComponent content="Loading Licenses..." />
+            </Grid.Column>
+          ) : (
+            <Segment color="blue">
+              <LicenseList />
+            </Segment>
+          )}
         </Grid.Column>
       </Grid>
     </Container>
