@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -21,6 +22,16 @@ namespace Application.Technologists
             public string Initial { get; set; }
             public ICollection<Guid> LicenseIdList { get; set; }
 
+        }
+        public class CommandValidator : AbstractValidator<Command>
+        {
+
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty().WithMessage(("Name must not be empty"));
+                RuleFor(x => x.Initial).NotEmpty().WithMessage("Initial must not be empty");
+
+            }
         }
 
         public class Handler : IRequestHandler<Command>

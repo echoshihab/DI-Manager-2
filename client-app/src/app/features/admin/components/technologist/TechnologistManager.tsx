@@ -5,8 +5,6 @@ import { Container, Header, Grid, Segment } from "semantic-ui-react";
 import TechnologistList from "./TechnologistList";
 import { observer } from "mobx-react-lite";
 import TechnologistForm from "./TechnologistForm";
-import { setReactionScheduler } from "mobx/lib/internal";
-import { cleanup } from "@testing-library/react";
 
 const TechnologistManager = () => {
   const rootStore = useContext(RootStoreContext);

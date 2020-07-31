@@ -8,6 +8,7 @@ import { v4 as uuid } from "uuid";
 import TextInput from "../../../../common/form/TextInput";
 import SelectInput from "../../../../common/form/SelectInput";
 import { ILocation } from "../../../../models/location";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   changeLocation: (locationId: string) => void;
@@ -79,4 +80,4 @@ const RoomForm: React.FC<IProps> = ({ changeLocation }) => {
   );
 };
 
-export default RoomForm;
+export default observer(RoomForm);

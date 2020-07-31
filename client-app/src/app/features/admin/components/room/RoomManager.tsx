@@ -9,20 +9,23 @@ import RoomList from "./RoomList";
 const RoomManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadLocations } = rootStore.locationStore;
-  const { loadRooms } = rootStore.roomStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+  const { loadRooms, clearRooms } = rootStore.roomStore;
   const [roomsLoader, setRoomsLoader] = useState(false);
 
   useEffect(() => {
-    loadLocations().finally(() => setAppLoaded());
-  }, [loadLocations, setAppLoaded]);
+    loadLocations();
+    return () => {
+      setRoomsLoader(true);
+      clearRooms();
+      setRoomsLoader(false);
+    };
+  }, [loadLocations, clearRooms]);
 
   const handleLocationChange = (locationId: string) => {
     setRoomsLoader(true);
     loadRooms(locationId).then(() => setRoomsLoader(false));
   };
 
-  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header

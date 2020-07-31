@@ -4,7 +4,7 @@ import { RootStoreContext } from "../../../../stores/rootStore";
 import { combineValidators, isRequired } from "revalidate";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
-import { Form, Button, Icon, List } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label } from "semantic-ui-react";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { observer } from "mobx-react-lite";
 
@@ -51,15 +51,17 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
               value={room.name}
               label="Name"
             />
-
+          </Form.Group>
+          <Form.Group inline>
             <Button
+              fluid
               loading={submitting}
               type="submit"
               disabled={loading || invalid || pristine}
             >
               <Icon name="check" color="green" />
             </Button>
-            <Button onClick={toggleEditMode}>
+            <Button fluid onClick={toggleEditMode}>
               <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>
@@ -70,16 +72,24 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
     <LoadingComponent content="Loading Rooms..." />
   ) : (
     <List horizontal>
-      <List.Item>{room.name}</List.Item>
       <List.Item>
-        <Button circular size="small" onClick={toggleEditMode}>
-          <Icon name="edit" color="blue" />
-        </Button>
+        <Label ribbon basic>
+          <Button circular size="mini" onClick={toggleEditMode}>
+            <Icon name="edit" color="blue" />
+          </Button>
+          <Button
+            circular
+            size="mini"
+            onClick={() => handleDeleteRoom(room.id)}
+          >
+            <Icon name="trash alternate outline" color="red" />
+          </Button>
+        </Label>
       </List.Item>
       <List.Item>
-        <Button circular size="small" onClick={() => handleDeleteRoom(room.id)}>
-          <Icon name="trash alternate outline" color="red" />
-        </Button>
+        <Label size="large" basic color="black">
+          {room.name}
+        </Label>
       </List.Item>
     </List>
   );

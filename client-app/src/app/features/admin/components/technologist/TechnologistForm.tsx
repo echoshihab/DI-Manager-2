@@ -21,7 +21,7 @@ interface IProps {
   changeModality: (modalityId: string) => void;
 }
 const validate = combineValidators({
-  modality: isRequired({ message: "Location is required" }),
+  modality: isRequired({ message: "modality is required" }),
   name: isRequired({ message: "Name is required" }),
   initial: isRequired({ message: "Initial is required" }),
 });

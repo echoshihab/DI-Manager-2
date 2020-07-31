@@ -88,4 +88,8 @@ export default class RoomStore {
       this.submitting = false;
     });
   };
+
+  @action clearRooms = () => {
+    this.roomRegistry.clear();
+  };
 }

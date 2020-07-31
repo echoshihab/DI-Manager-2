@@ -8,6 +8,7 @@ import TextInput from "../../../../common/form/TextInput";
 import SelectInput from "../../../../common/form/SelectInput";
 import { LicenseFormValues } from "../../../../models/license";
 import { IModality } from "../../../../models/modality";
+import { observer } from "mobx-react-lite";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -90,4 +91,4 @@ const LicenseForm: React.FC<IProps> = ({ changeModality }) => {
   );
 };
 
-export default LicenseForm;
+export default observer(LicenseForm);
