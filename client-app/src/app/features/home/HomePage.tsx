@@ -16,6 +16,7 @@ import RegisterForm from "../user/RegisterForm";
 const HomePage = () => {
   const rootStore = useContext(RootStoreContext);
   const { openModal } = rootStore.modalStore;
+  const { logout, user } = rootStore.userStore;
 
   return (
     <Container
@@ -81,15 +82,29 @@ const HomePage = () => {
                 </Card.Description>
               </Card.Content>
               <Card.Content extra textAlign="center">
-                <Button.Group>
-                  <Button color="blue" onClick={() => openModal(<LoginForm />)}>
-                    Login
-                  </Button>
-                  <Button.Or />
-                  <Button positive onClick={() => openModal(<RegisterForm />)}>
-                    Sign up
-                  </Button>
-                </Button.Group>
+                {user ? (
+                  <Button
+                    color="red"
+                    content="Log out"
+                    onClick={() => logout()}
+                  />
+                ) : (
+                  <Button.Group>
+                    <Button
+                      color="blue"
+                      onClick={() => openModal(<LoginForm />)}
+                    >
+                      Login
+                    </Button>
+                    <Button.Or />
+                    <Button
+                      positive
+                      onClick={() => openModal(<RegisterForm />)}
+                    >
+                      Sign up
+                    </Button>
+                  </Button.Group>
+                )}
               </Card.Content>
             </Card>
             <Divider style={{ backgroundColor: "black" }} />
