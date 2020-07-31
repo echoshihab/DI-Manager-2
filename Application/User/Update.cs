@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Errors;
 using Domain;
 using Domain.Utility;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Persistence;
@@ -20,6 +21,18 @@ namespace Application.User
             public string Role { get; set; }
 
         }
+
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.UserName).NotEmpty();
+                RuleFor(x => x.Role).NotEmpty();
+            }
+        }
+
+
 
         public class Handler : IRequestHandler<Command>
         {

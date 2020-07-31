@@ -55,12 +55,13 @@ const UserListItem: React.FC<IProps> = ({ user }) => {
       onSubmit={handleFinalFormSubmit}
       render={({ handleSubmit, invalid, pristine, submitting }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
-          <Form.Group widths="equal">
-            <Header textAlign="center">{user.userName.toUpperCase()} </Header>
-          </Form.Group>
-
           <Form.Group widths="equal" inline>
-            <Label size="large">Modality:</Label>
+            <Label ribbon basic size="large">
+              <Icon name="user" /> {user.userName.toUpperCase()}
+            </Label>
+            <Label size="large" style={{ marginLeft: "10px" }}>
+              Modality:
+            </Label>
             <Field
               name="modalityId"
               defaultValue={user.modalityId}
