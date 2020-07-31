@@ -55,7 +55,7 @@ export default class TechnologistStore {
         });
       });
     } catch (error) {
-      console.log(error);
+      toast.error(error);
     }
     runInAction("toggle loading indicator", () => {
       this.loadingInitial = false;

@@ -75,6 +75,9 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
       loadTechnologists(data.value),
       loadLicenses(data.value),
     ]).finally(() => {
+      setLocation("");
+      setLicense("");
+      setTechnologist("");
       setModalityFlag(true);
       setLoadingFilters(false);
     });
@@ -157,7 +160,7 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
             <LoadingComponent content="Loading.." />
           </Menu.Item>
         )}
-        {modalityFlag ? (
+        {modalityFlag && (
           <Fragment>
             <Menu.Item>
               <Dropdown
@@ -227,8 +230,6 @@ const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
               </Button>
             </Menu.Item>
           </Fragment>
-        ) : (
-          ""
         )}
       </Menu>
     </Fragment>
