@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { IModality } from "../../../../models/modality";
-import { List, Button, Icon, Form } from "semantic-ui-react";
+import { List, Button, Icon, Form, Label } from "semantic-ui-react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { Form as FinalForm, Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
@@ -28,9 +28,10 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
 
   const handleFinalFormSubmit = (modality: IModality) => {
     setLoading(true);
-    editModality(modality)
-      .then(() => setLoading(false))
-      .finally(() => setEditMode(false));
+    editModality(modality).finally(() => {
+      setLoading(false);
+      setEditMode(false);
+    });
   };
 
   const handleDeleteModality = (id: string) => {
@@ -59,10 +60,17 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
               value={modality.displayName}
               label="Display Name"
             />
-            <Button loading={submitting} type="submit">
+          </Form.Group>
+          <Form.Group inline>
+            <Button
+              fluid
+              loading={submitting}
+              disabled={loading || invalid || pristine}
+              type="submit"
+            >
               <Icon name="check" color="green" />
             </Button>
-            <Button onClick={toggleEditMode}>
+            <Button fluid onClick={toggleEditMode}>
               <Icon name="cancel" color="red" />
             </Button>
           </Form.Group>
@@ -73,23 +81,27 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
     <LoadingComponent content="Loading Modality List" />
   ) : (
     <List horizontal>
-      <List.Item>
-        {modality.name} {"(" + modality.displayName + ")"}
-      </List.Item>
-      <List.Item>
-        <Button circular size="small" onClick={toggleEditMode}>
-          <Icon name="edit" color="blue" />
-        </Button>
-      </List.Item>
-      <List.Item>
-        <Button
-          circular
-          size="small"
-          onClick={() => handleDeleteModality(modality.id)}
-        >
-          <Icon name="trash alternate outline" color="red" />
-        </Button>
-      </List.Item>
+      <Label ribbon basic>
+        <List.Item>
+          <Button circular size="mini" onClick={toggleEditMode}>
+            <Icon name="edit" color="blue" />
+          </Button>
+
+          <Button
+            circular
+            size="mini"
+            onClick={() => handleDeleteModality(modality.id)}
+          >
+            <Icon name="trash alternate outline" color="red" />
+          </Button>
+        </List.Item>
+      </Label>
+
+      <Label size="large" basic color="black">
+        <List.Item>
+          {modality.name} {"(" + modality.displayName + ")"}
+        </List.Item>
+      </Label>
     </List>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ModalityForm from "./ModalityForm";
 import ModalityList from "./ModalityList";
 import { observer } from "mobx-react-lite";
@@ -9,13 +9,13 @@ import LoadingComponent from "../../../../layout/LoadingComponent";
 const ModalityManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+
+  const [modalityLoader, setModalityLoader] = useState(true);
 
   useEffect(() => {
-    loadModalities().finally(() => setAppLoaded());
-  }, [loadModalities, setAppLoaded]);
+    loadModalities().finally(() => setModalityLoader(false));
+  }, [loadModalities]);
 
-  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header
@@ -31,9 +31,15 @@ const ModalityManager = () => {
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">
-            <ModalityList />
-          </Segment>
+          {modalityLoader ? (
+            <Grid.Column style={{ marginTop: "20px" }}>
+              <LoadingComponent content="loading rooms.." />
+            </Grid.Column>
+          ) : (
+            <Segment color="blue">
+              <ModalityList />
+            </Segment>
+          )}
         </Grid.Column>
       </Grid>
     </Container>

@@ -22,7 +22,7 @@ const TechnologistManager = () => {
       clearLicenses();
       setTechLoader(false);
     };
-  }, [loadModalities, clearTechnologists]);
+  }, [loadModalities, clearTechnologists, clearLicenses]);
 
   const handleModalityChange = (modalityId: string) => {
     setTechLoader(true);
