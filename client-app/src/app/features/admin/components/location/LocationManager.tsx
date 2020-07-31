@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import LoadingComponent from "../../../../layout/LoadingComponent";
 import { Container, Header, Grid, Segment } from "semantic-ui-react";
@@ -9,13 +9,12 @@ import LocationList from "./LocationList";
 const LocationManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadLocations } = rootStore.locationStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+  const [locationLoader, setLocationLoader] = useState(true);
 
   useEffect(() => {
-    loadLocations().finally(() => setAppLoaded());
-  }, [loadLocations, setAppLoaded]);
+    loadLocations().finally(() => setLocationLoader(false));
+  }, [loadLocations]);
 
-  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header
@@ -31,9 +30,15 @@ const LocationManager = () => {
           </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment color="blue">
-            <LocationList />
-          </Segment>
+          {locationLoader ? (
+            <Grid.Column style={{ marginTop: "20px" }}>
+              <LoadingComponent content="loading locations..." />
+            </Grid.Column>
+          ) : (
+            <Segment color="blue">
+              <LocationList />
+            </Segment>
+          )}
         </Grid.Column>
       </Grid>
     </Container>

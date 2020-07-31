@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { ILocation } from "../../../../models/location";
 import { combineValidators, isRequired } from "revalidate";
 import { RootStoreContext } from "../../../../stores/rootStore";
-import { Form, Button, Icon, List } from "semantic-ui-react";
+import { Form, Button, Icon, List, Label } from "semantic-ui-react";
 import { Form as FinalForm } from "react-final-form";
 import { Field } from "react-final-form";
 import TextInput from "../../../../common/form/TextInput";
@@ -71,21 +71,24 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
     <LoadingComponent content="Loading Locations..." />
   ) : (
     <List horizontal>
-      <List.Item>{location.name}</List.Item>
       <List.Item>
-        <Button circular size="small" onClick={toggleEditMode}>
-          <Icon name="edit" color="blue" />
-        </Button>
+        <Label ribbon basic>
+          <Button circular size="mini" onClick={toggleEditMode}>
+            <Icon name="edit" color="blue" />
+          </Button>
+
+          <Button
+            circular
+            size="mini"
+            onClick={() => handleDeleteLocation(location.id)}
+          >
+            <Icon name="trash alternate outline" color="red" />
+          </Button>
+        </Label>
       </List.Item>
-      <List.Item>
-        <Button
-          circular
-          size="small"
-          onClick={() => handleDeleteLocation(location.id)}
-        >
-          <Icon name="trash alternate outline" color="red" />
-        </Button>
-      </List.Item>
+      <Label size="large" basic color="black">
+        <List.Item>{location.name}</List.Item>
+      </Label>
     </List>
   );
 };

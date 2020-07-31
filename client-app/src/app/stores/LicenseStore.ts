@@ -100,4 +100,8 @@ export default class LicenseStore {
       this.submitting = false;
     });
   };
+
+  @action clearLicenses = () => {
+    this.licenseRegistry.clear();
+  };
 }

@@ -12,7 +12,7 @@ const TechnologistManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
   const { loadTechnologists, clearTechnologists } = rootStore.technologistStore;
-  const { loadLicenses } = rootStore.licenseStore;
+  const { loadLicenses, clearLicenses } = rootStore.licenseStore;
 
   const [techLoader, setTechLoader] = useState(false);
 
@@ -21,6 +21,7 @@ const TechnologistManager = () => {
     return () => {
       setTechLoader(true); //this loader takes care of the ui flicker from state update
       clearTechnologists();
+      clearLicenses();
       setTechLoader(false);
     };
   }, [loadModalities, clearTechnologists]);

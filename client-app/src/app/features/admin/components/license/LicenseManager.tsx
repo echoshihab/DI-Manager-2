@@ -9,21 +9,24 @@ import LicenseForm from "./LicenseForm";
 const LicenseManager = () => {
   const rootStore = useContext(RootStoreContext);
   const { loadModalities } = rootStore.modalityStore;
-  const { loadLicenses } = rootStore.licenseStore;
-  const { setAppLoaded, appLoaded } = rootStore.commonStore;
+  const { loadLicenses, clearLicenses } = rootStore.licenseStore;
 
   const [licenseLoader, setLicenseLoader] = useState(false);
 
   useEffect(() => {
-    loadModalities().finally(() => setAppLoaded());
-  }, [loadModalities, setAppLoaded]);
+    loadModalities();
+    return () => {
+      setLicenseLoader(true); //this fixes ui flicker issue on state update
+      clearLicenses();
+      setLicenseLoader(false);
+    };
+  }, [loadModalities, clearLicenses]);
 
   const handleModalityChange = (modalityId: string) => {
     setLicenseLoader(true);
     loadLicenses(modalityId).finally(() => setLicenseLoader(false));
   };
 
-  if (!appLoaded) return <LoadingComponent content="Loading app..." />;
   return (
     <Container style={{ width: "800px" }}>
       <Header
