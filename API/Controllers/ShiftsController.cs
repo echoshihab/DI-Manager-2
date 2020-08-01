@@ -34,6 +34,13 @@ namespace API.Controllers
             return await Mediator.Send(command);
         }
 
+        [HttpPost("range")]
+        [AllowAnonymous]
+        public async Task<ActionResult<Unit>> CreateRange(CreateRange.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult<Unit>> Edit(Guid id, Edit.Command command)
         {

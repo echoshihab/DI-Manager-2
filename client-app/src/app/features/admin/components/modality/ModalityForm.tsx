@@ -39,7 +39,7 @@ const ModalityForm = () => {
       onSubmit={handleFinalFormSubmit}
       validate={validate}
       initialValues={modality}
-      render={({ handleSubmit, form, invalid, pristine }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
           <Header content="Add New Modality" />
           <Field

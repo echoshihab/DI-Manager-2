@@ -10,15 +10,16 @@ using FluentValidation;
 using MediatR;
 using Persistence;
 
+
 namespace Application.Shifts
 {
-    public class Create
+    public class CreateRange
     {
         public class Command : IRequest
         {
-            public Guid Id { get; set; }
             public DateTime Start { get; set; }
             public DateTime End { get; set; }
+            public DateTime EndDate { get; set; }
             public Guid LicenseId { get; set; }
             public Guid LocationId { get; set; }
             public Guid RoomId { get; set; }
@@ -33,6 +34,7 @@ namespace Application.Shifts
             {
                 RuleFor(x => x.Start).NotEmpty().WithMessage(("Start time must not be empty"));
                 RuleFor(x => x.End).NotEmpty().WithMessage(("End time must not be empty"));
+                RuleFor(x => x.EndDate).NotEmpty().WithMessage(("End Date must not be empty"));
                 RuleFor(x => x.LocationId).NotEmpty().WithMessage("Location must be selected");
                 RuleFor(x => x.RoomId).NotEmpty().WithMessage("Room must be selected");
                 RuleFor(x => x.TechnologistId).NotEmpty().WithMessage("Technologist must be selected");
@@ -85,19 +87,28 @@ namespace Application.Shifts
                     throw new RestException(HttpStatusCode.NotFound, errors);
                 }
 
-                var shift = new Shift
+                while (request.Start <= request.EndDate)
                 {
-                    Id = request.Id,
-                    Start = request.Start,
-                    End = request.End,
-                    License = license,
-                    Location = location,
-                    Room = room,
-                    Technologist = technologist,
-                    Modality = modality
+                    var shift = new Shift
+                    {
+                        Start = request.Start,
+                        End = request.End,
+                        License = license,
+                        Location = location,
+                        Room = room,
+                        Technologist = technologist,
+                        Modality = modality
 
-                };
-                _context.Shifts.Add(shift);
+                    };
+
+
+                    _context.Shifts.Add(shift);
+                    request.Start = request.Start.AddDays(1);
+                    request.End = request.End.AddDays(1);
+
+                }
+
+
                 var success = await _context.SaveChangesAsync() > 0;
 
                 if (success) return Unit.Value;

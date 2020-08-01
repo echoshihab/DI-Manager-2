@@ -36,7 +36,7 @@ const LocationForm = () => {
       onSubmit={handleFinalFormSubmit}
       validate={validate}
       initialValues={location}
-      render={({ handleSubmit, form, invalid, pristine }) => (
+      render={({ handleSubmit, invalid, pristine }) => (
         <Form onSubmit={handleSubmit} loading={loading}>
           <Header content="Add New Location" />
           <Field
