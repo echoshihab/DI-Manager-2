@@ -9,11 +9,15 @@ import {
   Container,
   Label,
   Divider,
+  Accordion,
+  Icon,
+  AccordionTitleProps,
 } from "semantic-ui-react";
 import { IShift } from "../../../../models/shift";
 import { format } from "date-fns";
 import { filterDate, monthFlag, coordinator } from "../../../../helpers/util";
 import { Link } from "react-router-dom";
+import ShiftRangeForm from "../../Form/ShiftRangeForm";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
@@ -23,6 +27,14 @@ const ShiftMonthList = () => {
     [key: string]: IShift[] | [];
   }>({});
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleClick = (titleProps: AccordionTitleProps) => {
+    const { index } = titleProps;
+    const newIndex = activeIndex === index ? 1 : 0;
+    setActiveIndex(newIndex);
+  };
+
   useEffect(() => {
     setPredicate(monthFlag, true);
     let monthDates = getMonthDates();
@@ -30,49 +42,70 @@ const ShiftMonthList = () => {
   }, [setDaysInMonth, setPredicate]);
 
   return (
-    <Segment>
-      <Header as="h2" attached="top" textAlign="center">
-        {predicate.has(filterDate)
-          ? format(predicate.get(filterDate) as Date, "MMMM YYYY")
-          : format(new Date().toDateString(), "MMMM YYYY")}
-      </Header>
-      <Container>
-        <Grid columns={7} divided style={{ marginTop: "20px" }}>
-          {Object.keys(daysInMonth).map((d) => (
-            <Grid.Column key={d} style={{ border: "1px solid black" }}>
-              {d.slice(3, 5)}
-              {role === coordinator && (
-                <Label
-                  size="small"
-                  attached="top right"
-                  as={Link}
-                  to={{
-                    pathname: "/dayview",
-                    state: d,
-                  }}
-                  basic
-                  icon="edit"
-                ></Label>
-              )}
+    <Fragment>
+      {role === coordinator && (
+        <Accordion>
+          <Accordion.Title
+            active={activeIndex === 1}
+            index={0}
+            onClick={(e, titleProps) => handleClick(titleProps)}
+          >
+            <Icon name="dropdown" />
+            <Label color="blue">
+              {activeIndex === 0 ? "Add Shifts" : "Close Form"}
+            </Label>
+          </Accordion.Title>
+          <Accordion.Content active={activeIndex === 1}>
+            <ShiftRangeForm />
+          </Accordion.Content>
+        </Accordion>
+      )}
+      <Segment>
+        <Header as="h2" attached="top" textAlign="center">
+          {predicate.has(filterDate)
+            ? format(predicate.get(filterDate) as Date, "MMMM YYYY")
+            : format(new Date().toDateString(), "MMMM YYYY")}
+        </Header>
+        <Container>
+          <Grid columns={7} divided style={{ marginTop: "20px" }}>
+            {Object.keys(daysInMonth).map((d) => (
+              <Grid.Column key={d} style={{ border: "1px solid black" }}>
+                {d.slice(3, 5)}
+                {role === coordinator && (
+                  <Label
+                    size="small"
+                    attached="top right"
+                    as={Link}
+                    to={{
+                      pathname: "/dayview",
+                      state: d,
+                    }}
+                    basic
+                    icon="edit"
+                  ></Label>
+                )}
 
-              {shiftsByMonth[d]?.map((shift) => (
-                <Fragment key={shift.id}>
-                  <Label color="blue">
-                    {shift.roomName + " " + shift.licenseDisplayName}
-                    <Label.Detail>
-                      {format(shift.start, "hh:mm a")}-
-                    </Label.Detail>
-                    <Label.Detail>{format(shift.end, "hh:mm a")}</Label.Detail>
-                    <Label.Detail>{shift.technologistInitial}</Label.Detail>
-                  </Label>
-                  <Divider fitted />
-                </Fragment>
-              ))}
-            </Grid.Column>
-          ))}
-        </Grid>
-      </Container>
-    </Segment>
+                {shiftsByMonth[d]?.map((shift) => (
+                  <Fragment key={shift.id}>
+                    <Label color="blue">
+                      {shift.roomName + " " + shift.licenseDisplayName}
+                      <Label.Detail>
+                        {format(shift.start, "hh:mm a")}-
+                      </Label.Detail>
+                      <Label.Detail>
+                        {format(shift.end, "hh:mm a")}
+                      </Label.Detail>
+                      <Label.Detail>{shift.technologistInitial}</Label.Detail>
+                    </Label>
+                    <Divider fitted />
+                  </Fragment>
+                ))}
+              </Grid.Column>
+            ))}
+          </Grid>
+        </Container>
+      </Segment>
+    </Fragment>
   );
 };
 
