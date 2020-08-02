@@ -28,12 +28,16 @@ const ShiftRangeForm = () => {
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { user } = rootStore.userStore;
-  const { createShiftRange, predicate } = rootStore.shiftStore;
+  const {
+    createShiftRange,
+    predicate,
+    loading,
+    setLoading,
+  } = rootStore.shiftStore;
   const [shift, setShift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [endDate, setEndDate] = useState<null | Date>(null);
   const [licenses, setLicenses] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleClearForm = (
     e: SyntheticEvent,
@@ -73,10 +77,7 @@ const ShiftRangeForm = () => {
     newShiftRange.endDate = endDate;
     newShiftRange.modalityId = user?.modalityId as string;
 
-    setLoading(true);
-    createShiftRange(newShiftRange)
-      .then(() => form.restart())
-      .finally(() => setLoading(false));
+    createShiftRange(newShiftRange).then(() => form.restart());
   };
 
   useEffect(() => {

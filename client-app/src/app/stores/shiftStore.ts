@@ -230,6 +230,7 @@ export default class ShiftStore {
 
   @action deleteShift = async (id: string) => {
     this.submitting = true;
+
     try {
       await agent.Shifts.delete(id);
       runInAction("delete location", () => {

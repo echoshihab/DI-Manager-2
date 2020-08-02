@@ -57,6 +57,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
     setPredicate,
     clearShifts,
     user,
+    setLoading,
     loadModalities,
   ]);
 

@@ -80,6 +80,11 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     setLicensePlaceHolder(false);
   };
 
+  const handleDeleteShift = (event: SyntheticEvent) => {
+    setLoading(true);
+    deleteShift(shift.id).finally(() => setLoading(false));
+  };
+
   return editMode ? (
     <Segment raised>
       <FinalForm
@@ -187,7 +192,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
       />
     </Segment>
   ) : loading ? (
-    <LoadingComponent content="Loading technologists..." />
+    <LoadingComponent content="Loading Shifts..." />
   ) : (
     <Step.Group fluid>
       <Step>
@@ -238,12 +243,11 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
         >
           <Icon name="edit" color="blue" />
         </Button>
-        <Button circular size="mini" onClick={() => deleteShift(shift.id)}>
+        <Button circular size="mini" id="delete" onClick={handleDeleteShift}>
           <Icon name="trash alternate outline" color="red" />
         </Button>
       </Step>
     </Step.Group>
   );
 };
-
 export default observer(ShiftDayListItem);

@@ -21,7 +21,12 @@ import ShiftRangeForm from "../../Form/ShiftRangeForm";
 
 const ShiftMonthList = () => {
   const rootStore = useContext(RootStoreContext);
-  const { shiftsByMonth, predicate, setPredicate } = rootStore.shiftStore;
+  const {
+    shiftsByMonth,
+    predicate,
+    setPredicate,
+    loading,
+  } = rootStore.shiftStore;
   const { role } = rootStore.commonStore;
   const [daysInMonth, setDaysInMonth] = useState<{
     [key: string]: IShift[] | [];
@@ -67,48 +72,52 @@ const ShiftMonthList = () => {
             : format(new Date().toDateString(), "MMMM YYYY")}
         </Header>
         <Container>
-          <Grid columns={7} divided style={{ marginTop: "20px" }}>
-            {Object.keys(daysInMonth).map((d) => (
-              <Grid.Column key={d} style={{ border: "1px solid black" }}>
-                {d.slice(3, 5)}
-                {role === coordinator && (
-                  <Label
-                    size="small"
-                    attached="top right"
-                    as={Link}
-                    to={{
-                      pathname: "/dayview",
-                      state: d,
-                    }}
-                    basic
-                    icon="edit"
-                  ></Label>
-                )}
+          {!loading && (
+            <Grid columns={7} divided style={{ marginTop: "20px" }}>
+              {Object.keys(daysInMonth).map((d) => (
+                <Grid.Column key={d} style={{ border: "1px solid black" }}>
+                  {d.slice(3, 5)}
+                  {role === coordinator && (
+                    <Label
+                      size="small"
+                      attached="top right"
+                      as={Link}
+                      to={{
+                        pathname: "/dayview",
+                        state: d,
+                      }}
+                      basic
+                      icon="edit"
+                    ></Label>
+                  )}
 
-                {shiftsByMonth[d]
-                  ?.sort(
-                    (a, b) =>
-                      a.roomName.localeCompare(b.roomName) ||
-                      a.start.getTime() - b.start.getTime()
-                  )
-                  .map((shift) => (
-                    <Fragment key={shift.id}>
-                      <Label color="blue">
-                        {shift.roomName + " " + shift.licenseDisplayName}
-                        <Label.Detail>
-                          {format(shift.start, "hh:mm a")}-
-                        </Label.Detail>
-                        <Label.Detail>
-                          {format(shift.end, "hh:mm a")}
-                        </Label.Detail>
-                        <Label.Detail>{shift.technologistInitial}</Label.Detail>
-                      </Label>
-                      <Divider fitted />
-                    </Fragment>
-                  ))}
-              </Grid.Column>
-            ))}
-          </Grid>
+                  {shiftsByMonth[d]
+                    ?.sort(
+                      (a, b) =>
+                        a.roomName.localeCompare(b.roomName) ||
+                        a.start.getTime() - b.start.getTime()
+                    )
+                    .map((shift) => (
+                      <Fragment key={shift.id}>
+                        <Label color="blue">
+                          {shift.roomName + " " + shift.licenseDisplayName}
+                          <Label.Detail>
+                            {format(shift.start, "hh:mm a")}-
+                          </Label.Detail>
+                          <Label.Detail>
+                            {format(shift.end, "hh:mm a")}
+                          </Label.Detail>
+                          <Label.Detail>
+                            {shift.technologistInitial}
+                          </Label.Detail>
+                        </Label>
+                        <Divider fitted />
+                      </Fragment>
+                    ))}
+                </Grid.Column>
+              ))}
+            </Grid>
+          )}
         </Container>
       </Segment>
     </Fragment>
