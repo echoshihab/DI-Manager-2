@@ -204,6 +204,18 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
       </Step>
       <Step>
         <Step.Content>
+          <Step.Title>{format(shift.start, "hh:mm a")}</Step.Title>
+          <Step.Description>Start</Step.Description>
+        </Step.Content>
+      </Step>
+      <Step>
+        <Step.Content>
+          <Step.Title>{format(shift.end, "hh:mm a")}</Step.Title>
+          <Step.Description>End</Step.Description>
+        </Step.Content>
+      </Step>
+      <Step>
+        <Step.Content>
           <Step.Title>{shift.technologistInitial}</Step.Title>
           <Step.Description>Technologist</Step.Description>
         </Step.Content>
@@ -215,18 +227,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
           <Step.Description>License</Step.Description>
         </Step.Content>
       </Step>
-      <Step>
-        <Step.Content>
-          <Step.Title>{format(shift.start, "hh:mm a")}</Step.Title>
-          <Step.Description>Start</Step.Description>
-        </Step.Content>
-      </Step>
-      <Step>
-        <Step.Content>
-          <Step.Title>{format(shift.end, "hh:mm a")}</Step.Title>
-          <Step.Description>End</Step.Description>
-        </Step.Content>
-      </Step>
+
       <Step>
         <Button
           circular

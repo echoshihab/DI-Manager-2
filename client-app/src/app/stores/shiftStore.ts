@@ -60,7 +60,9 @@ export default class ShiftStore {
 
   sortShiftsForDay(shifts: IShift[]) {
     const sortedShifts = shifts.sort(
-      (a, b) => a.start.getTime() - b.start.getTime()
+      (a, b) =>
+        a.roomName.localeCompare(b.roomName) ||
+        a.start.getTime() - b.start.getTime()
     );
     return sortedShifts;
   }
