@@ -16,6 +16,10 @@ const validate = combineValidators({
   date: isRequired("Date"),
   start: isRequired("start"),
   end: isRequired("end"),
+  locationId: isRequired("Location"),
+  roomId: isRequired("Room"),
+  technologistId: isRequired("Technologist"),
+  licenseId: isRequired("license"),
 });
 
 const ShiftRangeForm = () => {
