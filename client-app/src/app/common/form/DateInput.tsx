@@ -11,11 +11,7 @@ const DateInput: React.FC<IProps> = ({
   type,
   date = false,
   time = false,
-  placeholder,
   id,
-  min,
-  max,
-  defaultValue,
   timeFormat,
   meta: { touched, error },
   ...rest
@@ -25,17 +21,13 @@ const DateInput: React.FC<IProps> = ({
   return (
     <Form.Field error={touched && !!error} type={type} width={width}>
       <DateTimePicker
-        placeholder={placeholder}
         value={input.value || null}
         onChange={input.onChange}
         onBlur={input.onBlur}
         onKeyDown={(e) => e.preventDefault()}
         date={date}
         time={time}
-        min={min}
-        max={max}
         format={timeFormat}
-        defaultValue={defaultValue}
         timeFormat={timeFormat}
         {...rest}
       />

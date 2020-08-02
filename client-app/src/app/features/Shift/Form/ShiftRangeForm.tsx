@@ -105,7 +105,9 @@ const ShiftRangeForm = () => {
               component={DateInput}
               placeholder="Start Date"
               date={true}
+              currentDate={shift.date as Date}
               onSelect={handleStartdateChange}
+              readOnly={endDate}
               name="startDate"
               min={startOfMonth(shift.date as Date)}
               max={lastDayOfMonth(shift.date as Date)}
@@ -114,6 +116,7 @@ const ShiftRangeForm = () => {
               component={DateInput}
               placeholder="End Date"
               date={true}
+              currentDate={shift.date as Date}
               disabled={!endDate}
               name="endDate"
               min={endDate}
