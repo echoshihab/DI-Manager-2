@@ -85,21 +85,27 @@ const ShiftMonthList = () => {
                   ></Label>
                 )}
 
-                {shiftsByMonth[d]?.map((shift) => (
-                  <Fragment key={shift.id}>
-                    <Label color="blue">
-                      {shift.roomName + " " + shift.licenseDisplayName}
-                      <Label.Detail>
-                        {format(shift.start, "hh:mm a")}-
-                      </Label.Detail>
-                      <Label.Detail>
-                        {format(shift.end, "hh:mm a")}
-                      </Label.Detail>
-                      <Label.Detail>{shift.technologistInitial}</Label.Detail>
-                    </Label>
-                    <Divider fitted />
-                  </Fragment>
-                ))}
+                {shiftsByMonth[d]
+                  ?.sort(
+                    (a, b) =>
+                      a.roomName.localeCompare(b.roomName) ||
+                      a.start.getTime() - b.start.getTime()
+                  )
+                  .map((shift) => (
+                    <Fragment key={shift.id}>
+                      <Label color="blue">
+                        {shift.roomName + " " + shift.licenseDisplayName}
+                        <Label.Detail>
+                          {format(shift.start, "hh:mm a")}-
+                        </Label.Detail>
+                        <Label.Detail>
+                          {format(shift.end, "hh:mm a")}
+                        </Label.Detail>
+                        <Label.Detail>{shift.technologistInitial}</Label.Detail>
+                      </Label>
+                      <Divider fitted />
+                    </Fragment>
+                  ))}
               </Grid.Column>
             ))}
           </Grid>
