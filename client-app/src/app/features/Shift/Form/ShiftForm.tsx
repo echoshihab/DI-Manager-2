@@ -27,11 +27,10 @@ const ShiftForm = () => {
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { user } = rootStore.userStore;
-  const { createShift, predicate } = rootStore.shiftStore;
+  const { createShift, predicate, loading, setLoading } = rootStore.shiftStore;
   const [shift, setShift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [licenses, setLicenses] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleClearForm = (
     e: SyntheticEvent,

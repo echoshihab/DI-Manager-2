@@ -25,7 +25,6 @@ const ShiftDayList = () => {
     setPredicate,
   } = rootStore.shiftStore;
   const { role } = rootStore.commonStore;
-
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleClick = (titleProps: AccordionTitleProps) => {

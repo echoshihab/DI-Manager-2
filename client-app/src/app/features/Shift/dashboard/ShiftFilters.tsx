@@ -22,16 +22,16 @@ import LoadingComponent from "../../../layout/LoadingComponent";
 
 interface IProps {
   view: string;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShiftFilters: React.FC<IProps> = ({ view, setLoading }) => {
+const ShiftFilters: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
   const {
     setPredicate,
     loadShifts,
     clearPredicate,
     predicate,
+    setLoading,
   } = rootStore.shiftStore;
   const { sortedModalitiesByDisplayName } = rootStore.modalityStore;
   const {

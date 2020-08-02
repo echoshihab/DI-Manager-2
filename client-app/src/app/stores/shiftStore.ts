@@ -224,6 +224,10 @@ export default class ShiftStore {
     this.predicate.clear();
   };
 
+  @action setLoading = (value: boolean) => {
+    this.loading = value;
+  };
+
   @action deleteShift = async (id: string) => {
     this.submitting = true;
     try {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, Fragment } from "react";
+import React, { useContext, useEffect, Fragment } from "react";
 import { Grid } from "semantic-ui-react";
 import ShiftMonthList from "../display/month/ShiftMonthList";
 import ShiftFilters from "./ShiftFilters";
@@ -19,12 +19,14 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const { loadLicenses } = rootStore.licenseStore;
   const { loadModalities } = rootStore.modalityStore;
   const { user } = rootStore.userStore;
-  const [loading, setLoading] = useState(false);
+
   const {
     loadShifts,
     predicate,
     setPredicate,
     clearShifts,
+    loading,
+    setLoading,
   } = rootStore.shiftStore;
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
       </Grid.Column>
 
       <Grid.Column floated="left">
-        <ShiftFilters view={view} setLoading={setLoading} />
+        <ShiftFilters view={view} />
       </Grid.Column>
     </Grid>
   );
