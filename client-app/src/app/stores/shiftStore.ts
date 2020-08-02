@@ -140,6 +140,29 @@ export default class ShiftStore {
     });
   };
 
+  @action createShiftRange = async (shift: ShiftFormValues) => {
+    this.submitting = true;
+
+    //converting to UTC for API
+
+    shift.start = zonedTimeToUtc(shift.start as Date, "Eastern");
+    shift.end = zonedTimeToUtc(shift.end as Date, "Eastern");
+    shift.endDate = zonedTimeToUtc(shift.endDate as Date, "Eastern");
+
+    try {
+      await agent.Shifts.createRange(shift);
+      runInAction("create & load new shifts", () => {
+        this.loadShifts();
+      });
+    } catch (error) {
+      toast.error("Problem submitting data");
+      console.log(error.response);
+    }
+    runInAction("toggle button loading indicator", () => {
+      this.submitting = false;
+    });
+  };
+
   @action editShift = async (shift: ShiftFormValues) => {
     this.submitting = true;
 

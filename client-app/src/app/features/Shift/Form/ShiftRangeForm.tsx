@@ -1,7 +1,6 @@
 import React, { useState, SyntheticEvent, useContext, useEffect } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 import { ShiftFormValues } from "../../../models/shift";
-import { v4 as uuid } from "uuid";
 import { Form as FinalForm, Field } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
 import DateInput from "../../../common/form/DateInput";
@@ -29,7 +28,7 @@ const ShiftRangeForm = () => {
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { user } = rootStore.userStore;
-  const { createShift, predicate } = rootStore.shiftStore;
+  const { createShiftRange, predicate } = rootStore.shiftStore;
   const [shift, setShift] = useState(new ShiftFormValues());
   const [rooms, setRooms] = useState(false);
   const [endDate, setEndDate] = useState<null | Date>(null);
@@ -68,18 +67,16 @@ const ShiftRangeForm = () => {
     const shiftStart = combineDateAndTime(date, start);
     const shiftEnd = combineDateAndTime(date, end);
 
-    console.log(endDate);
+    let newShiftRange = shift as ShiftFormValues;
+    newShiftRange.start = shiftStart;
+    newShiftRange.end = shiftEnd;
+    newShiftRange.endDate = endDate;
+    newShiftRange.modalityId = user?.modalityId as string;
 
-    // let newShift = shift as ShiftFormValues;
-    // newShift.start = shiftStart;
-    // newShift.end = shiftEnd;
-    // newShift.modalityId = user?.modalityId as string;
-    // newShift.id = uuid();
-
-    // setLoading(true);
-    // createShift(newShift)
-    //   .then(() => form.restart())
-    //   .finally(() => setLoading(false));
+    setLoading(true);
+    createShiftRange(newShiftRange)
+      .then(() => form.restart())
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {

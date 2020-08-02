@@ -73,6 +73,8 @@ const Shifts = {
       .then(sleep(500))
       .then(responseBody), //used axios directly here to pass params
   create: (shift: ShiftFormValues) => requests.post("/shifts", shift),
+  createRange: (shift: ShiftFormValues) =>
+    requests.post("/shifts/range", shift),
   details: (id: string) => requests.get(`/shifts/${id}`),
   edit: (shift: ShiftFormValues) => requests.put(`/shifts/${shift.id}`, shift),
   delete: (id: string) => requests.delete(`/shifts/${id}`),

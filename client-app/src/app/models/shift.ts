@@ -20,6 +20,7 @@ export interface IShiftFormValues extends Partial<IShift> {
 export class ShiftFormValues implements IShiftFormValues {
   id?: string = undefined;
   date?: Date = undefined;
+  endDate?: Date = undefined;
   start?: Date = undefined;
   end?: Date = undefined;
   licenseId: string = "";

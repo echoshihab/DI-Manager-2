@@ -80,6 +80,7 @@ namespace Application.Shifts
                     errors.technologist = "Invalid Technologist";
 
 
+
                 int errorCount = ((ICollection<KeyValuePair<string, Object>>)errors).Count;
 
                 if (errorCount > 0)
