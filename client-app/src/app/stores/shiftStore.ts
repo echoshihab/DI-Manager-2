@@ -32,7 +32,7 @@ export default class ShiftStore {
   }
 
   @computed get shiftsByDay() {
-    return this.sortShiftsForDay(Array.from(this.shiftRegistry.values()));
+    return this.groupShiftsByLocation(Array.from(this.shiftRegistry.values()));
   }
 
   @computed get axiosParams() {
@@ -45,6 +45,24 @@ export default class ShiftStore {
       }
     });
     return params;
+  }
+
+  groupShiftsByLocation(shifts: IShift[]) {
+    const sortedShifts = shifts.sort(
+      (a, b) =>
+        a.roomName.localeCompare(b.roomName) ||
+        a.start.getTime() - b.start.getTime()
+    );
+
+    return Object.entries(
+      sortedShifts.reduce((shifts, shift) => {
+        const location = shift.locationName;
+        shifts[location] = shifts[location]
+          ? [...shifts[location], shift]
+          : [shift];
+        return shifts;
+      }, {} as { [key: string]: IShift[] })
+    );
   }
 
   groupShiftsByDateForMonth(shifts: IShift[]) {

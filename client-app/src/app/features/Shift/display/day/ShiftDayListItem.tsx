@@ -8,6 +8,7 @@ import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
+import { combineValidators, isRequired } from "revalidate";
 
 interface IProps {
   shift: IShift;
@@ -195,12 +196,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     <LoadingComponent content="Loading Shifts..." />
   ) : (
     <Step.Group fluid>
-      <Step>
-        <Step.Content>
-          <Step.Title>{shift.locationName}</Step.Title>
-          <Step.Description>Location</Step.Description>
-        </Step.Content>
-      </Step>
       <Step>
         <Step.Content>
           <Step.Title>{shift.roomName}</Step.Title>

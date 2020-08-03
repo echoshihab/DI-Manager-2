@@ -20,7 +20,6 @@ const validate = combineValidators({
   technologistId: isRequired("Technologist"),
   licenseId: isRequired("license"),
 });
-
 const ShiftForm = () => {
   const rootStore = useContext(RootStoreContext);
   const {

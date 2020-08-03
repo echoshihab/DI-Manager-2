@@ -65,13 +65,25 @@ const ShiftDayList = () => {
       )}
 
       <Segment>
-        <Header as="h2" attached="top" textAlign="center">
+        <Header
+          as="h2"
+          attached="top"
+          textAlign="center"
+          style={{ marginBottom: "10px" }}
+        >
           {predicate.has(filterDate)
             ? (predicate.get(filterDate) as Date).toDateString()
             : new Date().toDateString()}
         </Header>
-        {shiftsByDay.map((shift) => (
-          <ShiftDayListItem key={shift.id} shift={shift} />
+        {shiftsByDay.map(([group, shifts]) => (
+          <Fragment key={group}>
+            <Label size="large" ribbon color="grey">
+              {group}
+            </Label>
+            {shifts.map((shift) => (
+              <ShiftDayListItem key={shift.id} shift={shift} />
+            ))}
+          </Fragment>
         ))}
       </Segment>
     </Fragment>
