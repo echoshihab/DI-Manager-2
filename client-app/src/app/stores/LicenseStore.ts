@@ -3,6 +3,7 @@ import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { ILicense, ILicenseWithModality } from "../models/license";
+import { SyntheticEvent } from "react";
 
 export default class LicenseStore {
   rootStore: RootStore;
@@ -13,6 +14,7 @@ export default class LicenseStore {
   @observable license: ILicense | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable targetLicense = "";
 
   @computed get sortedLicenseByName() {
     return this.sortLicenseByName(Array.from(this.licenseRegistry.values()));
@@ -86,18 +88,24 @@ export default class LicenseStore {
     });
   };
 
-  @action deleteLicense = async (id: string) => {
+  @action deleteLicense = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.targetLicense = event.currentTarget.name;
     try {
       await agent.Licenses.delete(id);
       runInAction("delete license", () => {
         this.licenseRegistry.delete(id);
+        this.targetLicense = "";
       });
     } catch (error) {
       console.log(error);
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.targetLicense = "";
     });
   };
 

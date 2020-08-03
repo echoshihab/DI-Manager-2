@@ -3,6 +3,7 @@ import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { ILocation } from "../models/location";
+import { SyntheticEvent } from "react";
 
 export default class LocationStore {
   rootStore: RootStore;
@@ -13,6 +14,7 @@ export default class LocationStore {
   @observable location: ILocation | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable targetLocation = "";
 
   @computed get sortedLocationByName() {
     return this.sortLocationsByName(Array.from(this.locationRegistry.values()));
@@ -72,18 +74,24 @@ export default class LocationStore {
     });
   };
 
-  @action deleteLocation = async (id: string) => {
+  @action deleteLocation = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.targetLocation = event.currentTarget.name;
     try {
       await agent.Locations.delete(id);
       runInAction("delete location", () => {
         this.locationRegistry.delete(id);
+        this.targetLocation = "";
       });
     } catch (error) {
       toast.error("Problem deleting");
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.targetLocation = "";
     });
   };
 }

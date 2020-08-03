@@ -3,6 +3,7 @@ import { observable, runInAction, action, computed } from "mobx";
 import { IModality } from "../models/modality";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
+import { SyntheticEvent } from "react";
 
 export default class ModalityStore {
   rootStore: RootStore;
@@ -13,6 +14,7 @@ export default class ModalityStore {
   @observable modality: IModality | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable targetModality = "";
 
   @computed get sortedModalitiesByDisplayName() {
     return this.sortModalityByDisplayName(
@@ -75,18 +77,24 @@ export default class ModalityStore {
     });
   };
 
-  @action deleteModality = async (id: string) => {
+  @action deleteModality = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.targetModality = event.currentTarget.name;
     try {
       await agent.Modalities.delete(id);
       runInAction("delete Modality", () => {
         this.modalityRegistry.delete(id);
+        this.targetModality = "";
       });
     } catch (error) {
       console.log(error);
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.targetModality = "";
     });
   };
 }

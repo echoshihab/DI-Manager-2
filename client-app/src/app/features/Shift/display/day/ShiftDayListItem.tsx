@@ -15,7 +15,12 @@ interface IProps {
 
 const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
   const rootStore = useContext(RootStoreContext);
-  const { deleteShift, editShift, submitting } = rootStore.shiftStore;
+  const {
+    deleteShift,
+    editShift,
+    submitting,
+    targetShift,
+  } = rootStore.shiftStore;
   const { sortedLocationByName } = rootStore.locationStore;
   const { loadRooms, sortedRoomsByName } = rootStore.roomStore;
   const {
@@ -78,11 +83,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
 
   const handleLicenseChange = () => {
     setLicensePlaceHolder(false);
-  };
-
-  const handleDeleteShift = (event: SyntheticEvent) => {
-    setLoading(true);
-    deleteShift(shift.id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -252,8 +252,18 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
         >
           <Icon name="edit" color="blue" />
         </Button>
-        <Button circular size="mini" id="delete" onClick={handleDeleteShift}>
-          <Icon name="trash alternate outline" color="red" />
+        <Button
+          circular
+          name={shift.id}
+          loading={targetShift === shift.id}
+          size="mini"
+          id="delete"
+          onClick={(e) => deleteShift(e, shift.id)}
+        >
+          <Icon
+            name="trash alternate outline"
+            color={targetShift === shift.id ? "grey" : "red"}
+          />
         </Button>
       </Step>
     </Step.Group>

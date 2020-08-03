@@ -20,7 +20,6 @@ const ModalityForm = () => {
   const [loading, setLoading] = useState(false);
 
   const handleFinalFormSubmit = (values: any, form: any) => {
-    console.log(values);
     const { name, displayName } = values;
 
     let newModality = {

@@ -18,7 +18,12 @@ const validate = combineValidators({
 
 const LicenseListItem: React.FC<IProps> = ({ license }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteLicense, editLicense } = rootStore.licenseStore;
+  const {
+    submitting,
+    deleteLicense,
+    editLicense,
+    targetLicense,
+  } = rootStore.licenseStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -31,11 +36,6 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
     editLicense(license)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
-  };
-
-  const handleDeleteLicense = (id: string) => {
-    setLoading(true);
-    deleteLicense(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -85,11 +85,16 @@ const LicenseListItem: React.FC<IProps> = ({ license }) => {
             <Icon name="edit" color="blue" />
           </Button>
           <Button
+            name={license.id}
             circular
             size="mini"
-            onClick={() => handleDeleteLicense(license.id)}
+            loading={targetLicense === license.id}
+            onClick={(e) => deleteLicense(e, license.id)}
           >
-            <Icon name="trash alternate outline" color="red" />
+            <Icon
+              name="trash alternate outline"
+              color={targetLicense === license.id ? "grey" : "red"}
+            />
           </Button>
         </Label>
       </List.Item>

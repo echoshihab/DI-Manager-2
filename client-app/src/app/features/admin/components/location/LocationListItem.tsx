@@ -18,7 +18,12 @@ const validate = combineValidators({
 
 const LocationListItem: React.FC<IProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteLocation, editLocation } = rootStore.locationStore;
+  const {
+    submitting,
+    deleteLocation,
+    editLocation,
+    targetLocation,
+  } = rootStore.locationStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -31,11 +36,6 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
     editLocation(location)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
-  };
-
-  const handleDeleteLocation = (id: string) => {
-    setLoading(true);
-    deleteLocation(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -82,10 +82,15 @@ const LocationListItem: React.FC<IProps> = ({ location }) => {
 
           <Button
             circular
+            name={location.id}
             size="mini"
-            onClick={() => handleDeleteLocation(location.id)}
+            loading={targetLocation === location.id}
+            onClick={(e) => deleteLocation(e, location.id)}
           >
-            <Icon name="trash alternate outline" color="red" />
+            <Icon
+              name="trash alternate outline"
+              color={targetLocation === location.id ? "grey" : "red"}
+            />
           </Button>
         </Label>
       </List.Item>

@@ -3,6 +3,7 @@ import { observable, runInAction, action, computed } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
 import { IRoom, IRoomWithLocation } from "../models/room";
+import { SyntheticEvent } from "react";
 
 export default class RoomStore {
   rootStore: RootStore;
@@ -13,6 +14,7 @@ export default class RoomStore {
   @observable room: IRoom | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable roomTarget = "";
 
   @computed get sortedRoomsByName() {
     return this.sortRoomsByName(Array.from(this.roomRegistry.values()));
@@ -74,18 +76,24 @@ export default class RoomStore {
     });
   };
 
-  @action deleteRoom = async (id: string) => {
+  @action deleteRoom = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.roomTarget = event.currentTarget.name;
     try {
       await agent.Rooms.delete(id);
       runInAction("delete room", () => {
         this.roomRegistry.delete(id);
+        this.roomTarget = "";
       });
     } catch (error) {
       console.log(error);
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.roomTarget = "";
     });
   };
 

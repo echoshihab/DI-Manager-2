@@ -25,6 +25,7 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
   const rootStore = useContext(RootStoreContext);
   const {
     submitting,
+    targetTechnologist,
     deleteTechnologist,
     editTechnologist,
   } = rootStore.technologistStore;
@@ -50,11 +51,6 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
     editTechnologist(updatedTechnologist)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
-  };
-
-  const handleDeleteTechnologist = (id: string) => {
-    setLoading(true);
-    deleteTechnologist(id).finally(() => setLoading(false));
   };
 
   const currentLicenses = technologist.licenses.map((l) => l.licenseId);
@@ -126,11 +122,16 @@ const TechnologistListItem: React.FC<IProps> = ({ technologist }) => {
             <Icon name="edit" color="blue" />
           </Button>
           <Button
+            name={technologist.id}
+            loading={targetTechnologist === technologist.id && submitting}
             circular
             size="mini"
-            onClick={() => handleDeleteTechnologist(technologist.id)}
+            onClick={(e) => deleteTechnologist(e, technologist.id)}
           >
-            <Icon name="trash alternate outline" color="red" />
+            <Icon
+              name="trash alternate outline"
+              color={targetTechnologist === technologist.id ? "grey" : "red"}
+            />
           </Button>
         </Label>
       </List.Item>

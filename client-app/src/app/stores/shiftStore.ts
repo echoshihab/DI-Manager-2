@@ -9,6 +9,7 @@ import { IRoom } from "../models/room";
 import { ILocation } from "../models/location";
 import { zonedTimeToUtc } from "date-fns-tz";
 import { filterDate } from "../helpers/util";
+import { SyntheticEvent } from "react";
 
 export default class ShiftStore {
   rootStore: RootStore;
@@ -24,6 +25,7 @@ export default class ShiftStore {
   @observable predicate = new Map();
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable targetShift = "";
 
   @computed get shiftsByMonth() {
     return this.groupShiftsByDateForMonth(
@@ -246,19 +248,25 @@ export default class ShiftStore {
     this.loading = value;
   };
 
-  @action deleteShift = async (id: string) => {
+  @action deleteShift = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.targetShift = event.currentTarget.name;
 
     try {
       await agent.Shifts.delete(id);
-      runInAction("delete location", () => {
+      runInAction("delete shift", () => {
         this.shiftRegistry.delete(id);
+        this.targetShift = "";
       });
     } catch (error) {
       toast.error("Problem deleting");
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.targetShift = "";
     });
   };
 }

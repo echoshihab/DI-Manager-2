@@ -18,7 +18,12 @@ const validate = combineValidators({
 
 const ModalityListItem: React.FC<IProps> = ({ modality }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteModality, editModality } = rootStore.modalityStore;
+  const {
+    submitting,
+    deleteModality,
+    editModality,
+    targetModality,
+  } = rootStore.modalityStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -32,11 +37,6 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
       setLoading(false);
       setEditMode(false);
     });
-  };
-
-  const handleDeleteModality = (id: string) => {
-    setLoading(true);
-    deleteModality(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -89,10 +89,15 @@ const ModalityListItem: React.FC<IProps> = ({ modality }) => {
 
           <Button
             circular
+            name={modality.id}
+            loading={targetModality === modality.id}
             size="mini"
-            onClick={() => handleDeleteModality(modality.id)}
+            onClick={(e) => deleteModality(e, modality.id)}
           >
-            <Icon name="trash alternate outline" color="red" />
+            <Icon
+              name="trash alternate outline"
+              color={targetModality === modality.id ? "grey" : "red"}
+            />
           </Button>
         </List.Item>
       </Label>

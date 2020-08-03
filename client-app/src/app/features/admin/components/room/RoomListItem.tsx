@@ -17,7 +17,7 @@ const validate = combineValidators({
 
 const RoomListItem: React.FC<IProps> = ({ room }) => {
   const rootStore = useContext(RootStoreContext);
-  const { submitting, deleteRoom, editRoom } = rootStore.roomStore;
+  const { submitting, deleteRoom, editRoom, roomTarget } = rootStore.roomStore;
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -30,11 +30,6 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
     editRoom(room)
       .then(() => setLoading(false))
       .finally(() => setEditMode(false));
-  };
-
-  const handleDeleteRoom = (id: string) => {
-    setLoading(true);
-    deleteRoom(id).finally(() => setLoading(false));
   };
 
   return editMode ? (
@@ -78,11 +73,16 @@ const RoomListItem: React.FC<IProps> = ({ room }) => {
             <Icon name="edit" color="blue" />
           </Button>
           <Button
+            name={room.id}
+            loading={roomTarget === room.id && submitting}
             circular
             size="mini"
-            onClick={() => handleDeleteRoom(room.id)}
+            onClick={(e) => deleteRoom(e, room.id)}
           >
-            <Icon name="trash alternate outline" color="red" />
+            <Icon
+              name="trash alternate outline"
+              color={roomTarget === room.id ? "grey" : "red"}
+            />
           </Button>
         </Label>
       </List.Item>

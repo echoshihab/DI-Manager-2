@@ -9,6 +9,7 @@ import {
   ITechnologistEdit,
 } from "../models/technologist";
 import { ILicense } from "../models/license";
+import { SyntheticEvent } from "react";
 
 export default class TechnologistStore {
   rootStore: RootStore;
@@ -19,6 +20,7 @@ export default class TechnologistStore {
   @observable technologist: ITechnologist | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
+  @observable targetTechnologist = "";
 
   @computed get sortedTechnologistByInitial() {
     return this.sortTechnologistByInitial(
@@ -127,18 +129,24 @@ export default class TechnologistStore {
     });
   };
 
-  @action deleteTechnologist = async (id: string) => {
+  @action deleteTechnologist = async (
+    event: SyntheticEvent<HTMLButtonElement>,
+    id: string
+  ) => {
     this.submitting = true;
+    this.targetTechnologist = event.currentTarget.name;
     try {
       await agent.Technologists.delete(id);
-      runInAction("delete technologst", () => {
+      runInAction("delete technologist", () => {
         this.technologistRegistry.delete(id);
+        this.targetTechnologist = "";
       });
     } catch (error) {
       console.log(error);
     }
     runInAction("toggle submitting", () => {
       this.submitting = false;
+      this.targetTechnologist = "";
     });
   };
 }

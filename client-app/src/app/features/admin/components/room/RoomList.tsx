@@ -15,7 +15,7 @@ const RoomList = () => {
       {sortedRoomsByName.map((room) => (
         <List.Item key={room.id}>
           <List.Content>
-            <RoomListItem room={room} />
+            <RoomListItem room={room} key={room.id} />
           </List.Content>
         </List.Item>
       ))}
