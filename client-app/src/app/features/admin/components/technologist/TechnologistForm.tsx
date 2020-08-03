@@ -6,7 +6,7 @@ import {
   ITechnologistForm,
 } from "../../../../models/technologist";
 import { v4 as uuid } from "uuid";
-import { Form, Button, Segment } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 import { Form as FinalForm, Field } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import TextInput from "../../../../common/form/TextInput";
@@ -14,7 +14,7 @@ import { IModality } from "../../../../models/modality";
 import MultiSelectInput from "../../../../common/form/MultiSelectInput";
 import { ILicense } from "../../../../models/license";
 import { observer } from "mobx-react-lite";
-import { FORM_ERROR } from "final-form";
+import { FORM_ERROR, FormApi } from "final-form";
 import ErrorMessage from "../../../../common/form/ErrorMessage";
 
 interface IProps {
@@ -34,7 +34,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
   const technologist = new TechnologistFormValues();
   const [loading, setLoading] = useState(false);
 
-  const handleFinalFormSubmit = async (values: any, form: any) => {
+  const handleFinalFormSubmit = async (values: any, form: FormApi) => {
     let errors: any;
     const { name, initial, modality, licenses: licenseIdList } = values;
 
@@ -48,7 +48,6 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
 
     setLoading(true);
     await createTechnologist(newTechnologist)
-      .then(() => setTimeout(form.restart))
       .catch((error) => {
         errors = error;
         return errors;
@@ -56,8 +55,16 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
       .finally(() => {
         setLoading(false);
       });
-
-    return { [FORM_ERROR]: errors };
+    if (errors) {
+      return { [FORM_ERROR]: errors };
+    } else {
+      form.change("name", undefined);
+      form.resetFieldState("name");
+      form.change("initial", undefined);
+      form.resetFieldState("initial");
+      form.change("licenses", "");
+      form.resetFieldState("licenses");
+    }
   };
 
   return (

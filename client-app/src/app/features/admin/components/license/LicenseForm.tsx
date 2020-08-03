@@ -9,6 +9,7 @@ import SelectInput from "../../../../common/form/SelectInput";
 import { LicenseFormValues } from "../../../../models/license";
 import { IModality } from "../../../../models/modality";
 import { observer } from "mobx-react-lite";
+import { FormApi } from "final-form";
 
 interface IProps {
   changeModality: (modalityId: string) => void;
@@ -26,7 +27,7 @@ const LicenseForm: React.FC<IProps> = ({ changeModality }) => {
   const license = new LicenseFormValues();
   const [loading, setLoading] = useState(false);
 
-  const handleFinalFormSubmit = (values: any, form: any) => {
+  const handleFinalFormSubmit = (values: any, form: FormApi) => {
     const { name, displayName, modality } = values;
 
     let newLicense = {
@@ -38,7 +39,12 @@ const LicenseForm: React.FC<IProps> = ({ changeModality }) => {
     setLoading(true);
 
     createLicense(newLicense)
-      .then(() => form.restart())
+      .then(() => {
+        form.change("name", undefined);
+        form.resetFieldState("name");
+        form.change("displayName", undefined);
+        form.resetFieldState("displayName");
+      })
       .finally(() => setLoading(false));
   };
 

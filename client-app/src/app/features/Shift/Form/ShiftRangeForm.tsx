@@ -97,7 +97,7 @@ const ShiftRangeForm = () => {
       updatedShift.endDate = date;
       setShift(updatedShift);
     }
-  }, [predicate, filterDate]);
+  }, [predicate]);
 
   return (
     <Segment compact>

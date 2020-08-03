@@ -48,7 +48,7 @@ const ShiftMonthList = () => {
       ? (monthDates = getMonthDates(date))
       : (monthDates = getMonthDates(new Date()));
     setDaysInMonth(monthDates);
-  }, [setDaysInMonth, setPredicate]);
+  }, [setDaysInMonth, predicate, setPredicate]);
 
   return (
     <Fragment>

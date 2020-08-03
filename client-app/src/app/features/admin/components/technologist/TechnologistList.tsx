@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../../../stores/rootStore";
 import { List, Header } from "semantic-ui-react";

@@ -9,6 +9,7 @@ import TextInput from "../../../../common/form/TextInput";
 import SelectInput from "../../../../common/form/SelectInput";
 import { ILocation } from "../../../../models/location";
 import { observer } from "mobx-react-lite";
+import { FormApi } from "final-form";
 
 interface IProps {
   changeLocation: (locationId: string) => void;
@@ -25,7 +26,7 @@ const RoomForm: React.FC<IProps> = ({ changeLocation }) => {
   const room = new RoomFormValues();
   const [loading, setLoading] = useState(false);
 
-  const handleFinalFormSubmit = (values: any, form: any) => {
+  const handleFinalFormSubmit = (values: any, form: FormApi) => {
     const { name, location } = values;
 
     let newRoom = {
@@ -35,7 +36,10 @@ const RoomForm: React.FC<IProps> = ({ changeLocation }) => {
     };
     setLoading(true);
     createRoom(newRoom)
-      .then(() => form.restart())
+      .then(() => {
+        form.change("name", undefined);
+        form.resetFieldState("name");
+      })
       .finally(() => setLoading(false));
   };
 
