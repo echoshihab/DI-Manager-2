@@ -30,12 +30,12 @@ export default class TechnologistStore {
 
   sortTechnologistByInitial(technologist: ITechnologist[]) {
     if (technologist && technologist.length) {
-      return technologist;
+      const sortedTechnologists = technologist.sort((a, b) =>
+        a.initial.localeCompare(b.initial)
+      );
+      return sortedTechnologists;
     }
-    const sortedTechnologists = technologist.sort((a, b) =>
-      a.initial.localeCompare(b.initial)
-    );
-    return sortedTechnologists;
+    return technologist;
   }
   @action selectTechnologist = (id: string) => {
     this.technologist = this.technologistRegistry.get(id);
