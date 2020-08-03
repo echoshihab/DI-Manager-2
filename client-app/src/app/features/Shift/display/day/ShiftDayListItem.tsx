@@ -8,7 +8,6 @@ import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
-import { combineValidators, isRequired } from "revalidate";
 
 interface IProps {
   shift: IShift;
@@ -91,7 +90,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
       <FinalForm
         initialValues={shift}
         onSubmit={handleFinalFormSubmit}
-        render={({ handleSubmit, invalid, pristine }) => (
+        render={({ handleSubmit, invalid, pristine, form }) => (
           <Form onSubmit={handleSubmit} loading={loading}>
             <Form.Group>
               <Label size="medium">Location: </Label>
@@ -109,11 +108,14 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
                   };
                 })}
               />
-              <Label size="medium">Room: </Label>
+              <Label size="medium" color={roomPlaceholder ? "red" : undefined}>
+                Room:
+              </Label>
               <Field
                 name="roomId"
                 inputOnChange={handleRoomChange}
                 component={SelectInput}
+                error={roomPlaceholder}
                 defaultValue={shift.roomId}
                 text={roomPlaceholder ? "Select a room" : undefined} //add placeholder on location change
                 options={sortedRoomsByName.map((room) => {
@@ -138,11 +140,17 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
                   };
                 })}
               />
-              <Label size="medium">License: </Label>
+              <Label
+                size="medium"
+                color={licensePlaceholder ? "red" : undefined}
+              >
+                License:{" "}
+              </Label>
               <Field
                 name="licenseId"
                 component={SelectInput}
                 defaultValue={shift.licenseId}
+                error={licensePlaceholder}
                 inputOnChange={handleLicenseChange}
                 text={licensePlaceholder ? "Select License" : undefined}
                 options={
@@ -154,7 +162,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
                           value: license.licenseId,
                         };
                       })
-                    : undefined
+                    : ""
                 }
               />
             </Form.Group>
@@ -179,7 +187,13 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
               <Button
                 loading={submitting}
                 type="submit"
-                disabled={loading || invalid || pristine}
+                disabled={
+                  loading ||
+                  invalid ||
+                  pristine ||
+                  roomPlaceholder ||
+                  licensePlaceholder
+                }
               >
                 <Icon name="check" color="green" />
               </Button>
