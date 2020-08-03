@@ -88,7 +88,7 @@ namespace Application.Shifts
                     throw new RestException(HttpStatusCode.NotFound, errors);
                 }
 
-                while (request.Start <= request.EndDate)
+                while (request.Start.Day <= request.EndDate.Day)
                 {
                     var shift = new Shift
                     {

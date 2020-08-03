@@ -42,7 +42,11 @@ const ShiftMonthList = () => {
 
   useEffect(() => {
     setPredicate(monthFlag, true);
-    let monthDates = getMonthDates();
+    let date = predicate.get(filterDate) as Date;
+    let monthDates;
+    date
+      ? (monthDates = getMonthDates(date))
+      : (monthDates = getMonthDates(new Date()));
     setDaysInMonth(monthDates);
   }, [setDaysInMonth, setPredicate]);
 

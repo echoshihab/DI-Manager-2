@@ -70,6 +70,7 @@ const ShiftRangeForm = () => {
   };
 
   const handleFinalFormSubmit = (values: any, form: any) => {
+    setLoading(true);
     const { date, endDate, end, start, ...shift } = values;
 
     const shiftStart = combineDateAndTime(date, start);
@@ -84,20 +85,24 @@ const ShiftRangeForm = () => {
     createShiftRange(newShiftRange).then(() => form.restart());
   };
 
+  const handleCurrentDateChange = (date: Date) => {
+    console.log(date);
+  };
+
   useEffect(() => {
     if (predicate.has(filterDate)) {
       let date = predicate.get(filterDate) as Date;
       let updatedShift = new ShiftFormValues();
       updatedShift.date = date;
+      updatedShift.endDate = date;
       setShift(updatedShift);
     }
-  }, [predicate]);
+  }, [predicate, filterDate]);
 
   return (
     <Segment compact>
       <FinalForm
         validate={validate}
-        initialValues={shift}
         onSubmit={handleFinalFormSubmit}
         render={({ form, handleSubmit, invalid, pristine }) => (
           <Form onSubmit={handleSubmit} loading={loading}>
@@ -105,10 +110,11 @@ const ShiftRangeForm = () => {
               component={DateInput}
               placeholder="Start Date"
               date={true}
-              currentDate={shift.date as Date}
               onSelect={handleStartdateChange}
-              readOnly={endDate}
-              name="startDate"
+              currentDate={shift.date}
+              onCurrentDateChange={handleCurrentDateChange}
+              readOnly={!!endDate}
+              name="date"
               min={startOfMonth(shift.date as Date)}
               max={lastDayOfMonth(shift.date as Date)}
             />
@@ -116,11 +122,12 @@ const ShiftRangeForm = () => {
               component={DateInput}
               placeholder="End Date"
               date={true}
-              currentDate={shift.date as Date}
               disabled={!endDate}
+              currentDate={shift.endDate}
+              onCurrentDateChange={handleCurrentDateChange}
               name="endDate"
               min={endDate}
-              max={lastDayOfMonth(shift.date as Date)}
+              max={lastDayOfMonth(shift.endDate as Date)}
             />
             <Field
               component={DateInput}

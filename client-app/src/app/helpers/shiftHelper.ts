@@ -1,7 +1,7 @@
 import { format, getDaysInMonth } from "date-fns";
 
-export const getMonthDates = (): { [key: string]: [] } => {
-  let currentDate = new Date();
+export const getMonthDates = (date: Date): { [key: string]: [] } => {
+  let currentDate = date;
   let currentMonth = currentDate.getMonth();
   let currentYear = currentDate.getFullYear();
   let monthDates: { [key: string]: [] } = {};
