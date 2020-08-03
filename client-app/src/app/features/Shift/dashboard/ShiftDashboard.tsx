@@ -15,7 +15,7 @@ interface IProps {
 const ShiftDashboard: React.FC<IProps> = ({ view }) => {
   const rootStore = useContext(RootStoreContext);
   const { loadLocations } = rootStore.locationStore;
-  const { loadTechnologists } = rootStore.technologistStore;
+  const { loadTechnologists, clearTechnologists } = rootStore.technologistStore;
   const { loadLicenses } = rootStore.licenseStore;
   const { loadModalities } = rootStore.modalityStore;
   const { user } = rootStore.userStore;
@@ -47,7 +47,10 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
       loadLocations();
       loadModalities();
     }
-    return () => clearShifts();
+    return () => {
+      clearShifts();
+      clearTechnologists();
+    };
   }, [
     loadShifts,
     loadLocations,
@@ -56,6 +59,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
     predicate,
     setPredicate,
     clearShifts,
+    clearTechnologists,
     user,
     setLoading,
     loadModalities,

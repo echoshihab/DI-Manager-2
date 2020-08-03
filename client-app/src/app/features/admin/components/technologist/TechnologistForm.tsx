@@ -6,7 +6,7 @@ import {
   ITechnologistForm,
 } from "../../../../models/technologist";
 import { v4 as uuid } from "uuid";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Segment } from "semantic-ui-react";
 import { Form as FinalForm, Field } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import TextInput from "../../../../common/form/TextInput";
@@ -48,7 +48,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
 
     setLoading(true);
     await createTechnologist(newTechnologist)
-      .then(() => form.restart())
+      .then(() => setTimeout(form.restart))
       .catch((error) => {
         errors = error;
         return errors;
@@ -56,6 +56,7 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
       .finally(() => {
         setLoading(false);
       });
+
     return { [FORM_ERROR]: errors };
   };
 
@@ -72,6 +73,9 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
         dirtySinceLastSubmit,
       }) => (
         <Form onSubmit={handleSubmit} loading={loading} error>
+          {submitError && !dirtySinceLastSubmit && (
+            <ErrorMessage error={submitError} />
+          )}
           <Field
             placeholder="Select a Modality"
             name="modality"
@@ -122,9 +126,6 @@ const TechnologistForm: React.FC<IProps> = ({ changeModality }) => {
             content="Add Technologist"
             disabled={(invalid && !dirtySinceLastSubmit) || pristine || loading}
           />
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} />
-          )}
         </Form>
       )}
     />
