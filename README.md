@@ -22,7 +22,7 @@ DI Manager is an application for healthcare organizations to build, customize , 
 - **Day View**: view, assign, edit, view, and filter shifts for selected day
 
 <p align="center">
-  <img src="./img/dayview.png" alt="Dayview image" >
+  <img src="./img/dayview1.png" alt="Dayview image" >
 </p>
 
 - **Error Prevention**: Reducing user errors through client and server side validations and dynamic rendering of strictly valid options in forms.
@@ -34,5 +34,5 @@ DI Manager is an application for healthcare organizations to build, customize , 
 - **Filter**: Comprehensive filtering options for both administrative and non-administrative users
 
 <p align="center">
-  <img src="./img/filter1.png" alt="validation snippett">
+  <img src="./img/filter1.PNG" alt="validation snippett">
 </p>
