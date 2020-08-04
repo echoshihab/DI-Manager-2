@@ -75,7 +75,7 @@ const RoomForm: React.FC<IProps> = ({ changeLocation }) => {
             floated="right"
             positive
             type="submit"
-            content="Add Location"
+            content="Add Room"
             disabled={loading || invalid || pristine}
           />
         </Form>

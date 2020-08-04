@@ -344,7 +344,6 @@ ASALocalRun/
 healthchecksdb
 
 #image files for now
-*.png
 *.jpg
 
 #build files

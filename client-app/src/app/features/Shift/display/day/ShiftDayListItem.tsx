@@ -140,6 +140,8 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
                   };
                 })}
               />
+            </Form.Group>
+            <Form.Group>
               <Label
                 size="medium"
                 color={licensePlaceholder ? "red" : undefined}
@@ -165,8 +167,6 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
                     : ""
                 }
               />
-            </Form.Group>
-            <Form.Group>
               <Label size="medium">Start: </Label>
               <Field
                 component={DateInput}

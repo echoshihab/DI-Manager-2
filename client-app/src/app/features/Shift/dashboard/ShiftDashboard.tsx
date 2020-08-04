@@ -67,7 +67,7 @@ const ShiftDashboard: React.FC<IProps> = ({ view }) => {
 
   return (
     <Grid>
-      <Grid.Column width={12} floated="right">
+      <Grid.Column width={11} floated="right">
         {loading ? (
           <LoadingComponent content="Loading shifts..." inverted />
         ) : (
