@@ -34,5 +34,5 @@ DI Manager is an application for healthcare organizations to build, customize , 
 - **Filter**: Comprehensive filtering options for both administrative and non-administrative users
 
 <p align="center">
-  <img src="./img/filter1.PNG" alt="validation snippett">
+  <img src="./img/filter2.PNG" alt="validation snippett">
 </p>
