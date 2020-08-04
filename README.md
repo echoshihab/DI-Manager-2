@@ -7,22 +7,22 @@ DI Manager is an application for healthcare organizations to build, customize , 
 - **Resource Manager**: build and customize shifts, technologists, licenses, locations, rooms
 
 <p align="center">
-  <img src="./img/resourceManager11.png" alt="Resource Builder image 1" width="440" height="192">
+  <img src="./img/resourceManager11.png" alt="Resource Builder image 1" >
 </p>
 <p align="center">
-  <img src="./img/resourceManager2.png" alt="Resource Builder image 2" width="440" height="192">
+  <img src="./img/resourceManager2.png" alt="Resource Builder image 2" >
 </p>
 
 - **Month View**: assign multiple shifts, edit, view and filter shifts for selected month
 
 <p align="center">
-  <img src="./img/monthView.png" alt="Monthview image" width="769" height="400">
+  <img src="./img/monthView.png" alt="Monthview image" >
 </p>
 
 - **Day View**: view, assign, edit, view, and filter shifts for selected day
 
 <p align="center">
-  <img src="./img/dayview.png" alt="Dayview image" width="677" height="400">
+  <img src="./img/dayview.png" alt="Dayview image" >
 </p>
 
 - **Error Prevention**: Reducing user errors through client and server side validations and dynamic rendering of strictly valid options in forms.
