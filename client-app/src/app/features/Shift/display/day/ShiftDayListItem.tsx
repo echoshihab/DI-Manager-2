@@ -8,6 +8,7 @@ import { Field, Form as FinalForm } from "react-final-form";
 import SelectInput from "../../../../common/form/SelectInput";
 import DateInput from "../../../../common/form/DateInput";
 import LoadingComponent from "../../../../layout/LoadingComponent";
+import { coordinator } from "../../../../helpers/util";
 
 interface IProps {
   shift: IShift;
@@ -28,6 +29,7 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
     technologist,
     sortedTechnologistByInitial,
   } = rootStore.technologistStore;
+  const { role } = rootStore.commonStore;
 
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -241,31 +243,32 @@ const ShiftDayListItem: React.FC<IProps> = ({ shift }) => {
           <Step.Description>License</Step.Description>
         </Step.Content>
       </Step>
-
-      <Step>
-        <Button
-          circular
-          size="mini"
-          onClick={toggleEditMode}
-          outline="black"
-          id="displayForm"
-        >
-          <Icon name="edit" color="blue" />
-        </Button>
-        <Button
-          circular
-          name={shift.id}
-          loading={targetShift === shift.id}
-          size="mini"
-          id="delete"
-          onClick={(e) => deleteShift(e, shift.id)}
-        >
-          <Icon
-            name="trash alternate outline"
-            color={targetShift === shift.id ? "grey" : "red"}
-          />
-        </Button>
-      </Step>
+      {role === coordinator && (
+        <Step>
+          <Button
+            circular
+            size="mini"
+            onClick={toggleEditMode}
+            outline="black"
+            id="displayForm"
+          >
+            <Icon name="edit" color="blue" />
+          </Button>
+          <Button
+            circular
+            name={shift.id}
+            loading={targetShift === shift.id}
+            size="mini"
+            id="delete"
+            onClick={(e) => deleteShift(e, shift.id)}
+          >
+            <Icon
+              name="trash alternate outline"
+              color={targetShift === shift.id ? "grey" : "red"}
+            />
+          </Button>
+        </Step>
+      )}
     </Step.Group>
   );
 };

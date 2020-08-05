@@ -35,7 +35,6 @@ namespace API.Controllers
         }
 
         [HttpPost("range")]
-        [AllowAnonymous]
         public async Task<ActionResult<Unit>> CreateRange(CreateRange.Command command)
         {
             return await Mediator.Send(command);
