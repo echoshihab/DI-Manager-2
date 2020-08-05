@@ -1,5 +1,7 @@
 # DI Manager (2.0)
 
+View Demo Here - [Demo](https://www.youtube.com/watch?v=NETeMjC1BBE) <br><br>
+
 DI Manager is an application for healthcare organizations to build, customize , schedule and view filtered shifts in multi-site multi-room facility with various modalities, technologists, licenses with month and day based views.
 
 ## Features
