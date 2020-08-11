@@ -1,4 +1,5 @@
 
+using System;
 using System.Text;
 using API.Middleware;
 using Application.Interfaces;
@@ -74,7 +75,9 @@ namespace API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateAudience = false,
-                        ValidateIssuer = false
+                        ValidateIssuer = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
                 });
 

@@ -25,13 +25,11 @@ namespace Application.User
 
             private readonly UserManager<AppUser> _userManager;
             private readonly SignInManager<AppUser> _signInManager;
-            private readonly RoleManager<IdentityRole> _roleManager;
             private readonly IJwtGenerator _jwtGenerator;
 
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager, IJwtGenerator jwtGenerator)
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator)
             {
                 _jwtGenerator = jwtGenerator;
-                _roleManager = roleManager;
                 _signInManager = signInManager;
                 _userManager = userManager;
 
@@ -49,13 +47,18 @@ namespace Application.User
 
                 if (result.Succeeded)
                 {
+                    user.RefreshToken = _jwtGenerator.GenerateRefreshToken();
+                    user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(30);
+
+                    await _userManager.UpdateAsync(user);
+
                     return new User
                     {
                         UserName = user.UserName,
                         Token = _jwtGenerator.CreateToken(user),
+                        RefreshToken = user.RefreshToken,
                         DisplayName = user.DisplayName,
                         ModalityId = user.ModalityId,
-
 
                     };
                 }

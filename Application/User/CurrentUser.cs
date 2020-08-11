@@ -36,6 +36,7 @@ namespace Application.User
                     DisplayName = user.DisplayName,
                     UserName = user.UserName,
                     ModalityId = user.ModalityId,
+                    RefreshToken = user.RefreshToken,
                     Token = _jwtGenerator.CreateToken(user)
                 };
             }
