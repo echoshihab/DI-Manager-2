@@ -14,5 +14,8 @@ namespace Domain
 
         [NotMapped]
         public string Role { get; set; }
+
+        public string RefreshToken;
+        public DateTime RefreshTokenExpiry { get; set; }
     }
 }
