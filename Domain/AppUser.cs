@@ -12,10 +12,11 @@ namespace Domain
         public Guid? ModalityId { get; set; }
         public Modality Modality { get; set; }
 
+        public string RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiry { get; set; }
+
         [NotMapped]
         public string Role { get; set; }
 
-        public string RefreshToken;
-        public DateTime RefreshTokenExpiry { get; set; }
     }
 }

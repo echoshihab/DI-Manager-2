@@ -57,10 +57,10 @@ namespace Infrastructure.Security
 
         public string GenerateRefreshToken()
         {
-            var randomNumer = new byte[32];
+            var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumer);
-            return Convert.ToBase64String(randomNumer);
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }
