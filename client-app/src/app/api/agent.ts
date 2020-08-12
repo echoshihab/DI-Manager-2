@@ -12,6 +12,7 @@ import {
   ITechnologistEdit,
 } from "../models/technologist";
 import { IUserFormValues, IUser, IUserSlim } from "../models/user";
+import { promises } from "dns";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -28,6 +29,7 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(undefined, (error) => {
+  const originalRequest = error.config;
   if (error.message === "Network Error" && !error.response) {
     toast.error("Network error- Problem communicating with server!");
   }
@@ -35,6 +37,29 @@ axios.interceptors.response.use(undefined, (error) => {
 
   if (status === 404) {
     history.push("/notfound");
+  }
+  if (status === 401 && originalRequest.url.endsWith("refresh")) {
+    window.localStorage.removeItem("jwt");
+    window.localStorage.removeItem("refreshToken");
+    history.push("/");
+    toast.info("Please login again, session expired");
+    return Promise.reject(error);
+  }
+  if (status === 401 && !originalRequest._retry) {
+    originalRequest._retry = true;
+    return axios
+      .post("user/refresh", {
+        token: window.localStorage.getItem("jwt"),
+        refreshToken: window.localStorage.getItem("refreshToken"),
+      })
+      .then((res) => {
+        window.localStorage.setItem("jwt", res.data.token);
+        window.localStorage.setItem("refreshToken", res.data.refreshToken);
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${res.data.token}`;
+        return axios(originalRequest);
+      });
   }
   if (
     status === 400 &&
