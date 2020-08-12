@@ -39,6 +39,7 @@ export default class UserStore {
         this.user = user;
       });
       this.rootStore.commonStore.setToken(user.token);
+      this.rootStore.commonStore.setRefreshToken(user.refreshToken);
       this.rootStore.modalStore.closeModal();
       if (this.rootStore.commonStore.role === admin) {
         history.push("/admin");
@@ -55,6 +56,7 @@ export default class UserStore {
       const user = await agent.User.register(values);
       runInAction(() => {
         this.rootStore.commonStore.setToken(user.token);
+        this.rootStore.commonStore.setRefreshToken(user.refreshToken);
         this.rootStore.modalStore.closeModal();
         history.push("/dayview");
       });
@@ -65,6 +67,7 @@ export default class UserStore {
 
   @action logout = () => {
     this.rootStore.commonStore.setToken(null);
+    this.rootStore.commonStore.setRefreshToken(null);
     this.rootStore.shiftStore.clearPredicate();
 
     this.user = null;
