@@ -21,8 +21,8 @@ namespace Application.Tests.Locations
         public void Should_Return_List_Of_Locations()
         {
             var context = GetDbContext();
-            context.Locations.Add(new Location { Id = new Guid(), Name = "Test Location 1" });
-            context.Locations.Add(new Location { Id = new Guid(), Name = "Test Location 2" });
+            context.Locations.Add(new Location { Id = Guid.NewGuid(), Name = "Test Location 1" });
+            context.Locations.Add(new Location { Id = Guid.NewGuid(), Name = "Test Location 2" });
             context.SaveChanges();
 
             var sut = new Application.Locations.List.Handler(context, _mapper);
