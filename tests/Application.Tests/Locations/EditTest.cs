@@ -10,12 +10,6 @@ namespace Application.Tests.Locations
 {
     public class EditTest : TestBase
     {
-        // private readonly IMapper _mapper;
-        // public EditTest()
-        // {
-        //     var mockMapper = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
-        //     _mapper = mockMapper.CreateMapper();
-        // }
 
         [Fact]
         public void Should_Edit_Location()
