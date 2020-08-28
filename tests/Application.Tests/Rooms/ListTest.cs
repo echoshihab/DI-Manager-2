@@ -20,7 +20,7 @@ namespace Application.Tests.Rooms
         [Fact]
         public void Should_List_Rooms_In_Location()
         {
-
+            //arrange
 
             var context = GetDbContext();
 
@@ -41,6 +41,8 @@ namespace Application.Tests.Rooms
             context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "Test Room 3", LocationId = locationId2 });
 
             context.SaveChanges();
+
+            //act
 
             var sut = new List.Handler(context, _mapper);
 
