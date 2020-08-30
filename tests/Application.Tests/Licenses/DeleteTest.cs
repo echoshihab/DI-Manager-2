@@ -19,8 +19,8 @@ namespace Application.Tests.Licenses
 
             var licenseId1 = Guid.NewGuid();
             var licenseId2 = Guid.NewGuid();
-            context.Licenses.Add(new Domain.License { Id = licenseId1, Name = "Test License", ModalityId = modalityId });
-            context.Licenses.Add(new Domain.License { Id = licenseId2, Name = "Test License 2", ModalityId = modalityId });
+            context.Licenses.Add(new Domain.License { Id = licenseId1, Name = "Test License", DisplayName = "TL", ModalityId = modalityId });
+            context.Licenses.Add(new Domain.License { Id = licenseId2, Name = "Test License 2", DisplayName = "TL2", ModalityId = modalityId });
             context.SaveChanges();
 
             var sut = new Delete.Handler(context);

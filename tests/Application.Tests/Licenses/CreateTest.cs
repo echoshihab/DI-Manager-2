@@ -23,6 +23,7 @@ namespace Application.Tests.Licenses
             {
                 Id = Guid.NewGuid(),
                 Name = "Test License",
+                DisplayName = "TL",
                 ModalityId = modalityId
             };
 
