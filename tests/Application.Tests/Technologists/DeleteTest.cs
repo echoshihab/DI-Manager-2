@@ -41,7 +41,7 @@ namespace Application.Tests.Technologists
 
             var sut = new Delete.Handler(context);
 
-            var result = sut.Handle(new Delete.Command { Id = technologistId1 }, CancellationToken.None);
+            var result = sut.Handle(new Delete.Command { Id = technologistId1 }, CancellationToken.None).Result;
 
             var technologists = context.Technologists.ToList();
 
