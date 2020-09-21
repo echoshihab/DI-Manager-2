@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Application.Errors;
 using Application.Licenses;
 using Domain;
 using Xunit;
@@ -35,6 +36,34 @@ namespace Application.Tests.Licenses
 
             Assert.NotNull(license);
             Assert.Equal("Test License", license.Name);
+        }
+
+        [Fact]
+        public void Should_Fail_License_Create_W_Invalid_Modality()
+        {
+            var context = GetDbContext();
+
+            context.Modalities.Add(new Modality { Id = Guid.NewGuid(), Name = "Test Modality" });
+
+            context.SaveChanges();
+
+            var licenseCreateCommand = new Create.Command
+            {
+                Id = Guid.NewGuid(),
+                Name = "Test License",
+                DisplayName = "TL",
+                ModalityId = Guid.NewGuid()
+            };
+
+            var sut = new Create.Handler(context);
+
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(licenseCreateCommand, CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { modality = "Modality not found" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
+
         }
     }
 }
