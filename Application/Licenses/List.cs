@@ -51,7 +51,7 @@ namespace Application.Licenses
                     var modality = await _context.Modalities.FindAsync(request.ModalityId);
 
                     if (modality == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { modality = "modality not found" });
+                        throw new RestException(HttpStatusCode.NotFound, new { modality = "Modality not found" });
 
                     queryable = queryable.Where(x => x.ModalityId == request.ModalityId);
                 }

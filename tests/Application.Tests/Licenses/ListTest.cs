@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using Application.Errors;
 using Application.Licenses;
 using AutoMapper;
 using Xunit;
@@ -66,8 +67,35 @@ namespace Application.Tests.Licenses
             var result = sut.Handle(new List.Query(modalityId1), CancellationToken.None).Result;
             var licenseExists = result.Any(x => x.Name == "UM License");
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.False(licenseExists);
         }
+
+        [Fact]
+        public void Should_Throw_Exception_On_Invalid_Modality()
+        {
+
+            var context = GetDbContext();
+
+            var modalityId = Guid.NewGuid();
+            context.Modalities.Add(new Domain.Modality { Id = modalityId, Name = "Test Modality" });
+            context.SaveChanges();
+
+            var licenseId = Guid.NewGuid();
+            context.Licenses.Add(new Domain.License { Id = licenseId, Name = "Test License", DisplayName = "TL", ModalityId = modalityId });
+
+            var sut = new List.Handler(context, _mapper);
+
+            var nonExistingModalityId = Guid.NewGuid();
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(new List.Query(nonExistingModalityId), CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { modality = "Modality not found" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
+
+
+        }
     }
+
 }
