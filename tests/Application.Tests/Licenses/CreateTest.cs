@@ -6,10 +6,12 @@ using Application.Licenses;
 using Domain;
 using Xunit;
 
+
 namespace Application.Tests.Licenses
 {
     public class CreateTest : TestBase
     {
+
         [Fact]
         public void Should_Create_License()
         {
@@ -65,5 +67,9 @@ namespace Application.Tests.Licenses
             Assert.Equal(expectedError, thrownError);
 
         }
+
+
+
+
     }
 }

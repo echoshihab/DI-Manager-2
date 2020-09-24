@@ -4,16 +4,19 @@ using Application.Rooms;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
+using static Application.Locations.Create;
 
 namespace Application.Tests.Locations
 {
     public class CreateTest : TestBase
     {
         private readonly IMapper _mapper;
+        private CommandValidator _validator;
         public CreateTest()
         {
             var mockMapper = new MapperConfiguration(cfg => { cfg.AddProfile(new MappingProfile()); });
             _mapper = mockMapper.CreateMapper();
+            _validator = new CommandValidator();
         }
 
         [Fact]
@@ -37,6 +40,23 @@ namespace Application.Tests.Locations
 
             Assert.NotNull(location);
             Assert.Equal("Test Location", location.Name);
+
+        }
+
+        [Fact]
+        public void Should_Not_Allow_Empty_Name()
+        {
+            var locationCreateCommand = new Application.Locations.Create.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty
+
+            };
+
+            var validationStatus = _validator.Validate(locationCreateCommand).IsValid;
+            Assert.False(validationStatus);
+
 
         }
     }
