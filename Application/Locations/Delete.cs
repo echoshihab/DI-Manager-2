@@ -28,7 +28,7 @@ namespace Application.Locations
                 var location = await _context.Locations.FindAsync(request.Id);
 
                 if (location == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { location = "Not Found" });
+                    throw new RestException(HttpStatusCode.NotFound, new { location = "Location Not Found" });
 
                 _context.Remove(location);
                 //handler logic

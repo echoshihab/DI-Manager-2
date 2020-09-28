@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading;
 using Domain;
 using Xunit;
+using Application.Locations;
+using Application.Errors;
 
 namespace Application.Tests.Locations
 {
@@ -42,6 +44,29 @@ namespace Application.Tests.Locations
 
             Assert.Equal("Second Location", locations[0].Name);
             Assert.Null(deletedLocation);
+
+
+        }
+
+        [Fact]
+        public void Delete_Location_Should_Fail_W_Invalid_Id()
+        {
+
+            var context = GetDbContext();
+            context.Locations.Add(new Domain.Location { Id = Guid.NewGuid(), Name = "Test Location" });
+            context.SaveChanges();
+
+
+            var sut = new Delete.Handler(context);
+
+            var nonExistingLocationId = Guid.NewGuid();
+
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(new Delete.Command { Id = nonExistingLocationId }, CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { location = "Location Not Found" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
 
 
         }
