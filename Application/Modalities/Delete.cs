@@ -28,7 +28,7 @@ namespace Application.Modalities
                 var modality = await _context.Modalities.FindAsync(request.Id);
 
                 if (modality == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Not Found" });
+                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Modality Not Found" });
 
                 _context.Remove(modality);
                 //handler logic
