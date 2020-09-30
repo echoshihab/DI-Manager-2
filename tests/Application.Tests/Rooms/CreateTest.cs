@@ -5,11 +5,17 @@ using Application.Rooms;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Application.Errors;
+using static Application.Rooms.Create;
 
 namespace Application.Tests.Rooms
 {
     public class CreateTest : TestBase
     {
+        private CommandValidator _validator;
+        public CreateTest()
+        {
+            _validator = new CommandValidator();
+        }
 
         [Fact]
         public void Should_Create_Room()
@@ -74,6 +80,34 @@ namespace Application.Tests.Rooms
             var expectedError = (new { location = "Could not find location" }).ToString();
 
             Assert.Equal(expectedError, thrownError);
+
+        }
+
+        [Fact]
+        public void Should_Fail_Validations()
+        {
+            var roomCreateCommandEmptyName = new Create.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                LocationId = Guid.NewGuid()
+
+            };
+
+            var roomCreateCommandEmptyId = new Create.Command
+            {
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                LocationId = Guid.Empty
+            };
+
+            var validationStatusEmptyName = _validator.Validate(roomCreateCommandEmptyName).IsValid;
+            var validationStatusEmptyId = _validator.Validate(roomCreateCommandEmptyId).IsValid;
+
+            Assert.False(validationStatusEmptyName);
+            Assert.False(validationStatusEmptyId);
+
 
         }
     }
