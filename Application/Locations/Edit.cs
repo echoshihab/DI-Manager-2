@@ -17,6 +17,13 @@ namespace Application.Locations
             public string Name { get; set; }
 
         }
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command>
         {
@@ -26,13 +33,7 @@ namespace Application.Locations
                 _context = context;
             }
 
-            public class CommandValidator : AbstractValidator<Command>
-            {
-                public CommandValidator()
-                {
-                    RuleFor(x => x.Name).NotEmpty();
-                }
-            }
+
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {

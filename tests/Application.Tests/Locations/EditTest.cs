@@ -1,16 +1,24 @@
 using System;
 using System.Threading;
 using Application.Errors;
-using AutoMapper;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Application.Locations;
+using static Application.Locations.Edit;
+
 
 namespace Application.Tests.Locations
 {
     public class EditTest : TestBase
     {
+        private readonly CommandValidator _validator;
+
+        public EditTest()
+        {
+            _validator = new CommandValidator();
+        }
+
 
         [Fact]
         public void Should_Edit_Location()
@@ -59,6 +67,24 @@ namespace Application.Tests.Locations
             var expectedError = (new { location = "Location Not Found" }).ToString();
 
             Assert.Equal(expectedError, thrownError);
+
+
+        }
+
+
+        [Fact]
+        public void Should_Not_Allow_Empty_Name()
+        {
+            var locationEditCommand = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty
+
+            };
+
+            var validationStatus = _validator.Validate(locationEditCommand).IsValid;
+            Assert.False(validationStatus);
 
 
         }
