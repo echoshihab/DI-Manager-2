@@ -4,11 +4,21 @@ using System.Threading;
 using Application.Errors;
 using Application.Licenses;
 using Xunit;
+using static Application.Licenses.Edit;
 
 namespace Application.Tests.Licenses
 {
     public class EditTest : TestBase
     {
+
+        private readonly CommandValidator _validator;
+
+        public EditTest()
+        {
+            _validator = new CommandValidator();
+
+        }
+
         [Fact]
         public void Should_Edit_License()
         {
@@ -59,6 +69,37 @@ namespace Application.Tests.Licenses
 
 
         }
+
+        [Fact]
+        public void Should_Fail_Validations()
+        {
+            var licenseEditEmptyName = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                DisplayName = "TL",
+
+            };
+
+            var licenseEditEmptyDisplay = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = "Test Name",
+                DisplayName = string.Empty,
+
+            };
+
+
+            var validationStatusEmptyName = _validator.Validate(licenseEditEmptyName).IsValid;
+            var validationStatusEmptyDisplay = _validator.Validate(licenseEditEmptyDisplay).IsValid;
+
+            Assert.False(validationStatusEmptyName);
+            Assert.False(validationStatusEmptyDisplay);
+
+        }
+
 
     }
 }
