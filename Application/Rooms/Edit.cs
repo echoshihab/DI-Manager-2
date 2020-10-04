@@ -39,7 +39,7 @@ namespace Application.Rooms
                 var room = await _context.Rooms.FindAsync(request.Id);
 
                 if (room == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { room = "Could not find room" });
+                    throw new RestException(HttpStatusCode.NotFound, new { room = "Room Not Found" });
 
                 room.Name = request.Name ?? room.Name;
 

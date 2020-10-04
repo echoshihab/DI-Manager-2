@@ -3,6 +3,7 @@ using Domain;
 using Xunit;
 using Application.Rooms;
 using System.Threading;
+using Application.Errors;
 
 namespace Application.Tests.Rooms
 {
@@ -36,6 +37,31 @@ namespace Application.Tests.Rooms
             var room = context.Rooms.Find(roomId);
 
             Assert.Equal("Room PostEdit", room.Name);
+
+
+        }
+
+        [Fact]
+        public void Should_Fail_To_Edit_Room_With_Invalid_Id()
+        {
+
+            var context = GetDbContext();
+            var locationId = Guid.NewGuid();
+
+            context.Locations.Add(new Domain.Location { Id = locationId, Name = "Test Location" });
+            context.SaveChanges();
+
+            context.Rooms.Add(new Domain.Room { Id = Guid.NewGuid(), Name = "Test Room", LocationId = locationId });
+
+            var sut = new Edit.Handler(context);
+
+            var nonExistingRoomId = Guid.NewGuid();
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(new Edit.Command { Id = nonExistingRoomId, Name = "Edit Room" }, CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { room = "Room Not Found" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
 
 
         }
