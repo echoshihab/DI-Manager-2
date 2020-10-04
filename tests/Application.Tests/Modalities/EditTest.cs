@@ -5,11 +5,17 @@ using Application.Errors;
 using Application.Modalities;
 using Domain;
 using Xunit;
+using static Application.Modalities.Edit;
 
 namespace Application.Tests.Modalities
 {
     public class EditTest : TestBase
     {
+        private readonly CommandValidator _validator;
+        public EditTest()
+        {
+            _validator = new CommandValidator();
+        }
         [Fact]
         public void Should_Edit_Modality()
         {
@@ -60,6 +66,35 @@ namespace Application.Tests.Modalities
             var expectedError = (new { modality = "Modality Not Found" }).ToString();
 
             Assert.Equal(expectedError, thrownError);
+        }
+
+        [Fact]
+        public void Should_Fail_Validations()
+        {
+            var modalityEmptyName = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                DisplayName = "M1"
+
+            };
+
+            var modalityEmptyDisplay = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = "Modality 2",
+                DisplayName = string.Empty
+
+            };
+
+
+            var validationStatusEmptyName = _validator.Validate(modalityEmptyName).IsValid;
+            var validationStatusEmptyDisplay = _validator.Validate(modalityEmptyDisplay).IsValid;
+
+            Assert.False(validationStatusEmptyName);
+            Assert.False(validationStatusEmptyDisplay);
         }
     }
 }
