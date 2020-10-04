@@ -42,7 +42,7 @@ namespace Application.Modalities
                 var modality = await _context.Modalities.FindAsync(request.Id);
 
                 if (modality == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Not Found" });
+                    throw new RestException(HttpStatusCode.NotFound, new { modality = "Modality Not Found" });
 
                 modality.Name = request.Name ?? modality.Name;
                 modality.DisplayName = request.DisplayName ?? modality.DisplayName;
