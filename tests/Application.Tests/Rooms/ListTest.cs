@@ -25,34 +25,50 @@ namespace Application.Tests.Rooms
             var context = GetDbContext();
 
             var locationId1 = Guid.NewGuid();
-            var locationId2 = Guid.NewGuid();
-
-
 
             context.Locations.Add(new Location { Id = locationId1, Name = "Location 1" });
-            context.Locations.Add(new Location { Id = locationId2, Name = "Location 2" });
-
             context.SaveChanges();
 
 
             context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "Test Room 1", LocationId = locationId1 });
             context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "Test Room 2", LocationId = locationId1 });
-
-            context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "Test Room 3", LocationId = locationId2 });
-
             context.SaveChanges();
 
             //act
-
             var sut = new List.Handler(context, _mapper);
-
             var result = sut.Handle(new List.Query(locationId1), CancellationToken.None).Result;
+
             var roomInLocation = result.Any(x => x.Name == "Test Room 1");
-            var rooomNotInLocation = result.Any(x => x.Name == "Test Room 3");
 
             Assert.Equal(2, result.Count);
             Assert.True(roomInLocation);
-            Assert.False(rooomNotInLocation);
+
+
+        }
+
+        [Fact]
+        public void Should_Not_Return_Unrequested_Location_Rooms()
+        {
+            var context = GetDbContext();
+
+            var requestedLocation = Guid.NewGuid();
+            var unrequestedLocation = Guid.NewGuid();
+
+            context.Locations.Add(new Location { Id = requestedLocation, Name = "Requested Location" });
+            context.Locations.Add(new Location { Id = unrequestedLocation, Name = "Unrequested Location" });
+            context.SaveChanges();
+
+            context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "RL Room", LocationId = requestedLocation });
+            context.Rooms.Add(new Room { Id = Guid.NewGuid(), Name = "UL Room", LocationId = unrequestedLocation });
+            context.SaveChanges();
+
+            var sut = new List.Handler(context, _mapper);
+            var result = sut.Handle(new List.Query(requestedLocation), CancellationToken.None).Result;
+            var roomExists = result.Any(x => x.Name == "UL Room");
+
+            Assert.Single(result);
+            Assert.False(roomExists);
+
 
         }
     }
