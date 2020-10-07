@@ -4,11 +4,18 @@ using Xunit;
 using Application.Rooms;
 using System.Threading;
 using Application.Errors;
+using static Application.Rooms.Edit;
 
 namespace Application.Tests.Rooms
 {
     public class EditTest : TestBase
     {
+        private CommandValidator _validator;
+        public EditTest()
+        {
+            _validator = new CommandValidator();
+        }
+
 
         [Fact]
         public void Should_Edit_Room()
@@ -62,6 +69,23 @@ namespace Application.Tests.Rooms
             var expectedError = (new { room = "Room Not Found" }).ToString();
 
             Assert.Equal(expectedError, thrownError);
+
+
+        }
+
+        [Fact]
+        public void Should_Fail_Validations()
+        {
+            var roomEditCommandEmptyName = new Edit.Command
+            {
+
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+
+            };
+
+            var validationStatusEmptyName = _validator.Validate(roomEditCommandEmptyName).IsValid;
+            Assert.False(validationStatusEmptyName);
 
 
         }
