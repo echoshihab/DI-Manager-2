@@ -5,6 +5,7 @@ using Application.Rooms;
 using AutoMapper;
 using System.Threading;
 using System.Linq;
+using Application.Errors;
 
 namespace Application.Tests.Rooms
 {
@@ -69,6 +70,31 @@ namespace Application.Tests.Rooms
             Assert.Single(result);
             Assert.False(roomExists);
 
+
+        }
+
+        [Fact]
+        public void Should_Fail_With_Invalid_Location()
+        {
+            var context = GetDbContext();
+
+            var location = Guid.NewGuid();
+            context.Locations.Add(new Location { Id = location, Name = "Location In Db" });
+            context.SaveChanges();
+
+            context.Rooms.Add(new Room { Id = location, Name = "RL Room", LocationId = location });
+            context.SaveChanges();
+
+            var locationIdNotInDb = Guid.NewGuid();
+            //act
+
+            var sut = new List.Handler(context, _mapper);
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(new List.Query(locationIdNotInDb), CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { location = "Location not found" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
 
         }
     }

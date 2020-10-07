@@ -49,7 +49,7 @@ namespace Application.Rooms
                     var location = await _context.Locations.FindAsync(request.LocationId);
 
                     if (location == null)
-                        throw new RestException(HttpStatusCode.NotFound, new { location = "location not found" });
+                        throw new RestException(HttpStatusCode.NotFound, new { location = "Location not found" });
 
                     queryable = queryable.Where(x => x.LocationId == request.LocationId);
                 }
