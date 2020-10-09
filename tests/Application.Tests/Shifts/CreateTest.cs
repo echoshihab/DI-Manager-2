@@ -5,11 +5,20 @@ using System.Threading;
 using System.Linq;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using static Application.Shifts.Create;
 
 namespace Application.Tests.Shifts
 {
+
     public class CreateTest : TestBase
     {
+
+        private readonly CommandValidator _validator;
+        public CreateTest()
+        {
+            _validator = new CommandValidator();
+        }
+
         [Fact]
         public void Should_Create_Shift()
         {
@@ -63,6 +72,49 @@ namespace Application.Tests.Shifts
             Assert.Equal("Test License", createdShift.License.Name);
 
         }
+
+        //creates shift create command with one empty guid value based on parameter
+        private Create.Command ShiftCreateCommandForValidationTests(int technologistId = 1, int modalityId = 1
+        , int licenseId = 1, int locationId = 1, int roomId = 1)
+        {
+            return new Create.Command
+            {
+                Id = Guid.NewGuid(),
+                Start = DateTime.Now,
+                End = DateTime.Now.AddHours(8),
+                TechnologistId = technologistId == 1 ? Guid.NewGuid() : Guid.Empty,
+                ModalityId = modalityId == 1 ? Guid.NewGuid() : Guid.Empty,
+                LicenseId = licenseId == 1 ? Guid.NewGuid() : Guid.Empty,
+                LocationId = locationId == 1 ? Guid.NewGuid() : Guid.Empty,
+                RoomId = roomId == 1 ? Guid.NewGuid() : Guid.Empty
+            };
+
+        }
+
+        [Fact]
+        public void Should_Fail_Vaidations()
+        {
+
+            var shiftCreateCommandEmptyLocationId = ShiftCreateCommandForValidationTests(locationId: 0);
+            var shiftCreateCommandEmptyRoomId = ShiftCreateCommandForValidationTests(roomId: 0);
+            var shiftCreateCommandEmptyModalityId = ShiftCreateCommandForValidationTests(modalityId: 0);
+            var shiftCreateCommandEmptyLicenseId = ShiftCreateCommandForValidationTests(licenseId: 0);
+            var shiftCreateCommandEmptyTechnologistId = ShiftCreateCommandForValidationTests(technologistId: 0);
+
+            var validationStatusEmptyLocationId = _validator.Validate(shiftCreateCommandEmptyLocationId).IsValid;
+            var validationStatusEmptyRoomId = _validator.Validate(shiftCreateCommandEmptyRoomId).IsValid;
+            var validationStatusEmptyModalityId = _validator.Validate(shiftCreateCommandEmptyRoomId).IsValid;
+            var validationStatusEmptyLicenseId = _validator.Validate(shiftCreateCommandEmptyRoomId).IsValid;
+            var validationStatusEmptyTechnologistId = _validator.Validate(shiftCreateCommandEmptyRoomId).IsValid;
+
+            Assert.False(validationStatusEmptyLocationId);
+            Assert.False(validationStatusEmptyRoomId);
+            Assert.False(validationStatusEmptyModalityId);
+            Assert.False(validationStatusEmptyLicenseId);
+            Assert.False(validationStatusEmptyTechnologistId);
+
+        }
+
 
     }
 }

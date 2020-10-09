@@ -31,12 +31,12 @@ namespace Application.Shifts
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Start).NotEmpty().WithMessage(("Start time must not be empty"));
-                RuleFor(x => x.End).NotEmpty().WithMessage(("End time must not be empty"));
+
                 RuleFor(x => x.LocationId).NotEmpty().WithMessage("Location must be selected");
                 RuleFor(x => x.RoomId).NotEmpty().WithMessage("Room must be selected");
                 RuleFor(x => x.TechnologistId).NotEmpty().WithMessage("Technologist must be selected");
-                RuleFor(x => x.ModalityId).NotEmpty().WithMessage("Invalid Modality");
+                RuleFor(x => x.ModalityId).NotEmpty().WithMessage("Modality must be selected");
+                RuleFor(x => x.LicenseId).NotEmpty().WithMessage("License must be selected");
             }
         }
 
