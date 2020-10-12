@@ -38,7 +38,7 @@ namespace Application.Shifts
                 var shift = await _context.Shifts.FindAsync(request.Id);
 
                 if (shift == null)
-                    throw new RestException(HttpStatusCode.NotFound, new { shift = "Shift not found" });
+                    throw new RestException(HttpStatusCode.NotFound, new { shift = "Shift Not Found" });
 
                 dynamic errors = new ExpandoObject();
                 var location = await _context.Locations.FindAsync(request.LocationId);
