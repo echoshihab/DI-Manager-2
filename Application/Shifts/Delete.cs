@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using MediatR;
 using Persistence;
 
@@ -26,7 +28,7 @@ namespace Application.Shifts
                 var shift = await _context.Shifts.FindAsync(request.Id);
 
                 if (shift == null)
-                    throw new Exception("Couldn't find shift");
+                    throw new RestException(HttpStatusCode.NotFound, new { shift = "Shift Not Found" });
 
                 _context.Remove(shift);
                 //handler logic
