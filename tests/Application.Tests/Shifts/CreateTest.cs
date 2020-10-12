@@ -6,6 +6,8 @@ using System.Linq;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using static Application.Shifts.Create;
+using Application.Errors;
+using System.Collections.Generic;
 
 namespace Application.Tests.Shifts
 {
@@ -112,6 +114,45 @@ namespace Application.Tests.Shifts
             Assert.False(validationStatusEmptyModalityId);
             Assert.False(validationStatusEmptyLicenseId);
             Assert.False(validationStatusEmptyTechnologistId);
+
+        }
+
+        [Fact]
+        public void Should_Not_Create_Shift_With_Invalid_Ids()
+        {
+
+            var context = GetDbContext();
+
+            var CreateShiftCommandWithInvalidIds = new Create.Command
+            {
+                Id = Guid.NewGuid(),
+                Start = DateTime.Now,
+                End = DateTime.Now.AddHours(8),
+                TechnologistId = Guid.NewGuid(),
+                ModalityId = Guid.NewGuid(),
+                LicenseId = Guid.NewGuid(),
+                LocationId = Guid.NewGuid(),
+                RoomId = Guid.NewGuid()
+
+            };
+
+            var sut = new Create.Handler(context);
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(CreateShiftCommandWithInvalidIds, CancellationToken.None));
+
+            var errors = (IDictionary<string, object>)ex.Result.Errors;
+
+            var locationError = errors["location"];
+            var licenseError = errors["license"];
+            var roomError = errors["room"];
+            var modalityError = errors["modality"];
+            var technologistError = errors["technologist"];
+
+            Assert.Equal("Invalid Location", locationError);
+            Assert.Equal("Invalid License", licenseError);
+            Assert.Equal("Invalid Room", roomError);
+            Assert.Equal("Invalid Modality", modalityError);
+            Assert.Equal("Invalid Technologist", technologistError);
+
 
         }
 
