@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -25,6 +26,15 @@ namespace Application.Shifts
             public Guid? ModalityId { get; set; }
         }
 
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+
+                RuleFor(x => x.Id).NotEmpty().WithMessage("a shift must be selected");
+
+            }
+        }
         public class Handler : IRequestHandler<Command>
         {
             private readonly ApplicationDbContext _context;
