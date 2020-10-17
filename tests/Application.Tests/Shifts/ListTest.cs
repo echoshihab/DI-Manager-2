@@ -116,5 +116,50 @@ namespace Application.Tests.Shifts
 
 
         }
+        [Fact]
+        public void Should_List_Only_Query_Matching_Shifts()
+        {
+
+            var shiftRelatedIds = Create_Shift_For_List_Tests_And_Return_Ids();
+
+            var date = DateTime.Now;
+
+            context.Shifts.Add(new Domain.Shift
+            {
+                Id = Guid.NewGuid(),
+                Start = date,
+                End = date.AddHours(8),
+                TechnologistId = shiftRelatedIds.TechnologistId1,
+                ModalityId = shiftRelatedIds.ModalityId,
+                LicenseId = shiftRelatedIds.LicenseId1,
+                LocationId = shiftRelatedIds.LocationId,
+                RoomId = shiftRelatedIds.RoomId
+            });
+
+            context.Shifts.Add(new Domain.Shift
+            {
+                Id = Guid.NewGuid(),
+                Start = date,
+                End = date.AddHours(8),
+                TechnologistId = shiftRelatedIds.TechnologistId2,
+                ModalityId = shiftRelatedIds.ModalityId,
+                LicenseId = shiftRelatedIds.LicenseId1,
+                LocationId = shiftRelatedIds.LocationId,
+                RoomId = shiftRelatedIds.RoomId
+            });
+
+            context.SaveChanges();
+
+            var sut = new List.Handler(context, _mapper);
+
+            var result = sut.Handle(new List.Query(filterDate: date, filterLicense: null, filterLocation: null, filterModality: null, filterTechnologist: shiftRelatedIds.TechnologistId1, monthFlag: null), CancellationToken.None).Result;
+
+            Assert.Equal(1, result.Count);
+            Assert.Equal(shiftRelatedIds.TechnologistId1, result[0].TechnologistId);
+
+
+        }
+
+
     }
 }
