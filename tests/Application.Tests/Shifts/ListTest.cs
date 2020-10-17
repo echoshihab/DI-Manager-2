@@ -4,6 +4,7 @@ using Application.Shifts;
 using AutoMapper;
 using System.Threading;
 using Persistence;
+using Application.Errors;
 
 namespace Application.Tests.Shifts
 {
@@ -154,9 +155,23 @@ namespace Application.Tests.Shifts
 
             var result = sut.Handle(new List.Query(filterDate: date, filterLicense: null, filterLocation: null, filterModality: null, filterTechnologist: shiftRelatedIds.TechnologistId1, monthFlag: null), CancellationToken.None).Result;
 
-            Assert.Equal(1, result.Count);
+            Assert.Single(result);
             Assert.Equal(shiftRelatedIds.TechnologistId1, result[0].TechnologistId);
 
+
+        }
+
+        [Fact]
+        public void Should_Fail_Without_Date()
+        {
+            var sut = new List.Handler(context, _mapper);
+
+            var ex = Assert.ThrowsAsync<RestException>(() => sut.Handle(new List.Query(filterDate: null, filterLicense: null, filterLocation: null, filterModality: null, filterTechnologist: null, monthFlag: null), CancellationToken.None));
+
+            var thrownError = ex.Result.Errors.ToString();
+            var expectedError = (new { error = "Invalid Date" }).ToString();
+
+            Assert.Equal(expectedError, thrownError);
 
         }
 
